@@ -4,7 +4,7 @@ Overview
 ****************
 This sample code shows a CoAP over DTLS client using mbedTLS on Linux or Nucleo_f411re.
 
-![image](http://note.youdao.com/favicon.ico)
+![image](https://bitbucket.org/iotwuxi/embeded-security/src/38d168143ad2001cd5225c436715586110ccad37/image/coaps.jpg?at=master&fileviewer=file-view-default)
 
 [Nucleo_f411re](http://www.st.com/content/st_com/en/products/evaluation-tools/product-evaluation-tools/mcu-eval-tools/stm32-mcu-eval-tools/stm32-mcu-nucleo/nucleo-f411re.html)
 - STM32F411RE microcontroller
