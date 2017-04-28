@@ -3,7 +3,7 @@
 Overview
 ****************
 This sample code shows a CoAP over DTLS client using mbedTLS on Linux or Nucleo_f411re.
-![coaps.jpg](https://bitbucket.org/repo/9ppMAA6/images/2633279681-coaps.jpg)
+![coaps.png](https://bitbucket.org/repo/9ppMAA6/images/316349869-coaps.png)
 
 Library
 - [Mbedtls](https://github.com/ARMmbed/mbedtls)
