@@ -6,7 +6,7 @@ This sample code shows a CoAP over DTLS client using mbedTLS on Linux or Nucleo_
 ![coaps.jpg](https://bitbucket.org/repo/9ppMAA6/images/2633279681-coaps.jpg)
 
 Library
-- [Mbedtls](https://github.com/ARMmbed/mbedtls) 
+- [Mbedtls](https://github.com/ARMmbed/mbedtls)
 - coap
 - JSON
 - w5x00
