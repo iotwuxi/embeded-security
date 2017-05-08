@@ -46,7 +46,7 @@ int main( void )
 #define SERVER_PORT "4433"
 #define SERVER_NAME "localhost"
 #define SERVER_ADDR "127.0.0.1" /* forces IPv4 */
-#define MESSAGE     "Hello DTLS PSK"
+#define MESSAGE     "Hello DTLS Server"
 
 #define READ_TIMEOUT_MS 1000
 #define MAX_RETRY       5
@@ -76,8 +76,10 @@ int main( int argc, char *argv[] )
     mbedtls_ctr_drbg_context ctr_drbg;
     mbedtls_ssl_context ssl;
     mbedtls_ssl_config conf;
-    // mbedtls_x509_crt cacert;
+    mbedtls_x509_crt cacert;
     mbedtls_timing_delay_context timer;
+
+    int dtls_ciphersuites[3];
 
     ((void) argc);
     ((void) argv);
@@ -92,7 +94,7 @@ int main( int argc, char *argv[] )
     mbedtls_net_init( &server_fd );
     mbedtls_ssl_init( &ssl );
     mbedtls_ssl_config_init( &conf );
-    // mbedtls_x509_crt_init( &cacert );
+    mbedtls_x509_crt_init( &cacert );
     mbedtls_ctr_drbg_init( &ctr_drbg );
 
     mbedtls_printf( "\n  . Seeding the random number generator..." );
@@ -109,27 +111,7 @@ int main( int argc, char *argv[] )
 
     mbedtls_printf( " ok\n" );
 
-#if 0
-    /*
-     * 0. Load certificates
-     */
-    mbedtls_printf( "  . Loading the CA root certificate ..." );
-    fflush( stdout );
 
-    ret = mbedtls_x509_crt_parse( &cacert, (const unsigned char *) mbedtls_test_cas_pem,
-                          mbedtls_test_cas_pem_len );
-    if( ret < 0 )
-    {
-        mbedtls_printf( " failed\n  !  mbedtls_x509_crt_parse returned -0x%x\n\n", -ret );
-        goto exit;
-    }
-
-    mbedtls_printf( " ok (%d skipped)\n", ret );
-#endif
-
-    /*
-     * 0. PSK
-     */
     printf( "\n  . Loading the psk and psk_identity" );
     fflush( stdout );
 
@@ -177,15 +159,15 @@ int main( int argc, char *argv[] )
     /* OPTIONAL is usually a bad choice for security, but makes interop easier
      * in this simplified example, in which the ca chain is hardcoded.
      * Production code should set a proper ca chain and use REQUIRED. */
-    mbedtls_ssl_conf_authmode( &conf, MBEDTLS_SSL_VERIFY_OPTIONAL );
+    // mbedtls_ssl_conf_authmode( &conf, MBEDTLS_SSL_VERIFY_OPTIONAL );
     // mbedtls_ssl_conf_ca_chain( &conf, &cacert, NULL );
     mbedtls_ssl_conf_rng( &conf, mbedtls_ctr_drbg_random, &ctr_drbg );
     mbedtls_ssl_conf_dbg( &conf, my_debug, stdout );
 
-    // int coaps_ciphersuite[2];
-    // coaps_ciphersuite[0] = mbedtls_ssl_get_ciphersuite_id("TLS-ECDHE-ECDSA-WITH-AES-128-CCM-8");
-    // coaps_ciphersuite[1] = 0;
-    // mbedtls_ssl_conf_ciphersuites( &conf, coaps_ciphersuite);
+    dtls_ciphersuites[0] = MBEDTLS_TLS_PSK_WITH_AES_128_CCM;
+    dtls_ciphersuites[1] = MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_CCM_8;
+    dtls_ciphersuites[2] = 0;
+    mbedtls_ssl_conf_ciphersuites( &conf, dtls_ciphersuites);
 
     if( ( ret = mbedtls_ssl_setup( &ssl, &conf ) ) != 0 )
     {
@@ -193,13 +175,11 @@ int main( int argc, char *argv[] )
         goto exit;
     }
 
-#if 0
     if( ( ret = mbedtls_ssl_set_hostname( &ssl, SERVER_NAME ) ) != 0 )
     {
         mbedtls_printf( " failed\n  ! mbedtls_ssl_set_hostname returned %d\n\n", ret );
         goto exit;
     }
-#endif
 
     mbedtls_ssl_set_bio( &ssl, &server_fd,
                          mbedtls_net_send, mbedtls_net_recv, mbedtls_net_recv_timeout );
@@ -230,7 +210,7 @@ int main( int argc, char *argv[] )
     /*
      * 5. Verify the server certificate
      */
-    mbedtls_printf( "  . Verifying peer X.509 certificate...(PSK Only)" );
+    mbedtls_printf( "  . Verifying peer X.509 certificate..." );
 
     /* In real life, we would have used MBEDTLS_SSL_VERIFY_REQUIRED so that the
      * handshake would not succeed if the peer's cert is bad.  Even if we used
@@ -336,11 +316,16 @@ exit:
 
     mbedtls_net_free( &server_fd );
 
-    // mbedtls_x509_crt_free( &cacert );
+    mbedtls_x509_crt_free( &cacert );
     mbedtls_ssl_free( &ssl );
     mbedtls_ssl_config_free( &conf );
     mbedtls_ctr_drbg_free( &ctr_drbg );
     mbedtls_entropy_free( &entropy );
+
+#if defined(_WIN32)
+    mbedtls_printf( "  + Press Enter to exit this program.\n" );
+    fflush( stdout ); getchar();
+#endif
 
     /* Shell can not handle large exit numbers -> 1 for errors */
     if( ret < 0 )
