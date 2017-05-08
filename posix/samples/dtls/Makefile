@@ -5,8 +5,8 @@ CFLAGS	?= -O2
 WARNING_CFLAGS ?= -Wall -W -Wdeclaration-after-statement
 LDFLAGS ?=
 
-LOCAL_CFLAGS = $(WARNING_CFLAGS) -I../lib/mbedtls/include 
-LOCAL_LDFLAGS = -L../lib/mbedtls	\
+LOCAL_CFLAGS = $(WARNING_CFLAGS) -I.
+LOCAL_LDFLAGS = -L.					\
 				-lmbedtls			\
 				-lmbedx509			\
 				-lmbedcrypto
@@ -22,12 +22,10 @@ all: $(APPS)
 coaps_client: coaps_client.c 
 	echo "  CC    coaps_client.c"
 	$(CC) $(LOCAL_CFLAGS) $(CFLAGS) coaps_client.c  $(LOCAL_LDFLAGS) $(LDFLAGS) -o $@
-	#echo $(CC) $(LOCAL_CFLAGS) $(CFLAGS) coaps_client.c  $(LOCAL_LDFLAGS) $(LDFLAGS) -o $@
 
 coaps_server: coaps_server.c 
 	echo "  CC    coaps_server.c"
 	$(CC) $(LOCAL_CFLAGS) $(CFLAGS) coaps_server.c  $(LOCAL_LDFLAGS) $(LDFLAGS) -o $@
-	#echo $(CC) $(LOCAL_CFLAGS) $(CFLAGS) coaps_server.c  $(LOCAL_LDFLAGS) $(LDFLAGS) -o $@
 
 clean:
 	rm -f $(APPS)
