@@ -2,10 +2,10 @@
 ************************
 
 ### Overview
-This sample code shows a CoAP over DTLS client using mbedTLS on Rpi/Linux or RTL8710/8711.
+This sample code shows a CoAP over DTLS client using mbedTLS on Rpi/Linux or RTL8711 platform.
 ![coaps.png](https://bitbucket.org/repo/9ppMAA6/images/2269939246-coaps.png)    
 
-### platform
+### Platform
 - posix
 - rtl8711
 
@@ -15,8 +15,8 @@ This sample code shows a CoAP over DTLS client using mbedTLS on Rpi/Linux or RTL
 - JSON
 
 ### TODO List
-- [x] DTLS Server on linux
-- [x] DTLS Client on linux
-- [ ] COAPS Server on linux
-- [ ] COAPS Client on linux
-- [ ] COAPS Client on RTL8710/8711
+- [x] DTLS Server on rpi/linux
+- [x] DTLS Client on rpi/linux
+- [ ] COAPS Server on rpi/linux
+- [ ] COAPS Client on rpi/linux
+- [ ] COAPS Client on RTL8711
