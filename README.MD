@@ -2,7 +2,7 @@
 ************************
 
 ### Overview
-This sample code shows a CoAP over DTLS client using mbedTLS on Linux or Nucleo_f411re.
+This sample code shows a CoAP over DTLS client using mbedTLS on Rpi/Linux or RTL8710/8711.
 ![coaps.png](https://bitbucket.org/repo/9ppMAA6/images/2269939246-coaps.png)    
 
 ### platform
