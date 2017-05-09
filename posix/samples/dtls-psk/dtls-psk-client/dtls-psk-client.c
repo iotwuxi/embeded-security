@@ -46,7 +46,7 @@ int main( void )
 #define SERVER_PORT "4433"
 #define SERVER_NAME "localhost"
 #define SERVER_ADDR "127.0.0.1" /* forces IPv4 */
-#define MESSAGE     "Echo this"
+#define MESSAGE     "Hello DTLS PSK"
 
 #define READ_TIMEOUT_MS 1000
 #define MAX_RETRY       5
@@ -76,7 +76,7 @@ int main( int argc, char *argv[] )
     mbedtls_ctr_drbg_context ctr_drbg;
     mbedtls_ssl_context ssl;
     mbedtls_ssl_config conf;
-    mbedtls_x509_crt cacert;
+    // mbedtls_x509_crt cacert;
     mbedtls_timing_delay_context timer;
 
     ((void) argc);
@@ -92,7 +92,7 @@ int main( int argc, char *argv[] )
     mbedtls_net_init( &server_fd );
     mbedtls_ssl_init( &ssl );
     mbedtls_ssl_config_init( &conf );
-    mbedtls_x509_crt_init( &cacert );
+    // mbedtls_x509_crt_init( &cacert );
     mbedtls_ctr_drbg_init( &ctr_drbg );
 
     mbedtls_printf( "\n  . Seeding the random number generator..." );
@@ -127,6 +127,9 @@ int main( int argc, char *argv[] )
     mbedtls_printf( " ok (%d skipped)\n", ret );
 #endif
 
+    /*
+     * 0. PSK
+     */
     printf( "\n  . Loading the psk and psk_identity" );
     fflush( stdout );
 
@@ -175,9 +178,12 @@ int main( int argc, char *argv[] )
      * in this simplified example, in which the ca chain is hardcoded.
      * Production code should set a proper ca chain and use REQUIRED. */
     mbedtls_ssl_conf_authmode( &conf, MBEDTLS_SSL_VERIFY_OPTIONAL );
-    mbedtls_ssl_conf_ca_chain( &conf, &cacert, NULL );
+    // mbedtls_ssl_conf_ca_chain( &conf, &cacert, NULL );
     mbedtls_ssl_conf_rng( &conf, mbedtls_ctr_drbg_random, &ctr_drbg );
     mbedtls_ssl_conf_dbg( &conf, my_debug, stdout );
+
+    // int coaps_ciphersuite[] = {mbedtls_ssl_get_ciphersuite_id("TLS_ECDHE_ECDSA_WITH_AES_128_CCM_8")};
+    // mbedtls_ssl_conf_ciphersuites( &conf, coaps_ciphersuite);
 
     if( ( ret = mbedtls_ssl_setup( &ssl, &conf ) ) != 0 )
     {
@@ -185,11 +191,13 @@ int main( int argc, char *argv[] )
         goto exit;
     }
 
+#if 0
     if( ( ret = mbedtls_ssl_set_hostname( &ssl, SERVER_NAME ) ) != 0 )
     {
         mbedtls_printf( " failed\n  ! mbedtls_ssl_set_hostname returned %d\n\n", ret );
         goto exit;
     }
+#endif
 
     mbedtls_ssl_set_bio( &ssl, &server_fd,
                          mbedtls_net_send, mbedtls_net_recv, mbedtls_net_recv_timeout );
@@ -326,16 +334,11 @@ exit:
 
     mbedtls_net_free( &server_fd );
 
-    mbedtls_x509_crt_free( &cacert );
+    // mbedtls_x509_crt_free( &cacert );
     mbedtls_ssl_free( &ssl );
     mbedtls_ssl_config_free( &conf );
     mbedtls_ctr_drbg_free( &ctr_drbg );
     mbedtls_entropy_free( &entropy );
-
-#if defined(_WIN32)
-    mbedtls_printf( "  + Press Enter to exit this program.\n" );
-    fflush( stdout ); getchar();
-#endif
 
     /* Shell can not handle large exit numbers -> 1 for errors */
     if( ret < 0 )

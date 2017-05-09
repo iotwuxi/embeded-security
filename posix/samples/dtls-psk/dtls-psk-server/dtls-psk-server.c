@@ -82,8 +82,8 @@ int main( void )
     mbedtls_ctr_drbg_context ctr_drbg;
     mbedtls_ssl_context ssl;
     mbedtls_ssl_config conf;
-    mbedtls_x509_crt srvcert;
-    mbedtls_pk_context pkey;
+    // mbedtls_x509_crt srvcert;
+    // mbedtls_pk_context pkey;
     mbedtls_timing_delay_context timer;
 #if defined(MBEDTLS_SSL_CACHE_C)
     mbedtls_ssl_cache_context cache;
@@ -97,8 +97,8 @@ int main( void )
 #if defined(MBEDTLS_SSL_CACHE_C)
     mbedtls_ssl_cache_init( &cache );
 #endif
-    mbedtls_x509_crt_init( &srvcert );
-    mbedtls_pk_init( &pkey );
+    // mbedtls_x509_crt_init( &srvcert );
+    //  mbedtls_pk_init( &pkey );
     mbedtls_entropy_init( &entropy );
     mbedtls_ctr_drbg_init( &ctr_drbg );
 
@@ -149,11 +149,11 @@ int main( void )
      * 1. Load the PSK and PSK_IDENTITY
      */
 
-    printf( "\n  . Loading the psk and psk_identity" );
-    fflush( stdout );
+    printf("\n  . Loading the psk and psk_identity" );
+    fflush(stdout);
 
-    ret = mbedtls_ssl_conf_psk( &conf, (const unsigned char *)DFL_PSK, strlen(DFL_PSK),
-                                       (const unsigned char *)DFL_PSK_IDENTITY, strlen(DFL_PSK_IDENTITY));
+    ret = mbedtls_ssl_conf_psk(&conf, (const unsigned char *)DFL_PSK, strlen(DFL_PSK),
+                                      (const unsigned char *)DFL_PSK_IDENTITY, strlen(DFL_PSK_IDENTITY));
     if( ret != 0 )
     {
         printf( " failed\n  !  mbedtls_ssl_conf_psk %d\n\n", ret );
@@ -216,12 +216,14 @@ int main( void )
                                    mbedtls_ssl_cache_set );
 #endif
 
+#if 0
     mbedtls_ssl_conf_ca_chain( &conf, srvcert.next, NULL );
     if( ( ret = mbedtls_ssl_conf_own_cert( &conf, &srvcert, &pkey ) ) != 0 )
     {
         printf( " failed\n  ! mbedtls_ssl_conf_own_cert returned %d\n\n", ret );
         goto exit;
     }
+#endif
 
     if( ( ret = mbedtls_ssl_cookie_setup( &cookie_ctx,
                                   mbedtls_ctr_drbg_random, &ctr_drbg ) ) != 0 )
@@ -232,6 +234,10 @@ int main( void )
 
     mbedtls_ssl_conf_dtls_cookies( &conf, mbedtls_ssl_cookie_write, mbedtls_ssl_cookie_check,
                                &cookie_ctx );
+
+    // int coaps_ciphersuite[] = {mbedtls_ssl_get_ciphersuite_id("TLS_ECDHE_ECDSA_WITH_AES_128_CCM_8")};
+    // mbedtls_ssl_conf_ciphersuites( &conf, coaps_ciphersuite);
+
 
     if( ( ret = mbedtls_ssl_setup( &ssl, &conf ) ) != 0 )
     {
@@ -395,8 +401,8 @@ exit:
     mbedtls_net_free( &client_fd );
     mbedtls_net_free( &listen_fd );
 
-    mbedtls_x509_crt_free( &srvcert );
-    mbedtls_pk_free( &pkey );
+    // mbedtls_x509_crt_free( &srvcert );
+    // mbedtls_pk_free( &pkey );
     mbedtls_ssl_free( &ssl );
     mbedtls_ssl_config_free( &conf );
     mbedtls_ssl_cookie_free( &cookie_ctx );
