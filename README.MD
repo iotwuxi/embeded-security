@@ -17,6 +17,8 @@ This sample code shows a CoAP over DTLS client using mbedTLS on Rpi/Linux or RTL
 ### TODO List
 - [x] DTLS Server on rpi/linux
 - [x] DTLS Client on rpi/linux
+- [ ] DTLS PSK Server on rpi/Linux
+- [ ] DTLS PSK Server on rpi/Linux
 - [ ] COAPS Server on rpi/linux
 - [ ] COAPS Client on rpi/linux
 - [ ] COAPS Client on RTL8711
