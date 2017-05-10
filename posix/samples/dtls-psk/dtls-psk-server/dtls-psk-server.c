@@ -235,9 +235,10 @@ int main( void )
     mbedtls_ssl_conf_dtls_cookies( &conf, mbedtls_ssl_cookie_write, mbedtls_ssl_cookie_check,
                                &cookie_ctx );
 
-    // int coaps_ciphersuite[] = {mbedtls_ssl_get_ciphersuite_id("TLS_ECDHE_ECDSA_WITH_AES_128_CCM_8")};
+    // int coaps_ciphersuite[2];
+    // coaps_ciphersuite[0] = mbedtls_ssl_get_ciphersuite_id("TLS-ECDHE-ECDSA-WITH-AES-128-CCM-8");
+    // coaps_ciphersuite[1] = 0;
     // mbedtls_ssl_conf_ciphersuites( &conf, coaps_ciphersuite);
-
 
     if( ( ret = mbedtls_ssl_setup( &ssl, &conf ) ) != 0 )
     {

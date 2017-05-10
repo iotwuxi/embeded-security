@@ -182,7 +182,9 @@ int main( int argc, char *argv[] )
     mbedtls_ssl_conf_rng( &conf, mbedtls_ctr_drbg_random, &ctr_drbg );
     mbedtls_ssl_conf_dbg( &conf, my_debug, stdout );
 
-    // int coaps_ciphersuite[] = {mbedtls_ssl_get_ciphersuite_id("TLS_ECDHE_ECDSA_WITH_AES_128_CCM_8")};
+    // int coaps_ciphersuite[2];
+    // coaps_ciphersuite[0] = mbedtls_ssl_get_ciphersuite_id("TLS-ECDHE-ECDSA-WITH-AES-128-CCM-8");
+    // coaps_ciphersuite[1] = 0;
     // mbedtls_ssl_conf_ciphersuites( &conf, coaps_ciphersuite);
 
     if( ( ret = mbedtls_ssl_setup( &ssl, &conf ) ) != 0 )
@@ -228,7 +230,7 @@ int main( int argc, char *argv[] )
     /*
      * 5. Verify the server certificate
      */
-    mbedtls_printf( "  . Verifying peer X.509 certificate..." );
+    mbedtls_printf( "  . Verifying peer X.509 certificate...(PSK Only)" );
 
     /* In real life, we would have used MBEDTLS_SSL_VERIFY_REQUIRED so that the
      * handshake would not succeed if the peer's cert is bad.  Even if we used

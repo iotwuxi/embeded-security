@@ -5,7 +5,7 @@ CC = gcc
 
 # CFLAG包括头文件目录
 CFLAGS = -g -Wall -std=gnu99
-#CFLAGS += -DMBEDTLS_CONFIG_FILE=\"xxx_dtls_config.h\"
+CFLAGS += -DMBEDTLS_CONFIG_FILE=\"dtls-config.h\"
 
 # 头文件查找路径
 INC = -I.
