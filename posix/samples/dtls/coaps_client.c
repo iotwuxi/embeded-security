@@ -68,6 +68,7 @@ int main( void )
 #define READ_TIMEOUT_MS 1000
 #define MAX_RETRY       5
 
+#if 0
 #define DEBUG_LEVEL 0
 
 static void my_debug( void *ctx, int level,
@@ -77,6 +78,25 @@ static void my_debug( void *ctx, int level,
     ((void) level);
 
     mbedtls_fprintf( (FILE *) ctx, "%s:%04d: %s", file, line, str );
+    fflush(  (FILE *) ctx  );
+}
+#endif
+
+#define DEBUG_LEVEL 100
+
+static void my_debug( void *ctx, int level,
+                      const char *file, int line,
+                      const char *str )
+{
+    struct timeval tv;
+
+    ((void) level);
+
+    #include <sys/time.h>
+    gettimeofday(&tv, NULL);
+    //strftime(outstr, sizeof(outstr), "%H:%M:%S", tmp);
+
+    mbedtls_fprintf( (FILE *) ctx, "[%06ld.%ld]%s:%04d: %s", tv.tv_sec, tv.tv_usec, file, line, str );
     fflush(  (FILE *) ctx  );
 }
 
