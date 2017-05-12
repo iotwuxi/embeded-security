@@ -18,16 +18,12 @@
 
 #if !defined(MBEDTLS_SSL_CLI_C) || !defined(MBEDTLS_SSL_PROTO_DTLS) ||    \
     !defined(MBEDTLS_NET_C)  || !defined(MBEDTLS_TIMING_C) ||             \
-    !defined(MBEDTLS_ENTROPY_C) || !defined(MBEDTLS_CTR_DRBG_C) ||        \
-    !defined(MBEDTLS_X509_CRT_PARSE_C) || !defined(MBEDTLS_RSA_C) ||      \
-    !defined(MBEDTLS_CERTS_C) || !defined(MBEDTLS_PEM_PARSE_C)
+    !defined(MBEDTLS_ENTROPY_C) || !defined(MBEDTLS_CTR_DRBG_C)
 int main( void )
 {
     mbedtls_printf( "MBEDTLS_SSL_CLI_C and/or MBEDTLS_SSL_PROTO_DTLS and/or "
             "MBEDTLS_NET_C and/or MBEDTLS_TIMING_C and/or "
-            "MBEDTLS_ENTROPY_C and/or MBEDTLS_CTR_DRBG_C and/or "
-            "MBEDTLS_X509_CRT_PARSE_C and/or MBEDTLS_RSA_C and/or "
-            "MBEDTLS_CERTS_C and/or MBEDTLS_PEM_PARSE_C not defined.\n" );
+            "MBEDTLS_ENTROPY_C and/or MBEDTLS_CTR_DRBG_C and/or not defined.\n" );
     return( 0 );
 }
 #else
@@ -40,7 +36,7 @@ int main( void )
 #include "mbedtls/entropy.h"
 #include "mbedtls/ctr_drbg.h"
 #include "mbedtls/error.h"
-#include "mbedtls/certs.h"
+// #include "mbedtls/certs.h"
 #include "mbedtls/timing.h"
 
 #define SERVER_PORT "4433"
@@ -76,7 +72,6 @@ int main( int argc, char *argv[] )
     mbedtls_ctr_drbg_context ctr_drbg;
     mbedtls_ssl_context ssl;
     mbedtls_ssl_config conf;
-    // mbedtls_x509_crt cacert;
     mbedtls_timing_delay_context timer;
 
     ((void) argc);
@@ -92,7 +87,6 @@ int main( int argc, char *argv[] )
     mbedtls_net_init( &server_fd );
     mbedtls_ssl_init( &ssl );
     mbedtls_ssl_config_init( &conf );
-    // mbedtls_x509_crt_init( &cacert );
     mbedtls_ctr_drbg_init( &ctr_drbg );
 
     mbedtls_printf( "\n  . Seeding the random number generator..." );
@@ -177,7 +171,7 @@ int main( int argc, char *argv[] )
     /* OPTIONAL is usually a bad choice for security, but makes interop easier
      * in this simplified example, in which the ca chain is hardcoded.
      * Production code should set a proper ca chain and use REQUIRED. */
-    mbedtls_ssl_conf_authmode( &conf, MBEDTLS_SSL_VERIFY_OPTIONAL );
+    // mbedtls_ssl_conf_authmode( &conf, MBEDTLS_SSL_VERIFY_OPTIONAL );
     // mbedtls_ssl_conf_ca_chain( &conf, &cacert, NULL );
     mbedtls_ssl_conf_rng( &conf, mbedtls_ctr_drbg_random, &ctr_drbg );
     mbedtls_ssl_conf_dbg( &conf, my_debug, stdout );
@@ -237,13 +231,13 @@ int main( int argc, char *argv[] )
      * MBEDTLS_SSL_VERIFY_OPTIONAL, we would bail out here if ret != 0 */
     if( ( flags = mbedtls_ssl_get_verify_result( &ssl ) ) != 0 )
     {
-        char vrfy_buf[512];
+        // char vrfy_buf[512];
 
         mbedtls_printf( " failed\n" );
 
-        mbedtls_x509_crt_verify_info( vrfy_buf, sizeof( vrfy_buf ), "  ! ", flags );
+        // mbedtls_x509_crt_verify_info( vrfy_buf, sizeof( vrfy_buf ), "  ! ", flags );
 
-        mbedtls_printf( "%s\n", vrfy_buf );
+        // mbedtls_printf( "%s\n", vrfy_buf );
     }
     else
         mbedtls_printf( " ok\n" );
