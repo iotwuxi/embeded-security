@@ -4258,6 +4258,9 @@
     <file>
       <name>$PROJ_DIR$\..\src\main.c</name>
     </file>
+    <file>
+      <name>$PROJ_DIR$\..\inc\platform_opts.h</name>
+    </file>
   </group>
   <group>
     <name>utilities</name>
@@ -4269,19 +4272,7 @@
       <file>
         <name>$PROJ_DIR$\..\..\..\component\common\example\example_entry.c</name>
       </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\..\component\common\example\high_load_memory_use\example_high_load_memory_use.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\..\component\common\example\httpd\example_httpd.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\..\component\common\example\mqtt\example_mqtt.c</name>
-      </file>
     </group>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\component\common\utilities\cJSON.c</name>
-    </file>
   </group>
 </project>
 

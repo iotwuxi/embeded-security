@@ -1,52 +1,28 @@
-#include <platform_opts.h>
 #include "FreeRTOS.h"
 #include "task.h"
-#include <platform/platform_stdlib.h>
+#include <platform_stdlib.h>
 #include <lwip_netconf.h>
-#include <lwip/sockets.h>
 #include "wifi_constants.h"
-#include "wifi_structures.h"
-#include "lwip_netconf.h"
-#include <string.h>
 
 #include "mbedtls/config.h"
 #include "mbedtls/platform.h"
 #include "mbedtls/net_sockets.h"
-#include "mbedtls/debug.h"
 #include "mbedtls/ssl.h"
-#include "mbedtls/entropy.h"
-#include "mbedtls/ctr_drbg.h"
-#include "mbedtls/error.h"
 #include "mbedtls/certs.h"
 #include "mbedtls/timing.h"
 
-#define DFL_PSK                 "password"
-#define DFL_PSK_IDENTITY        "identity"
-
-#define SERVER_PORT "4433"
-#define SERVER_NAME "localhost"
-#define SERVER_ADDR "139.196.187.107" /* forces IPv4 */
-#define MESSAGE     "Hello DTLS Server"
-
-#define READ_TIMEOUT_MS 1000
-#define MAX_RETRY       5
-
-#define PRIORITY_OFFSET		1
+#define DFL_PSK                     "password"
+#define DFL_PSK_IDENTITY            "identity"
+#define SERVER_PORT                 "4433"
+#define SERVER_NAME                 "localhost"
+#define SERVER_ADDR                 "139.196.187.107" /* ∞¢¿Ô‘∆ */
+#define MESSAGE                     "Hello DTLS Server"
+#define READ_TIMEOUT_MS             1000
+#define MAX_RETRY                   5
+#define PRIORITY_OFFSET		    1
 
 void dtls_psk_client_thread(void);
 static void dtls_psk_client_handler(void);
-
-#define DEBUG_LEVEL 0
-
-static void my_debug( void *ctx, int level,
-                      const char *file, int line,
-                      const char *str )
-{
-    ((void) level);
-
-    mbedtls_fprintf( /*(FILE *)*/ ctx, "%s:%04d: %s", file, line, str );
-//    fflush(  (FILE *) ctx  );
-}
 
 /*
  * @brief  dtls psk client case.
@@ -58,10 +34,10 @@ static void my_debug( void *ctx, int level,
 static void dtls_psk_client_usage(void)
 {
     printf("\n\ndtls psk client case...\n");
-   
-    /**********************************************************************************
-    *   1. Enable Wi-Fi with STA mode       
-    **********************************************************************************/
+
+    /*
+     * 1. Enable Wi-Fi with STA mode
+     */
     printf("\n\rEnable Wi-Fi\n");
     if(wifi_on(RTW_MODE_STA) < 0)
     {
@@ -69,22 +45,19 @@ static void dtls_psk_client_usage(void)
         return;
     }
     
-    
-    /**********************************************************************************
-    *   2. Connect to AP by WPA2-AES        
-    **********************************************************************************/ 
-    // Connect to AP with PSK-WPA2-AES.
+    /*
+     * 2. Connect to AP by WPA2-AES
+     */
     char *ssid = "bowen";
     char *password = "xianrenqiu";
     if(wifi_connect(ssid, RTW_SECURITY_WPA2_AES_PSK, password, strlen(ssid), strlen(password), -1, NULL) == RTW_SUCCESS)
     {
         LwIP_DHCP(0, DHCP_START);
     }
-    
-    /**********************************************************************************
-    *   3. Start DTLS sessions 
-    **********************************************************************************/ 
-    // Start DTLS connection
+
+    /*
+     * 3. Start DTLS sessions 
+     */
     dtls_psk_client_thread();
 }
 
@@ -128,56 +101,50 @@ static char *hl_itoa(int value){
     return val_str;
 }
 
+static int my_random(void *p_rng, unsigned char *output, size_t output_len)
+{
+    rtw_get_random_bytes(output, output_len);
+    return 0;
+}
+
 static void dtls_psk_client_handler(void)
 {
+#if !defined(MBEDTLS_BIGNUM_C) || !defined(MBEDTLS_CERTS_C) || \
+    !defined(MBEDTLS_SSL_TLS_C) || !defined(MBEDTLS_KEY_EXCHANGE_PSK_ENABLED) \
+    !defined(MBEDTLS_RSA_C) || !defined(MBEDTLS_NET_C) || || !define(MBEDTLS_TIMING_C)\
+    !defined(MBEDTLS_PEM_PARSE_C) || !defined(MBEDTLS_X509_CRT_PARSE_C) || \
+    !defined(MBEDTLS_SSL_PROTO_DTLS) || !define(MBEDTLS_TIMING_ALT)
+
+    printf("MBEDTLS_BIGNUM_C and/or MBEDTLS_CERTS_C and/or "
+        "MBEDTLS_SSL_TLS_C and/or MBEDTLS_SSL_SRV_C and/or "
+        "MBEDTLS_RSA_C and/or MBEDTLS_NET_C and/or "
+        "MBEDTLS_PEM_PARSE_C and/or MBEDTLS_X509_CRT_PARSE_C and/or "
+        "MBEDTLS_SSL_PROTO_DTLS and/or MBEDTLS_TIMING_C and/or "
+        "MBEDTLS_TIMING_ALT not defined.\n");
+
+#else    
     int ret, len;
     mbedtls_net_context server_fd;
     uint32_t flags;
     unsigned char buf[1024];
-    const char *pers = "dtls_client";
     int retry_left = MAX_RETRY;
-
-    mbedtls_entropy_context entropy;
-    mbedtls_ctr_drbg_context ctr_drbg;
     mbedtls_ssl_context ssl;
     mbedtls_ssl_config conf;
     mbedtls_x509_crt cacert;
     mbedtls_timing_delay_context timer;
-
     int dtls_ciphersuites[3];
-
-#if defined(MBEDTLS_DEBUG_C)
-    mbedtls_debug_set_threshold( DEBUG_LEVEL );
-#endif
 
     mbedtls_platform_set_calloc_free(my_calloc, vPortFree);
 
     /*
-     * 0. Initialize the RNG and the session data
+     * 0. Loading the psk and psk_identity
      */
     mbedtls_net_init( &server_fd );
     mbedtls_ssl_init( &ssl );
     mbedtls_ssl_config_init( &conf );
     mbedtls_x509_crt_init( &cacert );
-    mbedtls_ctr_drbg_init( &ctr_drbg );
-
-    mbedtls_printf( "\n  . Seeding the random number generator..." );
-//    fflush( stdout );
-
-    mbedtls_entropy_init( &entropy );
-    if( ( ret = mbedtls_ctr_drbg_seed( &ctr_drbg, mbedtls_entropy_func, &entropy,
-                               (const unsigned char *) pers,
-                               strlen( pers ) ) ) != 0 )
-    {
-        mbedtls_printf( " failed\n  ! mbedtls_ctr_drbg_seed returned %d\n", ret );
-        goto exit;
-    }
-
-    mbedtls_printf( " ok\n" );
-
 
     printf( "\n  . Loading the psk and psk_identity" );
-//    fflush( stdout );
 
     ret = mbedtls_ssl_conf_psk( &conf, (const unsigned char *)DFL_PSK, strlen(DFL_PSK),
                                        (const unsigned char *)DFL_PSK_IDENTITY, strlen(DFL_PSK_IDENTITY));
@@ -193,7 +160,6 @@ static void dtls_psk_client_handler(void)
      * 1. Start the connection
      */
     mbedtls_printf( "  . Connecting to udp/%s/%s...", SERVER_NAME, SERVER_PORT );
-//    fflush( stdout );
 
     if( ( ret = mbedtls_net_connect( &server_fd, SERVER_ADDR,
                                          SERVER_PORT, MBEDTLS_NET_PROTO_UDP ) ) != 0 )
@@ -204,12 +170,10 @@ static void dtls_psk_client_handler(void)
 
     mbedtls_printf( " ok\n" );
 
-
     /*
      * 2. Setup stuff
      */
     mbedtls_printf( "  . Setting up the DTLS structure..." );
-//    fflush( stdout );
 
     if( ( ret = mbedtls_ssl_config_defaults( &conf,
                    MBEDTLS_SSL_IS_CLIENT,
@@ -223,10 +187,10 @@ static void dtls_psk_client_handler(void)
     /* OPTIONAL is usually a bad choice for security, but makes interop easier
      * in this simplified example, in which the ca chain is hardcoded.
      * Production code should set a proper ca chain and use REQUIRED. */
-    // mbedtls_ssl_conf_authmode( &conf, MBEDTLS_SSL_VERIFY_OPTIONAL );
-    // mbedtls_ssl_conf_ca_chain( &conf, &cacert, NULL );
-    mbedtls_ssl_conf_rng( &conf, mbedtls_ctr_drbg_random, &ctr_drbg );
-//    mbedtls_ssl_conf_dbg( &conf, my_debug, stdout );
+
+    // mbedtls_ssl_conf_ca_chain(&conf, cacert.next, NULL);
+    // mbedtls_ssl_conf_authmode(&conf, MBEDTLS_SSL_VERIFY_NONE);
+    mbedtls_ssl_conf_rng( &conf, my_random, NULL );
 
     dtls_ciphersuites[0] = MBEDTLS_TLS_PSK_WITH_AES_128_CCM;
     dtls_ciphersuites[1] = MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_CCM_8;
@@ -245,11 +209,8 @@ static void dtls_psk_client_handler(void)
         goto exit;
     }
 
-    mbedtls_ssl_set_bio( &ssl, &server_fd,
-                         mbedtls_net_send, mbedtls_net_recv, mbedtls_net_recv_timeout );
-
-    mbedtls_ssl_set_timer_cb( &ssl, &timer, mbedtls_timing_set_delay,
-                                            mbedtls_timing_get_delay );
+    mbedtls_ssl_set_bio( &ssl, &server_fd, mbedtls_net_send, mbedtls_net_recv, mbedtls_net_recv_timeout );
+    mbedtls_ssl_set_timer_cb( &ssl, &timer, mbedtls_timing_set_delay, mbedtls_timing_get_delay );
 
     mbedtls_printf( " ok\n" );
 
@@ -257,7 +218,6 @@ static void dtls_psk_client_handler(void)
      * 4. Handshake
      */
     mbedtls_printf( "  . Performing the SSL/TLS handshake..." );
-//    fflush( stdout );
 
     do ret = mbedtls_ssl_handshake( &ssl );
     while( ret == MBEDTLS_ERR_SSL_WANT_READ ||
@@ -297,7 +257,6 @@ static void dtls_psk_client_handler(void)
      */
 send_request:
     mbedtls_printf( "  > Write to server:" );
-//    fflush( stdout );
 
     len = sizeof( MESSAGE ) - 1;
 
@@ -318,7 +277,6 @@ send_request:
      * 7. Read the echo response
      */
     mbedtls_printf( "  < Read from server:" );
-//    fflush( stdout );
 
     len = sizeof( buf ) - 1;
     memset( buf, 0, sizeof( buf ) );
@@ -368,28 +326,17 @@ close_notify:
      * 9. Final clean-ups and exit
      */
 exit:
-
-#ifdef MBEDTLS_ERROR_C
-    if( ret != 0 )
-    {
-        char error_buf[100];
-        mbedtls_strerror( ret, error_buf, 100 );
-        mbedtls_printf( "Last error was: %d - %s\n\n", ret, error_buf );
-    }
-#endif
-
     mbedtls_net_free( &server_fd );
 
     mbedtls_x509_crt_free( &cacert );
     mbedtls_ssl_free( &ssl );
     mbedtls_ssl_config_free( &conf );
-    mbedtls_ctr_drbg_free( &ctr_drbg );
-    mbedtls_entropy_free( &entropy );
 
     /* Shell can not handle large exit numbers -> 1 for errors */
     if( ret < 0 )
         ret = 1;
 
+#endif
     vTaskDelete(NULL);
 }
 

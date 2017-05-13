@@ -85,13 +85,13 @@ static void high_load_case_memory_usage(void){
 	/**********************************************************************************
 	*	5. Start 6 UDP sessions (5 servers, 1 client)
 	**********************************************************************************/	
-	// Start UDP servers for ports from 6001 to 6005 by using socket select
-	// if(xTaskCreate(udp_server_handler, "udp_server_handler", 1024, NULL, tskIDLE_PRIORITY + 1 + PRIORITY_OFFSET, NULL) != pdPASS)
-	// 	printf("\r\nUDP ERROR: Create UDP server task failed.");
+//	 Start UDP servers for ports from 6001 to 6005 by using socket select
+	 if(xTaskCreate(udp_server_handler, "udp_server_handler", 1024, NULL, tskIDLE_PRIORITY + 1 + PRIORITY_OFFSET, NULL) != pdPASS)
+	 	printf("\r\nUDP ERROR: Create UDP server task failed.");
 
-	// Start UDP client that simply sends data to 192.168.1.106 port 6001
-	// if(xTaskCreate(udp_client_handler, "udp_client_handler", 1024,NULL, tskIDLE_PRIORITY + 1 + PRIORITY_OFFSET, NULL) != pdPASS)
-	// 	printf("\r\nUDP ERROR: Create UDP client task failed.");
+//	 Start UDP client that simply sends data to 192.168.1.106 port 6001
+	 if(xTaskCreate(udp_client_handler, "udp_client_handler", 1024,NULL, tskIDLE_PRIORITY + 1 + PRIORITY_OFFSET, NULL) != pdPASS)
+	 	printf("\r\nUDP ERROR: Create UDP client task failed.");
 }
 
 // Heap monitor which will report the minimum available heap size during the execution.

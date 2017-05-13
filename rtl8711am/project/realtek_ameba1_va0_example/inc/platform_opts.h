@@ -163,7 +163,7 @@
 /******************End of iNIC configurations*******************/
 
 /* For DTLS-PSK-CLIENT example */
-#define CONFIG_EXAMPLE_DTLS_PSK_CLIENT			0
+#define CONFIG_EXAMPLE_DTLS_PSK_CLIENT			1
 
 /* For MQTT example */
 #define CONFIG_EXAMPLE_MQTT				0
@@ -172,7 +172,7 @@
 #define CONFIG_EXAMPLE_HTTPD			0
 
 /* For high-load memory use case memory usage */
-#define CONFIG_EXAMPLE_HIGH_LOAD_MEMORY_USE		1
+#define CONFIG_EXAMPLE_HIGH_LOAD_MEMORY_USE		0
 
 #if CONFIG_ENABLE_WPS
 #define WPS_CONNECT_RETRY_COUNT		4
