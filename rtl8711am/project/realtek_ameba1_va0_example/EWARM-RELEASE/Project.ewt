@@ -4264,6 +4264,9 @@
     <group>
       <name>example</name>
       <file>
+        <name>$PROJ_DIR$\..\..\..\component\common\example\dtls-psk-client\dtls-psk-client.c</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\..\component\common\example\example_entry.c</name>
       </file>
       <file>

@@ -77,21 +77,21 @@ static void high_load_case_memory_usage(void){
 	**********************************************************************************/	
 	// Start SSL connection
 	// For each session, it will setup the connection and transfer data 10 times with 5s interval
-	ssl_client_thread("192.168.1.107");
-	ssl_client_thread("192.168.1.107");
-	ssl_client_thread("192.168.1.107");
+	ssl_client_thread("139.196.187.107");
+	// ssl_client_thread("192.168.1.107");
+	// ssl_client_thread("192.168.1.107");
 
 	
 	/**********************************************************************************
 	*	5. Start 6 UDP sessions (5 servers, 1 client)
 	**********************************************************************************/	
 	// Start UDP servers for ports from 6001 to 6005 by using socket select
-	if(xTaskCreate(udp_server_handler, "udp_server_handler", 1024, NULL, tskIDLE_PRIORITY + 1 + PRIORITY_OFFSET, NULL) != pdPASS)
-		printf("\r\nUDP ERROR: Create UDP server task failed.");
+	// if(xTaskCreate(udp_server_handler, "udp_server_handler", 1024, NULL, tskIDLE_PRIORITY + 1 + PRIORITY_OFFSET, NULL) != pdPASS)
+	// 	printf("\r\nUDP ERROR: Create UDP server task failed.");
 
 	// Start UDP client that simply sends data to 192.168.1.106 port 6001
-	if(xTaskCreate(udp_client_handler, "udp_client_handler", 1024,NULL, tskIDLE_PRIORITY + 1 + PRIORITY_OFFSET, NULL) != pdPASS)
-		printf("\r\nUDP ERROR: Create UDP client task failed.");
+	// if(xTaskCreate(udp_client_handler, "udp_client_handler", 1024,NULL, tskIDLE_PRIORITY + 1 + PRIORITY_OFFSET, NULL) != pdPASS)
+	// 	printf("\r\nUDP ERROR: Create UDP client task failed.");
 }
 
 // Heap monitor which will report the minimum available heap size during the execution.
@@ -101,7 +101,7 @@ static void heap_monitor_handler(void *param){
 		int getHeap = xPortGetFreeHeapSize();
 		if(minHeap == 0 || minHeap > getHeap)
 			minHeap = getHeap;
-		printf("\n\nMin Available Heap: %d\n", minHeap);
+//		printf("\n\nMin Available Heap: %d\n", minHeap);
 		vTaskDelay(1000);
 	}	
 	vTaskDelete(NULL);
@@ -302,7 +302,7 @@ static char *hl_itoa(int value){
 
 static void ssl_client_handler(void *param){
 	char *server_host = param;
-	int server_port = 443;
+	int server_port = 4433;
 	char *get_request = "GET / HTTP/1.0\r\nConnection: Keep-Alive\r\n\r\n";
 	int ret, len;
 	unsigned char buf[512];

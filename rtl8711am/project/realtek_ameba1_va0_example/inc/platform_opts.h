@@ -162,6 +162,9 @@
 #endif
 /******************End of iNIC configurations*******************/
 
+/* For DTLS-PSK-CLIENT example */
+#define CONFIG_EXAMPLE_DTLS_PSK_CLIENT			0
+
 /* For MQTT example */
 #define CONFIG_EXAMPLE_MQTT				0
 

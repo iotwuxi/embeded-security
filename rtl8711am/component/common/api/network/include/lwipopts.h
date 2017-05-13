@@ -175,7 +175,7 @@ a lot of data that needs to be copied, this should be set high. */
 #define SO_REUSE                        			1
 
 #undef MEMP_NUM_NETCONN                	
-#define MEMP_NUM_NETCONN                	10
+#define MEMP_NUM_NETCONN                	20
 
 #undef TCP_WND                
 #define TCP_WND                                       (4*TCP_MSS)
@@ -196,7 +196,7 @@ a lot of data that needs to be copied, this should be set high. */
 #define SO_REUSE_RXTOALL				1
 
 #undef MEMP_NUM_NETCONN                	
-#define MEMP_NUM_NETCONN                	10
+#define MEMP_NUM_NETCONN                	20
 
 #undef MEMP_NUM_TCP_PCB
 #define MEMP_NUM_TCP_PCB				(MEMP_NUM_NETCONN)

@@ -25,6 +25,10 @@
 */
 void example_entry(void)
 {
+#if CONFIG_EXAMPLE_DTLS_PSK_CLIENT
+        example_dtls_psk_client();
+#endif
+
 #if CONFIG_EXAMPLE_HTTPD
 	example_httpd();
 #endif
@@ -34,7 +38,7 @@ void example_entry(void)
 #endif
 
 #if CONFIG_EXAMPLE_HIGH_LOAD_MEMORY_USE
-  example_high_load_memory_use();
+        example_high_load_memory_use();
 #endif
 
 }
