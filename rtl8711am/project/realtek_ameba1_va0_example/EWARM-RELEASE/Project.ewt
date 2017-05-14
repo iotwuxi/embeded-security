@@ -3473,16 +3473,13 @@
   <group>
     <name>cmsis</name>
     <file>
-      <name>$PROJ_DIR$\..\..\..\component\soc\realtek\8195a\cmsis\device\system_8195a.c</name>
-    </file>
-  </group>
-  <group>
-    <name>console</name>
-    <file>
       <name>$PROJ_DIR$\..\..\..\component\soc\realtek\8195a\misc\driver\low_level_io.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\..\component\soc\realtek\8195a\misc\driver\rtl_consol.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\component\soc\realtek\8195a\cmsis\device\system_8195a.c</name>
     </file>
   </group>
   <group>
@@ -3561,51 +3558,6 @@
     </group>
     <group>
       <name>app</name>
-      <group>
-        <name>httpd</name>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\component\common\network\httpd\httpd_tls.c</name>
-        </file>
-      </group>
-      <group>
-        <name>mqtt</name>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\component\common\application\mqtt\MQTTClient\MQTTClient.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\component\common\application\mqtt\MQTTPacket\MQTTConnectClient.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\component\common\application\mqtt\MQTTPacket\MQTTConnectServer.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\component\common\application\mqtt\MQTTPacket\MQTTDeserializePublish.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\component\common\application\mqtt\MQTTPacket\MQTTFormat.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\component\common\application\mqtt\MQTTClient\MQTTFreertos.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\component\common\application\mqtt\MQTTPacket\MQTTPacket.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\component\common\application\mqtt\MQTTPacket\MQTTSerializePublish.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\component\common\application\mqtt\MQTTPacket\MQTTSubscribeClient.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\component\common\application\mqtt\MQTTPacket\MQTTSubscribeServer.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\component\common\application\mqtt\MQTTPacket\MQTTUnsubscribeClient.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\component\common\application\mqtt\MQTTPacket\MQTTUnsubscribeServer.c</name>
-        </file>
-      </group>
       <file>
         <name>$PROJ_DIR$\..\..\..\component\common\api\network\src\wlan_network.c</name>
       </file>
@@ -4255,15 +4207,6 @@
   </group>
   <group>
     <name>user</name>
-    <file>
-      <name>$PROJ_DIR$\..\src\main.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\inc\platform_opts.h</name>
-    </file>
-  </group>
-  <group>
-    <name>utilities</name>
     <group>
       <name>example</name>
       <file>
@@ -4273,6 +4216,12 @@
         <name>$PROJ_DIR$\..\..\..\component\common\example\example_entry.c</name>
       </file>
     </group>
+    <file>
+      <name>$PROJ_DIR$\..\src\main.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\inc\platform_opts.h</name>
+    </file>
   </group>
 </project>
 

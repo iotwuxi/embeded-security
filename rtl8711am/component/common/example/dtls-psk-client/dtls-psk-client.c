@@ -15,7 +15,7 @@
 #define DFL_PSK_IDENTITY            "identity"
 #define SERVER_PORT                 "4433"
 #define SERVER_NAME                 "localhost"
-#define SERVER_ADDR                 "139.196.187.107" /* °¢ÀïÔÆ */
+#define SERVER_ADDR                 "139.196.187.107" /* é˜¿é‡Œäº‘ */
 #define MESSAGE                     "Hello DTLS Server"
 #define READ_TIMEOUT_MS             1000
 #define MAX_RETRY                   5
@@ -87,19 +87,6 @@ static void* my_calloc(size_t nelements, size_t elementSize)
 }
 
 #define my_free     vPortFree
-
-static char *hl_itoa(int value){
-    char *val_str;
-    int tmp = value, len = 1;
-
-    while((tmp /= 10) > 0)
-        len ++;
-
-    val_str = (char *) pvPortMalloc(len + 1);
-    sprintf(val_str, "%d", value);
-
-    return val_str;
-}
 
 static int my_random(void *p_rng, unsigned char *output, size_t output_len)
 {
