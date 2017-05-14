@@ -16,10 +16,10 @@
 #define SERVER_PORT                 "4433"
 #define SERVER_NAME                 "localhost"
 #define SERVER_ADDR                 "139.196.187.107" /* 阿里云 */
-#define MESSAGE                     "Hello DTLS Server"
+#define MESSAGE                     "This is RTL8711AM DTLS Client"
 #define READ_TIMEOUT_MS             1000
 #define MAX_RETRY                   5
-#define PRIORITY_OFFSET		    1
+#define PRIORITY_OFFSET		        1
 
 void dtls_psk_client_thread(void);
 static void dtls_psk_client_handler(void);
