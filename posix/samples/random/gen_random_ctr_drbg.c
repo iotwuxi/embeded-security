@@ -32,10 +32,10 @@ int main( void )
 int main( void )
 {
     FILE *f;
-    int i, k, ret;
+    int ret;
     mbedtls_ctr_drbg_context ctr_drbg;
     mbedtls_entropy_context entropy;
-    unsigned char buf[1024];
+    unsigned char buf[64];
 
     mbedtls_ctr_drbg_init( &ctr_drbg );
 
@@ -74,21 +74,17 @@ int main( void )
     }
 #endif
 
-    for( i = 0, k = 768; i < k; i++ )
+    ret = mbedtls_ctr_drbg_random( &ctr_drbg, buf, sizeof( buf ) );
+    if( ret != 0 )
     {
-        ret = mbedtls_ctr_drbg_random( &ctr_drbg, buf, sizeof( buf ) );
-        if( ret != 0 )
-        {
-            mbedtls_printf("failed!\n");
-            goto cleanup;
-        }
-
-        fwrite( buf, 1, sizeof( buf ), f );
-
-        mbedtls_printf( "Generating %ldkb of data in file '%s'... %04.1f" \
-                "%% done\r", (long)(sizeof(buf) * k / 1024), RANDOM_FILE, (100 * (float) (i + 1)) / k );
-        fflush( stdout );
+        mbedtls_printf("failed!\n");
+        goto cleanup;
     }
+
+    fwrite( buf, 1, sizeof( buf ), f );
+
+    mbedtls_printf( "Generating %ldkb of data in file '%s' done.\r", sizeof(buf), RANDOM_FILE );
+    fflush( stdout );
 
     ret = 0;
 

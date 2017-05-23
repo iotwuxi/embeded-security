@@ -29,7 +29,7 @@ int main( void )
 int main( void )
 {
     FILE *f;
-    int i, k, ret;
+    int ret;
     mbedtls_entropy_context entropy;
     unsigned char buf[MBEDTLS_ENTROPY_BLOCK_SIZE];
 
@@ -41,21 +41,17 @@ int main( void )
 
     mbedtls_entropy_init( &entropy );
 
-    for( i = 0, k = 768; i < k; i++ )
+    ret = mbedtls_entropy_func( &entropy, buf, sizeof( buf ) );
+    if( ret != 0 )
     {
-        ret = mbedtls_entropy_func( &entropy, buf, sizeof( buf ) );
-        if( ret != 0 )
-        {
-            mbedtls_printf("failed!\n");
-            goto cleanup;
-        }
-
-        fwrite( buf, 1, sizeof( buf ), f );
-
-        mbedtls_printf( "Generating %ldkb of data in file '%s'... %04.1f" \
-                "%% done\r", (long)(sizeof(buf) * k / 1024), ENTROPY_FILE, (100 * (float) (i + 1)) / k );
-        fflush( stdout );
+        mbedtls_printf("failed!\n");
+        goto cleanup;
     }
+
+    fwrite( buf, 1, sizeof( buf ), f );
+
+    mbedtls_printf( "Generating %ldkb of data in file '%s' done.\r", sizeof(buf), ENTROPY_FILE );
+    fflush( stdout );
 
     ret = 0;
 
