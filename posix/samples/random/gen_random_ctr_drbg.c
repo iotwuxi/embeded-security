@@ -2,8 +2,6 @@
 #include "mbedtls/entropy.h"
 #include "mbedtls/ctr_drbg.h"
 
-#define mbedtls_printf     printf
-
 int main( void )
 {
     int i, ret;
