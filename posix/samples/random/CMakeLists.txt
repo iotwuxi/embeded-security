@@ -2,9 +2,7 @@ cmake_minimum_required(VERSION 2.6)
 project("random")
 
 set(libs
-    mbedtls
     mbedcrypto 
-    mbedx509
 )
 
 set(targets
