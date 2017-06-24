@@ -2,9 +2,5 @@
 !CMakeLists.txt
 !*.c
 !*.h
-
-#CMakeCache.txt
-#CMakeFiles
-
-#cmake_install.cmake
-#Makefile
+!*.txt
+!*.md
