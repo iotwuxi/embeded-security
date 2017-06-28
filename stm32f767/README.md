@@ -6,6 +6,7 @@
 - Windows —— IAR(7.30以上) + STLink
 
 ## 目录结构
+```
 .
 ├── app
 │   ├── blink
@@ -30,8 +31,8 @@
 │   └── iar
 ├── README.md
 └── tests
-    └── README.md
-
+	└── README.md
+```
 ### Windows
 ```
 使用IAR工具打开 /project/iar/security.eww 工程文件
