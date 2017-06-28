@@ -1,0 +1,157 @@
+# Makefile for STM32F767 NUCLEO144 board projects
+PROJECT = security
+PROJECT_PATH ?= $(shell pwd)/../..
+
+HEAP_SIZE = 0x400
+
+# Sources
+SOURCES_S = ${PROJECT_PATH}/drivers/cmsis/stm32f7xx/source/gcc/startup_stm32f767xx.s
+# SOURCES_S += ${PROJECT_PATH}/freertos/source/portable/iar/arm_cm7/r0p1/portasm.s
+
+#app
+SOURCES_C += ${PROJECT_PATH}/app/http-server/src/main.c
+SOURCES_C += ${PROJECT_PATH}/app/http-server/src/ethernetif.c
+SOURCES_C += ${PROJECT_PATH}/app/http-server/src/app_ethernet.c
+SOURCES_C += ${PROJECT_PATH}/app/http-server/src/httpserver-netconn.c
+SOURCES_C += ${PROJECT_PATH}/app/http-server/src/stm32f7xx_hal_timebase_tim.c
+SOURCES_C += ${PROJECT_PATH}/app/http-server/src/stm32f7xx_it.c
+
+# sys
+SOURCES_C += $(wildcard ${PROJECT_PATH}/project/gcc/sys/*.c)
+
+SOURCES_C += ${PROJECT_PATH}/drivers/cmsis/stm32f7xx/source/system_stm32f7xx.c
+SOURCES_C += ${PROJECT_PATH}/drivers/bsp/stm32f7xx_nucleo_144/stm32f7xx_nucleo_144.c
+
+# hal
+SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal.c
+SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_cortex.c
+SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_eth.c
+SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_gpio.c
+SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_pwr_ex.c
+SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_rcc.c
+SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_tim.c
+SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_tim_ex.c
+SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_uart.c
+
+# lwip
+SOURCES_C += $(wildcard ${PROJECT_PATH}/external/lwip/src/api/*.c)
+SOURCES_C += ${PROJECT_PATH}/external/lwip/src/apps/httpd/fs.c
+SOURCES_C += ${PROJECT_PATH}/external/lwip/src/apps/httpd/httpd.c
+SOURCES_C += $(wildcard ${PROJECT_PATH}/external/lwip/src/core/*.c)
+SOURCES_C += $(wildcard ${PROJECT_PATH}/external/lwip/src/core/ipv4/*.c)
+SOURCES_C += ${PROJECT_PATH}/external/lwip/src/netif/ethernet.c
+SOURCES_C += ${PROJECT_PATH}/external/lwip/system/OS/sys_arch.c
+
+# freertos
+SOURCES_C += $(wildcard ${PROJECT_PATH}/freertos/source/*.c)
+SOURCES_C += ${PROJECT_PATH}/freertos/source/portable/memmang/heap_4.c
+SOURCES_C += ${PROJECT_PATH}/freertos/source/portable/gcc/arm_cm7/r0p1/port.c
+SOURCES_C += ${PROJECT_PATH}/freertos/source/cmsis_rtos/cmsis_os.c
+
+OBJS = $(SOURCES_S:.s=.o) $(SOURCES_C:.c=.o) 
+
+# Includes and Defines
+INCLUDES = -I ${PROJECT_PATH}/app/http-server/inc
+INCLUDES += -I ${PROJECT_PATH}/app/http-server/src
+INCLUDES += -I ${PROJECT_PATH}/drivers/bsp/stm32f7xx_nucleo_144
+INCLUDES += -I ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/inc
+INCLUDES += -I ${PROJECT_PATH}/drivers/cmsis/inc
+INCLUDES += -I ${PROJECT_PATH}/drivers/cmsis/stm32f7xx/inc
+INCLUDES += -I ${PROJECT_PATH}/external/lwip/src/include
+INCLUDES += -I ${PROJECT_PATH}/external/lwip/system
+INCLUDES += -I ${PROJECT_PATH}/freertos/source
+INCLUDES += -I ${PROJECT_PATH}/freertos/source/portable/gcc/arm_cm7/r0p1
+INCLUDES += -I ${PROJECT_PATH}/freertos/source/cmsis_rtos
+INCLUDES += -I ${PROJECT_PATH}/freertos/source/include
+
+DEFINES = -DSTM32 -DSTM32F7 -DSTM32F767xx -DUSE_HAL_DRIVER -DUSE_STM32F7XX_NUCLEO_144
+
+################
+# Compiler/Assembler/Linker/etc
+PREFIX = arm-none-eabi
+
+CC = $(PREFIX)-gcc
+AS = $(PREFIX)-as
+AR = $(PREFIX)-ar
+LD = $(PREFIX)-gcc
+NM = $(PREFIX)-nm
+OBJCOPY = $(PREFIX)-objcopy
+OBJDUMP = $(PREFIX)-objdump
+READELF = $(PREFIX)-readelf
+SIZE = $(PREFIX)-size
+GDB = $(PREFIX)-gdb
+RM = rm -f
+
+################
+# Compiler options
+MCUFLAGS = -mcpu=cortex-m7 -mlittle-endian
+MCUFLAGS += -mfloat-abi=hard -mfpu=fpv5-sp-d16
+MCUFLAGS += -mthumb
+
+DEBUG_OPTIMIZE_FLAGS = -O0 -g -gdwarf-2
+#DEBUG_OPTIMIZE_FLAGS = -O2
+
+CFLAGS = -std=c11
+CFLAGS += -w -Wextra --pedantic
+# CFLAGS += -Wall -Wextra --pedantic
+
+# generate listing files
+CFLAGS += -Wa,-aghlms=$(<:%.c=%.lst)
+CFLAGS += -DHEAP_SIZE=$(HEAP_SIZE)
+CFLAGS += -fstack-usage
+
+CFLAGS_EXTRA = -nostartfiles -nodefaultlibs -nostdlib
+CFLAGS_EXTRA += -fdata-sections -ffunction-sections
+
+CFLAGS += $(DEFINES) $(MCUFLAGS) $(DEBUG_OPTIMIZE_FLAGS) $(CFLAGS_EXTRA) $(INCLUDES)
+
+LDFLAGS = -static $(MCUFLAGS)
+LDFLAGS += -Wl,--start-group -lgcc -lm -lc -lg -lstdc++ -lsupc++ -Wl,--end-group
+# LDFLAGS += -Wl,--gc-sections -Wl,--print-gc-sections -Wl,--cref,-Map=$(@:%.elf=%.map)
+LDFLAGS += -Wl,--gc-sections -Wl,--cref,-Map=$(@:%.elf=%.map)
+LDFLAGS += -L ${PROJECT_PATH}/project/gcc/ -T stm32f767zi_flash.ld
+
+################
+# phony rules
+.PHONY: all clean flash erase
+
+all: $(PROJECT).bin $(PROJECT).hex $(PROJECT).asm
+
+clean:
+	@$(RM) $(OBJS) $(OBJS:$.o=$.lst) $(OBJS:$.o=$.su) $(PROJECT).elf $(PROJECT).bin $(PROJECT).hex $(PROJECT).map $(PROJECT).asm
+	@echo "clean all :*.o *.elf *.lst *.su *.bin *.map *.hex *.asm done!"
+
+flash: $(PROJECT).bin
+	st-flash write $(PROJECT).bin 0x08000000
+
+erase:
+	st-flash erase
+
+GDB_PORT:=4242
+gdb-server:
+	# st-util will listen on port :4242
+	st-util
+
+gdb: $(PROJECT).elf
+	$(GDB) --eval-command="target extended-remote localhost:$(GDB_PORT)" --eval-command="monitor halt" $(PROJECT).elf
+
+################
+# dependency graphs for wildcard rules
+$(PROJECT).elf: $(OBJS)
+
+################
+# wildcard rules
+%.elf:
+	$(LD) $(LDFLAGS) $(OBJS) -o $@
+	$(SIZE) -A -x $@
+
+%.bin: %.elf
+	$(OBJCOPY) -O binary $< $@
+
+%.hex: %.elf
+	$(OBJCOPY) -O ihex $< $@
+
+%.asm: %.elf
+	$(OBJDUMP) -dCxw $< > $@
+
+# EOF
