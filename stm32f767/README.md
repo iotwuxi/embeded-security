@@ -1,9 +1,9 @@
 ## iot security sample on stm32f767 platform   
 ********************************************
 初始版本工程，示例代码为一个HTTP Server工程实例，由STM32F7Cube生成，重新整理了目录结构，加入了Linux 下 gcc工程，IAR/GCC 可编译通过，未使用开发板调试. 
-工程支持Windows/Linux下开发：
-- Linux —— GDB + STLink
-- Windows —— IAR(7.30以上) + STLink
+工程支持Windows/Linux下开发：     
+- Linux —— GDB + STLink     
+- Windows —— IAR(7.30以上) + STLink     
 
 ## 目录结构
 ```
