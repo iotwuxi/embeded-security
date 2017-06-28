@@ -1,15 +1,15 @@
-## iot security samples
+## iot security 基础工程
 ************************
 
-### Overview
-This sample code shows iot security samples on Linux/stm32f767 platform.
+### 概述
+基础工程将使用mebdtls作为物联网通信安全套件，描述mbedtls的使用方法及安全通信流程.
 ![coaps.png](https://bitbucket.org/repo/9ppMAA6/images/2269939246-coaps.png)    
 
-### Platform
+### 平台
 - linux
 - stm32f767
 
-### Library
+### 软件库
 - [Mbedtls](https://github.com/ARMmbed/mbedtls)
 - Lwip
 - coap
