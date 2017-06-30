@@ -1,14 +1,11 @@
-# Makefile for STM32F767 NUCLEO144 board projects
-PROJECT = security
+# Makefile for http_server project
+PROJECT = http_server
 PROJECT_PATH ?= $(shell pwd)/../..
 
-HEAP_SIZE = 0x400
-
-# Sources
+# Sources-asm
 SOURCES_S = ${PROJECT_PATH}/drivers/cmsis/stm32f7xx/source/gcc/startup_stm32f767xx.s
-# SOURCES_S += ${PROJECT_PATH}/freertos/source/portable/iar/arm_cm7/r0p1/portasm.s
 
-#app
+# App
 SOURCES_C += ${PROJECT_PATH}/app/http-server/src/main.c
 SOURCES_C += ${PROJECT_PATH}/app/http-server/src/ethernetif.c
 SOURCES_C += ${PROJECT_PATH}/app/http-server/src/app_ethernet.c
@@ -16,13 +13,12 @@ SOURCES_C += ${PROJECT_PATH}/app/http-server/src/httpserver-netconn.c
 SOURCES_C += ${PROJECT_PATH}/app/http-server/src/stm32f7xx_hal_timebase_tim.c
 SOURCES_C += ${PROJECT_PATH}/app/http-server/src/stm32f7xx_it.c
 
-# sys
-SOURCES_C += $(wildcard ${PROJECT_PATH}/project/gcc/sys/*.c)
+# Sys
+SOURCES_C += ${PROJECT_PATH}/project/gcc/sys/syscalls.c
 
+# Driver
 SOURCES_C += ${PROJECT_PATH}/drivers/cmsis/stm32f7xx/source/system_stm32f7xx.c
 SOURCES_C += ${PROJECT_PATH}/drivers/bsp/stm32f7xx_nucleo_144/stm32f7xx_nucleo_144.c
-
-# hal
 SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal.c
 SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_cortex.c
 SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_eth.c
@@ -48,9 +44,10 @@ SOURCES_C += ${PROJECT_PATH}/freertos/source/portable/memmang/heap_4.c
 SOURCES_C += ${PROJECT_PATH}/freertos/source/portable/gcc/arm_cm7/r0p1/port.c
 SOURCES_C += ${PROJECT_PATH}/freertos/source/cmsis_rtos/cmsis_os.c
 
+# OBJS
 OBJS = $(SOURCES_S:.s=.o) $(SOURCES_C:.c=.o) 
 
-# Includes and Defines
+# Includes
 INCLUDES = -I ${PROJECT_PATH}/app/http-server/inc
 INCLUDES += -I ${PROJECT_PATH}/app/http-server/src
 INCLUDES += -I ${PROJECT_PATH}/drivers/bsp/stm32f7xx_nucleo_144
@@ -64,9 +61,9 @@ INCLUDES += -I ${PROJECT_PATH}/freertos/source/portable/gcc/arm_cm7/r0p1
 INCLUDES += -I ${PROJECT_PATH}/freertos/source/cmsis_rtos
 INCLUDES += -I ${PROJECT_PATH}/freertos/source/include
 
+# Defines
 DEFINES = -DSTM32 -DSTM32F7 -DSTM32F767xx -DUSE_HAL_DRIVER -DUSE_STM32F7XX_NUCLEO_144
 
-################
 # Compiler/Assembler/Linker/etc
 PREFIX = arm-none-eabi
 
@@ -82,18 +79,15 @@ SIZE = $(PREFIX)-size
 GDB = $(PREFIX)-gdb
 RM = rm -f
 
-################
 # Compiler options
 MCUFLAGS = -mcpu=cortex-m7 -mlittle-endian
 MCUFLAGS += -mfloat-abi=hard -mfpu=fpv5-sp-d16
 MCUFLAGS += -mthumb
 
 DEBUG_OPTIMIZE_FLAGS = -O0 -g -gdwarf-2
-#DEBUG_OPTIMIZE_FLAGS = -O2
 
 CFLAGS = -std=c11
-CFLAGS += -w -Wextra --pedantic
-# CFLAGS += -Wall -Wextra --pedantic
+CFLAGS += -Wall -Wextra --pedantic -Wno-unused-parameter
 
 # generate listing files
 CFLAGS += -Wa,-aghlms=$(<:%.c=%.lst)
@@ -109,9 +103,8 @@ LDFLAGS = -static $(MCUFLAGS)
 LDFLAGS += -Wl,--start-group -lgcc -lm -lc -lg -lstdc++ -lsupc++ -Wl,--end-group
 # LDFLAGS += -Wl,--gc-sections -Wl,--print-gc-sections -Wl,--cref,-Map=$(@:%.elf=%.map)
 LDFLAGS += -Wl,--gc-sections -Wl,--cref,-Map=$(@:%.elf=%.map)
-LDFLAGS += -L ${PROJECT_PATH}/project/gcc/ -T stm32f767zi_flash.ld
+LDFLAGS += -L ${PROJECT_PATH}/project/gcc/sys/ -T stm32f767zi_flash.ld
 
-################
 # phony rules
 .PHONY: all clean flash erase
 
@@ -135,11 +128,9 @@ gdb-server:
 gdb: $(PROJECT).elf
 	$(GDB) --eval-command="target extended-remote localhost:$(GDB_PORT)" --eval-command="monitor halt" $(PROJECT).elf
 
-################
 # dependency graphs for wildcard rules
 $(PROJECT).elf: $(OBJS)
 
-################
 # wildcard rules
 %.elf:
 	$(LD) $(LDFLAGS) $(OBJS) -o $@
