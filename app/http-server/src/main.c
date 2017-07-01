@@ -82,7 +82,7 @@ static void Netif_Config(void);
 static void Error_Handler(void);
 static void MPU_Config(void);
 static void CPU_CACHE_Enable(void);
-
+static void BlinkThread(void const * argument);
 /* Private functions ---------------------------------------------------------*/
 
 /**
@@ -128,7 +128,7 @@ int main(void)
   UartHandle.Init.BaudRate   = 9600;
   UartHandle.Init.WordLength = UART_WORDLENGTH_8B;
   UartHandle.Init.StopBits   = UART_STOPBITS_1;
-  UartHandle.Init.Parity     = UART_PARITY_ODD;
+  UartHandle.Init.Parity     = UART_PARITY_NONE;
   UartHandle.Init.HwFlowCtl  = UART_HWCONTROL_NONE;
   UartHandle.Init.Mode       = UART_MODE_TX_RX;
   UartHandle.Init.OverSampling = UART_OVERSAMPLING_16;
@@ -138,9 +138,7 @@ int main(void)
     Error_Handler();
   }
 
-  /* Output a message on Hyperterminal using printf function */
-  printf("\n\r UART Printf Example: retarget the C library printf function to the UART\n\r");
-  printf("** Test finished successfully. ** \n\r");
+  printf("** Hello World - Stm32f767zi-nucleo board. ** \n");
 
   /* Init thread */
 #if defined(__GNUC__)
@@ -148,7 +146,10 @@ int main(void)
 #else
   osThreadDef(Start, StartThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE * 2);
 #endif
-  
+
+  osThreadDef(Blink, BlinkThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE * 2);
+
+  osThreadCreate (osThread(Blink), NULL);
   osThreadCreate (osThread(Start), NULL);
   
   /* Start scheduler */
@@ -201,6 +202,18 @@ static void StartThread(void const * argument)
   {
     /* Delete the Init Thread */ 
     osThreadTerminate(NULL);
+  }
+}
+
+
+static void BlinkThread(void const * argument)
+{ 
+  BSP_LED_Init(LED2);
+  for( ;; )
+  {
+    BSP_LED_Toggle(LED2);
+    printf("blink task.\n");
+    osDelay(1000);
   }
 }
 

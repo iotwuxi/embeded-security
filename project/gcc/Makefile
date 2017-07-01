@@ -25,9 +25,11 @@ SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_eth.
 SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_gpio.c
 SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_pwr_ex.c
 SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_rcc.c
+SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_rcc_ex.c
 SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_tim.c
 SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_tim_ex.c
 SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_uart.c
+SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_msp.c
 
 # lwip
 SOURCES_C += $(wildcard ${PROJECT_PATH}/external/lwip/src/api/*.c)

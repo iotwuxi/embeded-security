@@ -34,20 +34,20 @@
         <option>
           <name>Input variant</name>
           <version>3</version>
-          <state>6</state>
+          <state>0</state>
         </option>
         <option>
           <name>Input description</name>
-          <state>No specifier n, no float nor long long, no scan set, no assignment suppressing.</state>
+          <state>Automatic choice of formatter.</state>
         </option>
         <option>
           <name>Output variant</name>
           <version>2</version>
-          <state>5</state>
+          <state>0</state>
         </option>
         <option>
           <name>Output description</name>
-          <state>No specifier a, A, no specifier n, no float nor long long.</state>
+          <state>Automatic choice of formatter.</state>
         </option>
         <option>
           <name>GOutputBinary</name>
@@ -1963,7 +1963,7 @@
   <group>
     <name>doc</name>
     <file>
-      <name>$PROJ_DIR$\..\..\README.md</name>
+      <name>$PROJ_DIR$\..\..\README.MD</name>
     </file>
   </group>
   <group>
@@ -1998,10 +1998,16 @@
         <name>$PROJ_DIR$\..\..\drivers\stm32f7xx_hal_driver\src\stm32f7xx_hal_gpio.c</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\drivers\stm32f7xx_hal_driver\src\stm32f7xx_hal_msp.c</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\drivers\stm32f7xx_hal_driver\src\stm32f7xx_hal_pwr_ex.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\drivers\stm32f7xx_hal_driver\src\stm32f7xx_hal_rcc.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\drivers\stm32f7xx_hal_driver\src\stm32f7xx_hal_rcc_ex.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\drivers\stm32f7xx_hal_driver\src\stm32f7xx_hal_tim.c</name>

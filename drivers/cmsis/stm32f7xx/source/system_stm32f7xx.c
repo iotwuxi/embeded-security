@@ -2,9 +2,10 @@
   ******************************************************************************
   * @file    system_stm32f7xx.c
   * @author  MCD Application Team
-  * @version V1.2.0
+  * @version V1.1.0
   * @date    30-December-2016
-  * @brief   CMSIS Cortex-M7 Device Peripheral Access Layer System Source File.
+  * @brief   - CMSIS Cortex-M7 Device Peripheral Access Layer System Source File.
+  *          - This file is dedicated only for STM32F746 NUCLEO 144 boards.
   *
   *   This file provides two functions and one global variable to be called from 
   *   user application:
@@ -66,7 +67,7 @@
 #include "stm32f7xx.h"
 
 #if !defined  (HSE_VALUE) 
-  #define HSE_VALUE    ((uint32_t)25000000) /*!< Default value of the External oscillator in Hz */
+  #define HSE_VALUE    ((uint32_t)8000000) /*!< Default value of the External oscillator in Hz */
 #endif /* HSE_VALUE */
 
 #if !defined  (HSI_VALUE)
@@ -90,7 +91,6 @@
   */
 
 /************************* Miscellaneous Configuration ************************/
-
 /*!< Uncomment the following line if you need to relocate your vector Table in
      Internal SRAM. */
 /* #define VECT_TAB_SRAM */
@@ -133,7 +133,7 @@
 /** @addtogroup STM32F7xx_System_Private_FunctionPrototypes
   * @{
   */
-
+ 
 /**
   * @}
   */
@@ -176,7 +176,7 @@ void SystemInit(void)
 
   /* Configure the Vector Table location add offset address ------------------*/
 #ifdef VECT_TAB_SRAM
-  SCB->VTOR = RAMDTCM_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal SRAM */
+  SCB->VTOR = SRAM1_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal SRAM */
 #else
   SCB->VTOR = FLASH_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal FLASH */
 #endif
@@ -203,11 +203,11 @@ void SystemInit(void)
   *           - If SYSCLK source is PLL, SystemCoreClock will contain the HSE_VALUE(**) 
   *             or HSI_VALUE(*) multiplied/divided by the PLL factors.
   *         
-  *         (*) HSI_VALUE is a constant defined in stm32f7xx_hal_conf.h file (default value
+  *         (*) HSI_VALUE is a constant defined in stm32f7xx.h file (default value
   *             16 MHz) but the real value may vary depending on the variations
   *             in voltage and temperature.   
   *    
-  *         (**) HSE_VALUE is a constant defined in stm32f7xx_hal_conf.h file (default value
+  *         (**) HSE_VALUE is a constant defined in stm32f7xx.h file (default value
   *              25 MHz), user has to ensure that HSE_VALUE is same as the real
   *              frequency of the crystal used. Otherwise, this function may
   *              have wrong result.
