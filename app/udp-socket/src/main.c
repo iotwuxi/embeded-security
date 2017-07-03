@@ -55,7 +55,7 @@
 #include "lwip/netif.h"
 #include "lwip/tcpip.h"
 #include "app_ethernet.h"
-#include "httpserver-netconn.h"
+#include "udp_server.h"
 
 /* UART handler declaration */
 UART_HandleTypeDef UartHandle;
@@ -187,7 +187,8 @@ static void StartThread(void const * argument)
   Netif_Config();
   
   /* Initialize webserver demo */
-  http_server_netconn_init();
+  // http_server_netconn_init();
+  udp_server_init();
   
   /* Notify user about the network interface config */
   User_notification(&gnetif);

@@ -1946,9 +1946,6 @@
           <name>$PROJ_DIR$\..\..\..\app\udp-socket\src\ethernetif.c</name>
         </file>
         <file>
-          <name>$PROJ_DIR$\..\..\..\app\udp-socket\src\httpserver-netconn.c</name>
-        </file>
-        <file>
           <name>$PROJ_DIR$\..\..\..\app\udp-socket\src\main.c</name>
         </file>
         <file>
@@ -1956,6 +1953,9 @@
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\..\app\udp-socket\src\stm32f7xx_it.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\app\udp-socket\src\udp_server.c</name>
         </file>
       </group>
     </group>
