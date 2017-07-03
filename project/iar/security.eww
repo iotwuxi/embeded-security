@@ -2,7 +2,10 @@
 
 <workspace>
   <project>
-    <path>$WS_DIR$\security.ewp</path>
+    <path>$WS_DIR$\http-server\http-server.ewp</path>
+  </project>
+  <project>
+    <path>$WS_DIR$\udp-socket\udp-socket.ewp</path>
   </project>
   <batchBuild/>
 </workspace>
