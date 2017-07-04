@@ -119,6 +119,27 @@ typedef enum
  #define USE_STM32F7XX_NUCLEO_144
 #endif
 
+/* Exported types ------------------------------------------------------------*/
+/* Exported constants --------------------------------------------------------*/
+/* User can use this section to tailor USARTx/UARTx instance used and associated
+   resources */
+/* Definition for USARTx clock resources */
+#define USARTx                           USART3
+#define USARTx_CLK_ENABLE()              __HAL_RCC_USART3_CLK_ENABLE();
+#define USARTx_RX_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOD_CLK_ENABLE()
+#define USARTx_TX_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOD_CLK_ENABLE()
+
+#define USARTx_FORCE_RESET()             __HAL_RCC_USART3_FORCE_RESET()
+#define USARTx_RELEASE_RESET()           __HAL_RCC_USART3_RELEASE_RESET()
+
+/* Definition for USARTx Pins */
+#define USARTx_TX_PIN                    GPIO_PIN_8
+#define USARTx_TX_GPIO_PORT              GPIOD
+#define USARTx_TX_AF                     GPIO_AF7_USART3
+#define USARTx_RX_PIN                    GPIO_PIN_9
+#define USARTx_RX_GPIO_PORT              GPIOD
+#define USARTx_RX_AF                     GPIO_AF7_USART3
+
 /** @addtogroup STM32F7XX_NUCLEO_144_LOW_LEVEL_LED
   * @{
   */
@@ -307,6 +328,14 @@ typedef enum
   * @{
   */
 uint32_t         BSP_GetVersion(void);  
+uint8_t          bsp_uart_init(uint32_t baudrate);
+void             SystemClock_Config(void);
+void             MPU_Config(void);
+void             CPU_CACHE_Enable(void);
+void             Error_Handler(void);
+#ifdef  USE_FULL_ASSERT
+void             assert_failed(uint8_t* file, uint32_t line);
+#endif
 void             BSP_LED_Init(Led_TypeDef Led);
 void             BSP_LED_DeInit(Led_TypeDef Led);
 void             BSP_LED_On(Led_TypeDef Led);

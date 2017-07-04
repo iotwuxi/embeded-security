@@ -1998,9 +1998,6 @@
         <name>$PROJ_DIR$\..\..\..\drivers\stm32f7xx_hal_driver\src\stm32f7xx_hal_gpio.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\drivers\stm32f7xx_hal_driver\src\stm32f7xx_hal_msp.c</name>
-      </file>
-      <file>
         <name>$PROJ_DIR$\..\..\..\drivers\stm32f7xx_hal_driver\src\stm32f7xx_hal_pwr_ex.c</name>
       </file>
       <file>
