@@ -2,6 +2,9 @@
 
 <workspace>
   <project>
+    <path>$WS_DIR$\blink\blink.ewp</path>
+  </project>
+  <project>
     <path>$WS_DIR$\http-server\http-server.ewp</path>
   </project>
   <project>

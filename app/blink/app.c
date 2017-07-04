@@ -5,7 +5,6 @@
 #include "cmsis_os.h"
 
 static void BlinkThread(void const * argument);
-static void StartThread(void const * argument);
 
 int main(void)
 {
