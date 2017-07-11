@@ -55,7 +55,12 @@
 #include "lwip/netif.h"
 #include "lwip/tcpip.h"
 #include "app_ethernet.h"
+#ifdef UDP_SERVER
 #include "udp_server.h"
+#endif
+#ifdef UDP_CLIENT
+#include "udp_client.h"
+#endif
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -133,10 +138,15 @@ static void StartThread(void const * argument)
   /* Initialize the LwIP stack */
   Netif_Config();
   
-  /* Initialize webserver demo */
-  // http_server_netconn_init();
+  /* Initialize UDP Server/Client */
+#ifdef UDP_SERVER
   udp_server_init();
-  
+#endif
+
+#ifdef UDP_CLIENT
+  udp_client_init();
+#endif
+
   /* Notify user about the network interface config */
   User_notification(&gnetif);
   

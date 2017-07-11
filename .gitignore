@@ -13,6 +13,11 @@
 Debug/
 settings/
 
+# 忽略IAR输出文件
+Obj/
+Exe/
+List/
+
 # 忽略ameba1项目中的部分特殊文件
 **/EWARM-RELEASE/main.icf
 **/EWARM-RELEASE/tmp.board
