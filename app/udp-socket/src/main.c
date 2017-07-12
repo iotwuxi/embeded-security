@@ -102,7 +102,7 @@ static void BlinkThread(void const * argument)
     for( ;; )
     {
         BSP_LED_Toggle(LED2);
-        printf("blink task.\n");
+        // printf("blink task.\n");
         osDelay(1000);
     }
 }

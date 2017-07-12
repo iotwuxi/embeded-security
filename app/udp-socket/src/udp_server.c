@@ -10,7 +10,7 @@
 #include <stdint.h>
 
 #define UDP_SERVER_THREAD_PRIO      (osPriorityAboveNormal)
-#define BUF_SIZE	                1024
+#define BUF_SIZE	                128
 #define PORT                        5000
 
 /**
