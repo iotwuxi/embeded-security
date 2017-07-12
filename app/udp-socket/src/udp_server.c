@@ -19,15 +19,15 @@
 void udp_server_thread(void* args)
 {
     int sock;
-    int bytes_read;
+    int len;
     char *recv_data;
     uint32_t addr_len;
     struct sockaddr_in server_addr, client_addr;
 
     struct timeval tv;
     int maxfd = 0;
-    int retval = 0;
-    fd_set readfds;
+    int ret = 0;
+    fd_set read_fds;
     
     recv_data = malloc(BUF_SIZE);
     if (recv_data == NULL) {
@@ -60,38 +60,41 @@ void udp_server_thread(void* args)
     
     while (1)
     {
-
-        FD_ZERO(&readfds);
-        FD_SET(sock, &readfds);
+        FD_ZERO(&read_fds);
+        FD_SET(sock, &read_fds);
         tv.tv_sec = 10;
         tv.tv_usec = 0;
         maxfd = sock;
 
-        retval = select(maxfd + 1, &readfds, NULL, NULL, &tv);
-
-        if (retval > 0) 
+        ret = select(maxfd + 1, &read_fds, NULL, NULL, &tv);
+        
+        if (ret == 0) 
         {
-            if (FD_ISSET(sock, &readfds)) 
+            continue;
+        }
+
+        if (ret > 0) 
+        {
+            if (FD_ISSET(sock, &read_fds)) 
             {
-                bytes_read = recvfrom(sock, recv_data, BUF_SIZE - 1, 0,
+                len = recvfrom(sock, recv_data, BUF_SIZE - 1, 0,
                   (struct sockaddr *)&client_addr, &addr_len);
         
-                recv_data[bytes_read] = '\0';
+                recv_data[len] = '\0';
         
                 printf("\n(%s , %d) said : ", inet_ntoa(client_addr.sin_addr),
                     ntohs(client_addr.sin_port));
                 printf("%s", recv_data);
 
-                if (strcmp(recv_data, "exit") == 0)
-                {
-                    closesocket(sock);
-                    free(recv_data);
-                    break;
-                }
+                // echo
+                sendto(sock, recv_data, strlen(recv_data), 0,
+                    (struct sockaddr *)&client_addr, sizeof(struct sockaddr));
             }
         }       
     }
     
+    closesocket(sock);
+    free(recv_data);
     return;
 }
 
@@ -99,7 +102,7 @@ void udp_server_thread(void* args)
 void udp_server_thread(void* args)
 {
     int sock;
-    int bytes_read;
+    int len;
     char *recv_data;
     uint32_t addr_len;
     struct sockaddr_in server_addr, client_addr;
@@ -134,10 +137,10 @@ void udp_server_thread(void* args)
     
     while (1)
     {
-        bytes_read = recvfrom(sock, recv_data, BUF_SIZE - 1, 0,
+        len = recvfrom(sock, recv_data, BUF_SIZE - 1, 0,
                               (struct sockaddr *)&client_addr, &addr_len);
         
-        recv_data[bytes_read] = '\0';
+        recv_data[len] = '\0';
         
         printf("\n(%s , %d) said : ", inet_ntoa(client_addr.sin_addr),
                ntohs(client_addr.sin_port));
