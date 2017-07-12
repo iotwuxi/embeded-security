@@ -1,5 +1,5 @@
-# Makefile for udp_server project
-PROJECT = udp_server
+# Makefile for udp socket project
+PROJECT = udp_socket
 PROJECT_PATH ?= $(shell pwd)/../..
 
 # Sources-asm
@@ -9,6 +9,7 @@ SOURCES_S = ${PROJECT_PATH}/drivers/cmsis/stm32f7xx/source/gcc/startup_stm32f767
 SOURCES_C += ${PROJECT_PATH}/app/udp-socket/src/main.c
 SOURCES_C += ${PROJECT_PATH}/app/udp-socket/src/ethernetif.c
 SOURCES_C += ${PROJECT_PATH}/app/udp-socket/src/udp_server.c
+SOURCES_C += ${PROJECT_PATH}/app/udp-socket/src/udp_client.c
 SOURCES_C += ${PROJECT_PATH}/app/udp-socket/src/app_ethernet.c
 SOURCES_C += ${PROJECT_PATH}/app/udp-socket/src/stm32f7xx_hal_timebase_tim.c
 SOURCES_C += ${PROJECT_PATH}/app/udp-socket/src/stm32f7xx_it.c
@@ -63,7 +64,7 @@ INCLUDES += -I ${PROJECT_PATH}/freertos/source/cmsis_rtos
 INCLUDES += -I ${PROJECT_PATH}/freertos/source/include
 
 # Defines
-DEFINES = -DSTM32 -DSTM32F7 -DSTM32F767xx -DUSE_HAL_DRIVER -DUSE_STM32F7XX_NUCLEO_144 -DUDP_SERVER
+DEFINES = -DSTM32 -DSTM32F7 -DSTM32F767xx -DUSE_HAL_DRIVER -DUSE_STM32F7XX_NUCLEO_144 -DUDP_CLIENT
 
 # Compiler/Assembler/Linker/etc
 PREFIX = arm-none-eabi
