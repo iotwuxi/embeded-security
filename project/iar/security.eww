@@ -10,6 +10,9 @@
   <project>
     <path>$WS_DIR$\udp-socket\udp-socket.ewp</path>
   </project>
+  <project>
+    <path>$WS_DIR$\base64\base64.ewp</path>
+  </project>
   <batchBuild/>
 </workspace>
 
