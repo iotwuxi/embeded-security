@@ -11,6 +11,9 @@
     <path>$WS_DIR$\udp-socket\udp-socket.ewp</path>
   </project>
   <project>
+    <path>$WS_DIR$\coap-demo\coap-demo.ewp</path>
+  </project>
+  <project>
     <path>$WS_DIR$\base64\base64.ewp</path>
   </project>
   <batchBuild/>

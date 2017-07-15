@@ -4,11 +4,11 @@
 #include "lwip/netif.h"
 #include "lwip/tcpip.h"
 #include "app_ethernet.h"
-#ifdef UDP_SERVER
-#include "udp_server.h"
+#ifdef COAP_SERVER
+#include "coap_server.h"
 #endif
-#ifdef UDP_CLIENT
-#include "udp_client.h"
+#ifdef COAP_CLIENT
+#include "coap_client.h"
 #endif
 
 static struct netif gnetif;
