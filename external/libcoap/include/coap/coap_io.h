@@ -11,8 +11,11 @@
 #define _COAP_IO_H_
 
 #include <assert.h>
+#ifdef WITH_LWIP
+#include "types.h"
+#else
 #include <sys/types.h>
-
+#endif
 #include "address.h"
 
 /**
