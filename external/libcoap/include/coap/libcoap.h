@@ -19,8 +19,12 @@
  * The CONTIKI variable is within the Contiki build environment! */
 
 #if !defined (CONTIKI) 
+#ifdef HAVE_NETINET_IN_H
 #include <netinet/in.h>
+#endif
+#ifdef HAVE_SOCKET
 #include <sys/socket.h>
+#endif
 #endif /* CONTIKI */
 
 #endif /* _LIBCOAP_H_ */

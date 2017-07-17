@@ -18,7 +18,11 @@
 #include <assert.h>
 #include <stdint.h>
 #include <string.h>
+#ifdef WITH_LWIP
+#include <stdint.h>
+#else
 #include <sys/types.h>
+#endif
 #include "libcoap.h"
 
 #ifdef WITH_LWIP
