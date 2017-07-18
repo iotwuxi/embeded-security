@@ -9,7 +9,7 @@
 
 #ifndef _COAP_ENCODE_H_
 #define _COAP_ENCODE_H_
-#define BSD 199103
+
 #if (BSD >= 199103) || defined(WITH_CONTIKI)
 # include <string.h>
 #else
@@ -30,6 +30,13 @@
 extern int coap_fls(unsigned int i);
 #else
 #define coap_fls(i) fls(i)
+#endif
+
+#ifndef HAVE_FLSLL
+ /* include this only if flsll() is not available */
+extern int coap_flsll(long long i);
+#else
+#define coap_flsll(i) flsll(i)
 #endif
 
 /* ls and s must be integer variables */

@@ -13,10 +13,8 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef HAVE_TIME_H
-//#include <sys/time.h>
+#include <sys/time.h>
 #include <time.h>
-#endif
 
 #ifdef WITH_LWIP
 #include <lwip/ip_addr.h>
