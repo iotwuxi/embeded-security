@@ -1,8 +1,8 @@
-#ifndef __UDP_CLIENT_H
-#define __UDP_CLIENT_H
+#ifndef __DTLS_CLIENT_H
+#define __DTLS_CLIENT_H
 
 #include "lwip/api.h"
 
-void udp_client_init(void);
+void dtls_client_init(void);
 
 #endif

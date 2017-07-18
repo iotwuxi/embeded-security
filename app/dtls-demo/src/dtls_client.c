@@ -1,4 +1,8 @@
-#include "mbedtls_config.h"
+#if !defined(MBEDTLS_CONFIG_FILE)
+#include "mbedtls/config.h"
+#else
+#include MBEDTLS_CONFIG_FILE
+#endif
 
 #define DFL_PSK                 "password"
 #define DFL_PSK_IDENTITY        "identity"

@@ -180,35 +180,32 @@ HAL_StatusTypeDef HAL_RNG_DeInit(RNG_HandleTypeDef *hrng)
 }
 
 /**
-  * @brief  Initializes the RNG MSP.
-  * @param  hrng: pointer to a RNG_HandleTypeDef structure that contains
-  *                the configuration information for RNG.
+  * @brief RNG MSP Initialization
+  *        This function configures the hardware resources used in this example:
+  *           - Peripheral's clock enable
+  * @param hrng: RNG handle pointer
   * @retval None
   */
-__weak void HAL_RNG_MspInit(RNG_HandleTypeDef *hrng)
+void HAL_RNG_MspInit(RNG_HandleTypeDef *hrng)
 {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hrng);
-  
-  /* NOTE : This function should not be modified. When the callback is needed,
-            function HAL_RNG_MspInit must be implemented in the user file.
-   */
+  /* RNG Peripheral clock enable */
+  __HAL_RCC_RNG_CLK_ENABLE();
 }
 
 /**
-  * @brief  DeInitializes the RNG MSP.
-  * @param  hrng: pointer to a RNG_HandleTypeDef structure that contains
-  *                the configuration information for RNG.
+  * @brief RNG MSP De-Initialization
+  *        This function freeze the hardware resources used in this example:
+  *          - Disable the Peripheral's clock
+  * @param hrng: RNG handle pointer
   * @retval None
   */
-__weak void HAL_RNG_MspDeInit(RNG_HandleTypeDef *hrng)
+void HAL_RNG_MspDeInit(RNG_HandleTypeDef *hrng)
 {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hrng);
-  
-  /* NOTE : This function should not be modified. When the callback is needed,
-            function HAL_RNG_MspDeInit must be implemented in the user file.
-   */
+  /* Enable RNG reset state */
+  __HAL_RCC_RNG_FORCE_RESET();
+
+  /* Release RNG from reset state */
+  __HAL_RCC_RNG_RELEASE_RESET();
 }
 
 /**

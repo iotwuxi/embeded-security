@@ -40,7 +40,11 @@
   ******************************************************************************
   */ 
 
-#include "mbedtls_config.h"
+#if !defined(MBEDTLS_CONFIG_FILE)
+#include "mbedtls/config.h"
+#else
+#include MBEDTLS_CONFIG_FILE
+#endif
 
 #include <string.h>
 #include <stdint.h>
@@ -81,7 +85,7 @@ void mbedtls_net_init( mbedtls_net_context *ctx )
   uint32_t start;
  
   ctx->fd = -1;
-#if 0
+#if 1
   tcpip_init(NULL, NULL);
 
   /* IP default settings, to be overridden by DHCP */  
@@ -113,7 +117,7 @@ void mbedtls_net_init( mbedtls_net_context *ctx )
   }
   else
   {
-     printf("\nIpAdress = %d.%d.%d.%d\n", (netif.ip_addr.addr & 0xff), ((netif.ip_addr.addr >> 8) & 0xff)
+     printf("\nIpAdress = %ld.%ld.%ld.%ld\n", (netif.ip_addr.addr & 0xff), ((netif.ip_addr.addr >> 8) & 0xff)
                                         , ((netif.ip_addr.addr >> 16) & 0xff), ((netif.ip_addr.addr >> 24)& 0xff));
 #ifdef USE_DHCP
     dhcp_stop(&netif);
@@ -174,7 +178,7 @@ int mbedtls_net_connect( mbedtls_net_context *ctx, const char *host, const char 
 int mbedtls_net_bind( mbedtls_net_context *ctx, const char *bind_ip, const char *port, int proto )
 {
   int ret = 0;
-  mbedtls_printf ("%s() NOT IMPLEMENTED!!\n", __FUNCTION__);
+  mbedtls_printf ("%s() NOT IMPLEMENTED!!\n", __func__);
 
   return ret;
 }
@@ -186,7 +190,7 @@ int mbedtls_net_accept( mbedtls_net_context *bind_ctx,
                         mbedtls_net_context *client_ctx,
                         void *client_ip, size_t buf_size, size_t *ip_len )
 {
-  mbedtls_printf ("%s() NOT IMPLEMENTED!!\n", __FUNCTION__);
+  mbedtls_printf ("%s() NOT IMPLEMENTED!!\n", __func__);
   return 0;
 }
 
@@ -195,13 +199,13 @@ int mbedtls_net_accept( mbedtls_net_context *bind_ctx,
  */
 int mbedtls_net_set_block( mbedtls_net_context *ctx )
 {
-  mbedtls_printf ("%s() NOT IMPLEMENTED!!\n", __FUNCTION__);
+  mbedtls_printf ("%s() NOT IMPLEMENTED!!\n", __func__);
   return 0;
 }
 
 int mbedtls_net_set_nonblock( mbedtls_net_context *ctx )
 {
-  mbedtls_printf ("%s() NOT IMPLEMENTED!!\n", __FUNCTION__);
+  mbedtls_printf ("%s() NOT IMPLEMENTED!!\n", __func__);
   return 0;
 }
 
@@ -210,7 +214,7 @@ int mbedtls_net_set_nonblock( mbedtls_net_context *ctx )
  */
 void mbedtls_net_usleep( unsigned long usec )
 {
-  mbedtls_printf ("%s() NOT IMPLEMENTED!!\n", __FUNCTION__);
+  mbedtls_printf ("%s() NOT IMPLEMENTED!!\n", __func__);
 }
 
 /*
@@ -258,7 +262,7 @@ int mbedtls_net_recv_timeout( void *ctx, unsigned char *buf, size_t len,
                       uint32_t timeout )
 {
   int ret = 0;
-  mbedtls_printf ("%s() NOT IMPLEMENTED!!\n", __FUNCTION__);
+  mbedtls_printf ("%s() NOT IMPLEMENTED!!\n", __func__);
 
   return ret;  
 }
