@@ -34,7 +34,7 @@
 
 #include <string.h>
 
-#define DTLS_CLIENT_THREAD_PRIO      (osPriorityAboveNormal)
+#define DTLS_CLIENT_THREAD_PRIO      (osPriorityRealtime)
 
 #define SERVER_PORT "4433"
 #define SERVER_NAME "aliyun"
@@ -107,11 +107,6 @@ int dtls_client_thread(void* args)
 
       int dtls_ciphersuites[3];
 
-
-  #if defined(MBEDTLS_DEBUG_C)
-      mbedtls_debug_set_threshold( DEBUG_LEVEL );
-  #endif
-
       /*
        * 0. Initialize the RNG and the session data
        */
@@ -151,7 +146,7 @@ int dtls_client_thread(void* args)
       /*
        * 1. Start the connection
        */
-      mbedtls_printf( "  . Connecting to udp/%s/%s...", SERVER_NAME, SERVER_PORT );
+      mbedtls_printf( "  . Connecting to [udp] %s:%s...", SERVER_ADDR, SERVER_PORT );
       fflush( stdout );
 
       if( ( ret = mbedtls_net_connect( &server_fd, SERVER_ADDR,
@@ -183,7 +178,6 @@ int dtls_client_thread(void* args)
        * in this simplified example, in which the ca chain is hardcoded.
        * Production code should set a proper ca chain and use REQUIRED. */
       mbedtls_ssl_conf_rng( &conf, mbedtls_ctr_drbg_random, &ctr_drbg );
-      // mbedtls_ssl_conf_dbg( &conf, my_debug, stdout );
 
       dtls_ciphersuites[0] = MBEDTLS_TLS_PSK_WITH_AES_128_CCM;
       dtls_ciphersuites[1] = MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_CCM_8;
@@ -335,11 +329,6 @@ int dtls_client_thread(void* args)
       mbedtls_ctr_drbg_free( &ctr_drbg );
       mbedtls_entropy_free( &entropy );
 
-      /* Shell can not handle large exit numbers -> 1 for errors */
-      if( ret < 0 )
-          ret = 1;
-
-      // return( ret );
       printf("dtls client thread exit.\n");
       
       for(;;)
