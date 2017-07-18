@@ -329,6 +329,7 @@
           <state>$PROJ_DIR$\..\..\..\freertos\source\portable\iar\arm_cm7\r0p1</state>
           <state>$PROJ_DIR$\..\..\..\freertos\source\cmsis_rtos</state>
           <state>$PROJ_DIR$\..\..\..\freertos\source\include</state>
+          <state>$PROJ_DIR$\..\..\..\external\lwip\src\include\posix</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -2099,6 +2100,12 @@
           <name>$PROJ_DIR$\..\..\..\external\libcoap\src\block.c</name>
         </file>
         <file>
+          <name>$PROJ_DIR$\..\..\..\external\libcoap\src\cmem.c</name>
+          <excluded>
+            <configuration>server</configuration>
+          </excluded>
+        </file>
+        <file>
           <name>$PROJ_DIR$\..\..\..\external\libcoap\src\coap_io.c</name>
           <excluded>
             <configuration>server</configuration>
@@ -2116,18 +2123,15 @@
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\..\external\libcoap\src\debug.c</name>
+          <excluded>
+            <configuration>server</configuration>
+          </excluded>
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\..\external\libcoap\src\encode.c</name>
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\..\external\libcoap\src\hashkey.c</name>
-          <excluded>
-            <configuration>server</configuration>
-          </excluded>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\external\libcoap\src\mem.c</name>
           <excluded>
             <configuration>server</configuration>
           </excluded>

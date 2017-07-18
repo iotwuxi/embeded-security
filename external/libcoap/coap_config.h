@@ -3,9 +3,9 @@
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
-#include "lwippools.h"
+// #include "lwippools.h"
 #define WITH_LWIP  1
-
+#define COAP_RESOURCES_NOHASH // ???
 
 /* Define to 1 if you have the <arpa/inet.h> header file. */
 #define HAVE_ARPA_INET_H 0
@@ -66,7 +66,7 @@
 #define HAVE_STRCASECMP 1
 
 /* Define to 1 if you have the <strings.h> header file. */
-#define HAVE_STRINGS_H 1
+#define HAVE_STRINGS_H 0
 
 /* Define to 1 if you have the <string.h> header file. */
 #define HAVE_STRING_H 1

@@ -40,6 +40,15 @@ typedef enum {
   COAP_RESOURCEATTR
 } coap_memory_tag_t;
 
+#define MEMP_COAP_CONTEXT       sizeof(coap_context_t)
+#define MEMP_COAP_ENDPOINT      sizeof(coap_endpoint_t)
+#define MEMP_COAP_PACKET        sizeof(coap_packet_t)
+#define MEMP_COAP_NODE          sizeof(coap_queue_t)
+#define MEMP_COAP_PDU           sizeof(coap_pdu_t)
+#define MEMP_COAP_subscription  sizeof(coap_subscription_t)
+#define MEMP_COAP_RESOURCE      sizeof(coap_resource_t)
+#define MEMP_COAP_RESOURCEATTR  sizeof(coap_attr_t)
+
 #ifndef WITH_LWIP
 
 /**

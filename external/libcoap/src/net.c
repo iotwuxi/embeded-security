@@ -14,7 +14,7 @@
 #ifdef HAVE_LIMITS_H
 #include <limits.h>
 #endif
-#ifdef HAVE_UNISTD_H
+#if HAVE_UNISTD_H
 #include <unistd.h>
 #elif HAVE_SYS_UNISTD_H
 #include <sys/unistd.h>
@@ -23,21 +23,21 @@
 #ifdef HAVE_SYS_SOCKET_H
 #include <sys/socket.h>
 #endif
-#ifdef HAVE_NETINET_IN_H
+#if HAVE_NETINET_IN_H
 #include <netinet/in.h>
 #endif
-#ifdef HAVE_ARPA_INET_H
+#if HAVE_ARPA_INET_H
 #include <arpa/inet.h>
 #endif
 
 #ifdef WITH_LWIP
 #include <lwip/pbuf.h>
 #include <lwip/udp.h>
-#include <lwip/timers.h>
+// #include <lwip/timers.h>
 #endif
 
 #include "debug.h"
-#include "mem.h"
+#include "coap/mem.h"
 #include "str.h"
 #include "async.h"
 #include "resource.h"
