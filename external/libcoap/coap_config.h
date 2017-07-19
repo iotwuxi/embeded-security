@@ -1,11 +1,15 @@
-/* coap_config.h.  Generated from coap_config.h.in by configure.  */
-/* coap_config.h.in.  Generated from configure.ac by autoheader.  */
+
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
-// #include "lwippools.h"
+#include <lwip/opt.h>
+#include <lwip/debug.h>
+#include <lwip/def.h> /* provide ntohs, htons */
+
 #define WITH_LWIP  1
-#define COAP_RESOURCES_NOHASH // ???
+#define COAP_RESOURCES_NOHASH
+
+#define assert(x) LWIP_ASSERT("CoAP assert failed", x)
 
 /* Define to 1 if you have the <arpa/inet.h> header file. */
 // #define HAVE_ARPA_INET_H 0
@@ -92,10 +96,8 @@
 /* Define to 1 if you have the <sys/types.h> header file. */
 #define HAVE_SYS_TYPES_H 1
 
-
 /* Define to 1 if you have the <sys/unistd.h> header file. */
 // #define HAVE_SYS_UNISTD_H 0
-
 
 /* Define to 1 if you have the <time.h> header file. */
 // #define HAVE_TIME_H 0
@@ -103,18 +105,4 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 // #define HAVE_UNISTD_H 0
 
-
-
-/* Define to 1 if your C compiler doesn't accept -c and -o together. */
-/* #undef NO_MINUS_C_MINUS_O */
-
-
-/* Define this to 1 for ancillary data on MacOS */
-/* #undef __APPLE_USE_RFC_3542 */
-
-/* Define to `unsigned int' if <sys/types.h> does not define. */
-/* #undef size_t */
-
-/* Define to `int' if <sys/types.h> does not define. */
-/* #undef ssize_t */
 #endif
