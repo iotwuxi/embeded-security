@@ -8,8 +8,7 @@
 #define COAP_RESOURCES_NOHASH // ???
 
 /* Define to 1 if you have the <arpa/inet.h> header file. */
-#define HAVE_ARPA_INET_H 0
-
+// #define HAVE_ARPA_INET_H 0
 
 /* Define to 1 if you have the <assert.h> header file. */
 #define HAVE_ASSERT_H 1
@@ -33,7 +32,7 @@
 #define HAVE_LIMITS_H 1
 
 /* Define to 1 if you have the `malloc' function. */
-#define HAVE_MALLOC 0
+// #define HAVE_MALLOC 0
 
 
 /* Define to 1 if you have the <memory.h> header file. */
@@ -47,7 +46,7 @@
 
 
 /* Define to 1 if you have the <netinet/in.h> header file. */
-#define HAVE_NETINET_IN_H 0
+// #define HAVE_NETINET_IN_H 0
 
 
 /* Define to 1 if you have the `select' function. */
@@ -66,7 +65,7 @@
 #define HAVE_STRCASECMP 1
 
 /* Define to 1 if you have the <strings.h> header file. */
-#define HAVE_STRINGS_H 0
+// #define HAVE_STRINGS_H 0
 
 /* Define to 1 if you have the <string.h> header file. */
 #define HAVE_STRING_H 1
@@ -79,30 +78,30 @@
 
 
 /* Define to 1 if you have the <syslog.h> header file. */
-#define HAVE_SYSLOG_H 0
+// #define HAVE_SYSLOG_H 0
 
 /* Define to 1 if you have the <sys/socket.h> header file. */
 #define HAVE_SYS_SOCKET_H 0
 
 /* Define to 1 if you have the <sys/stat.h> header file. */
-#define HAVE_SYS_STAT_H 0
+// #define HAVE_SYS_STAT_H 0
 
 /* Define to 1 if you have the <sys/time.h> header file. */
-#define HAVE_SYS_TIME_H 0
+// #define HAVE_SYS_TIME_H 0
 
 /* Define to 1 if you have the <sys/types.h> header file. */
-#define HAVE_SYS_TYPES_H 0
+#define HAVE_SYS_TYPES_H 1
 
 
 /* Define to 1 if you have the <sys/unistd.h> header file. */
-#define HAVE_SYS_UNISTD_H 0
+// #define HAVE_SYS_UNISTD_H 0
 
 
 /* Define to 1 if you have the <time.h> header file. */
-#define HAVE_TIME_H 0
+// #define HAVE_TIME_H 0
 
 /* Define to 1 if you have the <unistd.h> header file. */
-#define HAVE_UNISTD_H 0
+// #define HAVE_UNISTD_H 0
 
 
 

@@ -40,6 +40,7 @@ typedef enum {
   COAP_RESOURCEATTR
 } coap_memory_tag_t;
 
+// xukai modify
 #define MEMP_COAP_CONTEXT       sizeof(coap_context_t)
 #define MEMP_COAP_ENDPOINT      sizeof(coap_endpoint_t)
 #define MEMP_COAP_PACKET        sizeof(coap_packet_t)

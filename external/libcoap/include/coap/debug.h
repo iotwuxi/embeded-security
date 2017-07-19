@@ -18,7 +18,7 @@
 #define COAP_ERR_FD stderr
 #endif
 
-#if HAVE_SYSLOG_H
+#ifdef HAVE_SYSLOG_H
 #include <syslog.h>
 typedef short coap_log_t;
 #else
