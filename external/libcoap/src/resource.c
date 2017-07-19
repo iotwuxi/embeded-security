@@ -21,11 +21,14 @@
  * COAP_RESOURCE_FLAGS_RELEASE_URI. not sure what those lines should actually
  * do on lwip. */
 
-#include <lwip/memp.h>
+//#include <lwip/memp.h>
 
+//#define COAP_MALLOC_TYPE(Type) \
+//  ((coap_##Type##_t *)memp_malloc(MEMP_COAP_##Type))
+//#define COAP_FREE_TYPE(Type, Object) memp_free(MEMP_COAP_##Type, Object)
 #define COAP_MALLOC_TYPE(Type) \
-  ((coap_##Type##_t *)memp_malloc(MEMP_COAP_##Type))
-#define COAP_FREE_TYPE(Type, Object) memp_free(MEMP_COAP_##Type, Object)
+  ((coap_##Type##_t *)coap_malloc(sizeof(coap_##Type##_t)))
+#define COAP_FREE_TYPE(Type, Object) coap_free(Object)
 
 #endif
 
@@ -300,7 +303,8 @@ coap_resource_init(const unsigned char *uri, size_t len, int flags) {
   coap_resource_t *r;
 
 #ifdef WITH_LWIP
-  r = (coap_resource_t *)memp_malloc(MEMP_COAP_RESOURCE);
+  // r = (coap_resource_t *)memp_malloc(MEMP_COAP_RESOURCE);
+  r = (coap_resource_t *)coap_malloc_type(COAP_RESOURCE, sizeof(coap_resource_t));
 #endif
 #ifndef WITH_LWIP
   r = (coap_resource_t *)coap_malloc_type(COAP_RESOURCE, sizeof(coap_resource_t));
@@ -332,7 +336,8 @@ coap_add_attr(coap_resource_t *resource,
     return NULL;
 
 #ifdef WITH_LWIP
-  attr = (coap_attr_t *)memp_malloc(MEMP_COAP_RESOURCEATTR);
+  // attr = (coap_attr_t *)memp_malloc(MEMP_COAP_RESOURCEATTR);
+  attr = (coap_attr_t *)coap_malloc_type(COAP_RESOURCEATTR, sizeof(coap_attr_t));
 #endif
 #ifndef WITH_LWIP
   attr = (coap_attr_t *)coap_malloc_type(COAP_RESOURCEATTR, sizeof(coap_attr_t));
@@ -383,7 +388,8 @@ coap_delete_attr(coap_attr_t *attr) {
     coap_free(attr->value.s);
 
 #ifdef WITH_LWIP
-  memp_free(MEMP_COAP_RESOURCEATTR, attr);
+  // memp_free(MEMP_COAP_RESOURCEATTR, attr);
+  coap_free_type(COAP_RESOURCEATTR, attr);
 #endif
 #ifndef WITH_LWIP
   coap_free_type(COAP_RESOURCEATTR, attr);
@@ -428,7 +434,8 @@ coap_free_resource(coap_resource_t *resource) {
   LL_FOREACH_SAFE(resource->subscribers, obs, otmp) COAP_FREE_TYPE(subscription, obs);
 
 #ifdef WITH_LWIP
-  memp_free(MEMP_COAP_RESOURCE, resource);
+  // memp_free(MEMP_COAP_RESOURCE, resource);
+  coap_free_type(COAP_RESOURCE, resource);
 #endif
 #ifndef WITH_LWIP
   coap_free_type(COAP_RESOURCE, resource);

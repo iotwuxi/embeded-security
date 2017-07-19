@@ -36,7 +36,7 @@
 #define HAVE_LIMITS_H 1
 
 /* Define to 1 if you have the `malloc' function. */
-// #define HAVE_MALLOC 0
+#define HAVE_MALLOC 1
 
 
 /* Define to 1 if you have the <memory.h> header file. */

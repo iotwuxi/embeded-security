@@ -2101,9 +2101,6 @@
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\..\external\libcoap\src\cmem.c</name>
-          <excluded>
-            <configuration>server</configuration>
-          </excluded>
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\..\external\libcoap\src\coap_io.c</name>

@@ -34,6 +34,7 @@
 #include <lwip/pbuf.h>
 #include <lwip/udp.h>
 // #include <lwip/timers.h>
+#include <lwip/timeouts.h>
 #endif
 
 #include "debug.h"
@@ -129,19 +130,21 @@ coap_free_node(coap_queue_t *node) {
 #endif /* WITH_POSIX */
 #ifdef WITH_LWIP
 
-#include <lwip/memp.h>
+// #include <lwip/memp.h> 
 
 static void coap_retransmittimer_execute(void *arg);
 static void coap_retransmittimer_restart(coap_context_t *ctx);
 
 static inline coap_queue_t *
 coap_malloc_node() {
-	return (coap_queue_t *)memp_malloc(MEMP_COAP_NODE);
+	// return (coap_queue_t *)memp_malloc(MEMP_COAP_NODE);
+    return (coap_queue_t *)coap_malloc_type(COAP_NODE, sizeof(coap_queue_t));
 }
 
 static inline void
 coap_free_node(coap_queue_t *node) {
-	memp_free(MEMP_COAP_NODE, node);
+	// memp_free(MEMP_COAP_NODE, node);
+    coap_free_type(COAP_NODE, node);
 }
 
 #endif /* WITH_LWIP */
@@ -1151,6 +1154,7 @@ coap_wellknown_response(coap_context_t *context, coap_pdu_t *request) {
   coap_block_t block;
   coap_opt_t *query_filter;
   size_t offset = 0;
+  unsigned int new_resp_length = 0;
 
   resp = coap_pdu_init(request->hdr->type == COAP_MESSAGE_CON 
 		       ? COAP_MESSAGE_ACK 
@@ -1254,7 +1258,7 @@ coap_wellknown_response(coap_context_t *context, coap_pdu_t *request) {
     goto error;
   }
   
-  unsigned int new_resp_length = resp->length + COAP_PRINT_OUTPUT_LENGTH(result);
+  new_resp_length = resp->length + COAP_PRINT_OUTPUT_LENGTH(result);
   if (new_resp_length > USHRT_MAX)
   {
       debug("coap_print_wellknown failed - print result too large\n");
