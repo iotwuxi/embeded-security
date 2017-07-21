@@ -1,22 +1,21 @@
 #include <stdio.h>
+#include <string.h>
 #include "mbedtls/sha256.h"
 
-int main( void )
+static char *msg = "Hello, world!";
+
+int main(void)
 {
-    int i;
     unsigned char digest[32];
-    char str[] = "Hello, world!";
 
-    printf( "\n  SHA256('%s') = ", str );
+    mbedtls_sha256(msg, strlen(msg), digest, 0);
 
-    mbedtls_sha256( (unsigned char *) str, 13, digest, 0 );
-
-    for( i = 0; i < 32; i++ )
+    printf("\n  SHA256('%s') = ", msg);
+    for(int i = 0; i < 32; i++)
     {
-        printf( "%02x", digest[i] );
+        printf("%02X%s", digest[i], i == sizeof(digest) - 1 ? "\n\n" : "");
     }
-    printf( "\n\n" );   
 
-    return( 0 );
+    return 0;
 }
 

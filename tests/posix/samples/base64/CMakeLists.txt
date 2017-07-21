@@ -1,19 +1,14 @@
 cmake_minimum_required(VERSION 2.6)
-project("base64-test")
+project("base64")
 
 set(libs
-    mbedtls
-    mbedcrypto 
-    mbedx509
+    mbedcrypto
 )
 
 set(targets
-    base64-encode-test
-    base64-decode-test
+    base64
 )
 
-add_executable(base64-encode-test base64-encode-test.c)
-target_link_libraries(base64-encode-test ${libs})
+add_executable(base64 base64.c)
+target_link_libraries(base64 ${libs})
 
-add_executable(base64-decode-test base64-decode-test.c)
-target_link_libraries(base64-decode-test ${libs})

@@ -6,12 +6,8 @@ set(libs
 )
 
 set(targets
-    gen_entropy
-    gen_random_ctr_drbg
+    ctr_drbg
 )
 
-add_executable(gen_entropy gen_entropy.c)
-target_link_libraries(gen_entropy ${libs})
-
-add_executable(gen_random_ctr_drbg gen_random_ctr_drbg.c)
-target_link_libraries(gen_random_ctr_drbg ${libs})
+add_executable(ctr_drbg ctr_drbg.c)
+target_link_libraries(ctr_drbg ${libs})

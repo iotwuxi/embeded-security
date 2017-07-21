@@ -6,8 +6,8 @@ set(libs
 )
 
 set(targets
-    rsa_enc
+    ecdh
 )
 
-add_executable(rsa_enc rsa_enc.c)
-target_link_libraries(rsa_enc ${libs})
+add_executable(ecdh ecdh.c)
+target_link_libraries(ecdh ${libs})
