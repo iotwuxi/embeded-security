@@ -1,4 +1,4 @@
-/** 
+/**
   *  Portions COPYRIGHT 2016 STMicroelectronics
   *  Copyright (C) 2006-2015, ARM Limited, All Rights Reserved
   *
@@ -9,7 +9,7 @@
   * @date    14-April-2017
   * @brief   TCP/IP or UDP/IP networking functions iplementation based on LwIP API
              see the file "mbedTLS/library/net_socket_template.c" for the standard
-			 implmentation
+       implmentation
   ******************************************************************************
   * @attention
   *
@@ -38,7 +38,7 @@
   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
   ******************************************************************************
-  */ 
+  */
 
 #if !defined(MBEDTLS_CONFIG_FILE)
 #include "mbedtls/config.h"
@@ -66,7 +66,7 @@
 #include "lwip/tcpip.h"
 #include "lwip/netdb.h"
 #include "lwip/sockets.h"
-   
+
 #include "netif/ethernet.h"
 
 #include "ethernetif.h"
@@ -81,51 +81,50 @@ static int net_would_block( const mbedtls_net_context *ctx );
  */
 void mbedtls_net_init( mbedtls_net_context *ctx )
 {
-  
-  ip4_addr_t addr;
-  ip4_addr_t netmask;
-  ip4_addr_t gw;
-  uint32_t start;
- 
-  ctx->fd = -1;
+
+    ip4_addr_t addr;
+    ip4_addr_t netmask;
+    ip4_addr_t gw;
+    uint32_t start;
+
+    ctx->fd = -1;
 #if 1
-  tcpip_init(NULL, NULL);
+    tcpip_init(NULL, NULL);
 
-  /* IP default settings, to be overridden by DHCP */  
-  IP4_ADDR(&addr, IP_ADDR0, IP_ADDR1, IP_ADDR2, IP_ADDR3);
-  IP4_ADDR(&gw, GW_ADDR0, GW_ADDR1, GW_ADDR2, GW_ADDR3);
-  IP4_ADDR(&netmask, NETMASK_ADDR0, NETMASK_ADDR1, NETMASK_ADDR2, NETMASK_ADDR3);
-  
- /* add the network interface */    
-  netif_add(&netif, &addr, &netmask, &gw, NULL, &ethernetif_init, &ethernet_input);
+    /* IP default settings, to be overridden by DHCP */
+    IP4_ADDR(&addr, IP_ADDR0, IP_ADDR1, IP_ADDR2, IP_ADDR3);
+    IP4_ADDR(&gw, GW_ADDR0, GW_ADDR1, GW_ADDR2, GW_ADDR3);
+    IP4_ADDR(&netmask, NETMASK_ADDR0, NETMASK_ADDR1, NETMASK_ADDR2, NETMASK_ADDR3);
 
-  /* register the default network interface */
-  netif_set_up(&netif);
+    /* add the network interface */
+    netif_add(&netif, &addr, &netmask, &gw, NULL, &ethernetif_init, &ethernet_input);
+
+    /* register the default network interface */
+    netif_set_up(&netif);
 
 #ifdef USE_DHCP
-  dhcp_start(&netif);
+    dhcp_start(&netif);
 #endif
-  osDelay(500);
+    osDelay(500);
 
-  start = HAL_GetTick();
-  
-  while((netif.ip_addr.addr == 0) && (HAL_GetTick() - start < 10000))
-  {
-  }
-  
-  if (netif.ip_addr.addr == 0)
-  {
-    printf(" Failed to get ip address! Please check your network configuration.\n");
-    Error_Handler();
-  }
-  else
-  {
-     printf("\nIpAdress = %ld.%ld.%ld.%ld\n", (netif.ip_addr.addr & 0xff), ((netif.ip_addr.addr >> 8) & 0xff)
-                                        , ((netif.ip_addr.addr >> 16) & 0xff), ((netif.ip_addr.addr >> 24)& 0xff));
+    start = HAL_GetTick();
+
+    while ((netif.ip_addr.addr == 0) && (HAL_GetTick() - start < 10000))
+    {
+    }
+
+    if (netif.ip_addr.addr == 0)
+    {
+        printf(" Failed to get ip address! Please check your network configuration.\n");
+        Error_Handler();
+    }
+    else
+    {
+        printf("\nIP Address: %s\n", inet_ntoa(netif.ip_addr.addr));
 #ifdef USE_DHCP
-    dhcp_stop(&netif);
+        dhcp_stop(&netif);
 #endif
-  }
+    }
 #endif
 }
 
@@ -134,44 +133,44 @@ void mbedtls_net_init( mbedtls_net_context *ctx )
  */
 int mbedtls_net_connect( mbedtls_net_context *ctx, const char *host, const char *port, int proto )
 {
-  int ret;
-  struct addrinfo hints;
-  struct addrinfo *list;
-  struct addrinfo *current;
+    int ret;
+    struct addrinfo hints;
+    struct addrinfo *list;
+    struct addrinfo *current;
 
-  /* Do name resolution with both IPv6 and IPv4 */
-  memset(&hints, 0, sizeof(hints));
-  hints.ai_family = AF_UNSPEC;
-  hints.ai_socktype = proto == MBEDTLS_NET_PROTO_UDP ? SOCK_DGRAM : SOCK_STREAM;
-  hints.ai_protocol = proto == MBEDTLS_NET_PROTO_UDP ? IPPROTO_UDP : IPPROTO_TCP;
+    /* Do name resolution with both IPv6 and IPv4 */
+    memset(&hints, 0, sizeof(hints));
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = proto == MBEDTLS_NET_PROTO_UDP ? SOCK_DGRAM : SOCK_STREAM;
+    hints.ai_protocol = proto == MBEDTLS_NET_PROTO_UDP ? IPPROTO_UDP : IPPROTO_TCP;
 
-  if(getaddrinfo(host, port, &hints, &list) != 0)
-    return MBEDTLS_ERR_NET_UNKNOWN_HOST;
+    if (getaddrinfo(host, port, &hints, &list) != 0)
+        return MBEDTLS_ERR_NET_UNKNOWN_HOST;
 
-  /* Try the sockaddrs until a connection succeeds */
-  ret = MBEDTLS_ERR_NET_UNKNOWN_HOST;
-  for( current = list; current != NULL; current = current->ai_next)
-  {
-    ctx->fd = (int) socket(current->ai_family, current->ai_socktype, current->ai_protocol);
-    if(ctx->fd < 0)
+    /* Try the sockaddrs until a connection succeeds */
+    ret = MBEDTLS_ERR_NET_UNKNOWN_HOST;
+    for ( current = list; current != NULL; current = current->ai_next)
     {
-      ret = MBEDTLS_ERR_NET_SOCKET_FAILED;
-      continue;
+        ctx->fd = (int) socket(current->ai_family, current->ai_socktype, current->ai_protocol);
+        if (ctx->fd < 0)
+        {
+            ret = MBEDTLS_ERR_NET_SOCKET_FAILED;
+            continue;
+        }
+
+        if (connect(ctx->fd, current->ai_addr, (uint32_t)current->ai_addrlen) == 0)
+        {
+            ret = 0;
+            break;
+        }
+
+        close( ctx->fd );
+        ret = MBEDTLS_ERR_NET_CONNECT_FAILED;
     }
 
-    if(connect(ctx->fd, current->ai_addr, (uint32_t)current->ai_addrlen) == 0)
-    {
-      ret = 0;
-      break;
-    }
+    freeaddrinfo(list);
 
-    close( ctx->fd );
-    ret = MBEDTLS_ERR_NET_CONNECT_FAILED;
-  }
-
-  freeaddrinfo(list);
-
-  return ret;
+    return ret;
 
 }
 
@@ -180,10 +179,10 @@ int mbedtls_net_connect( mbedtls_net_context *ctx, const char *host, const char 
  */
 int mbedtls_net_bind( mbedtls_net_context *ctx, const char *bind_ip, const char *port, int proto )
 {
-  int ret = 0;
-  mbedtls_printf ("%s() NOT IMPLEMENTED!!\n", __func__);
+    int ret = 0;
+    mbedtls_printf ("%s() NOT IMPLEMENTED!!\n", __func__);
 
-  return ret;
+    return ret;
 }
 
 /*
@@ -193,8 +192,8 @@ int mbedtls_net_accept( mbedtls_net_context *bind_ctx,
                         mbedtls_net_context *client_ctx,
                         void *client_ip, size_t buf_size, size_t *ip_len )
 {
-  mbedtls_printf ("%s() NOT IMPLEMENTED!!\n", __func__);
-  return 0;
+    mbedtls_printf ("%s() NOT IMPLEMENTED!!\n", __func__);
+    return 0;
 }
 
 /*
@@ -202,14 +201,14 @@ int mbedtls_net_accept( mbedtls_net_context *bind_ctx,
  */
 int mbedtls_net_set_block( mbedtls_net_context *ctx )
 {
-  mbedtls_printf ("%s() NOT IMPLEMENTED!!\n", __func__);
-  return 0;
+    mbedtls_printf ("%s() NOT IMPLEMENTED!!\n", __func__);
+    return 0;
 }
 
 int mbedtls_net_set_nonblock( mbedtls_net_context *ctx )
 {
-  mbedtls_printf ("%s() NOT IMPLEMENTED!!\n", __func__);
-  return 0;
+    mbedtls_printf ("%s() NOT IMPLEMENTED!!\n", __func__);
+    return 0;
 }
 
 /*
@@ -217,7 +216,7 @@ int mbedtls_net_set_nonblock( mbedtls_net_context *ctx )
  */
 void mbedtls_net_usleep( unsigned long usec )
 {
-  mbedtls_printf ("%s() NOT IMPLEMENTED!!\n", __func__);
+    mbedtls_printf ("%s() NOT IMPLEMENTED!!\n", __func__);
 }
 
 /*
@@ -225,76 +224,76 @@ void mbedtls_net_usleep( unsigned long usec )
  */
 int mbedtls_net_recv( void *ctx, unsigned char *buf, size_t len )
 {
-  int32_t ret;
-  int32_t fd = ((mbedtls_net_context *) ctx)->fd;
+    int32_t ret;
+    int32_t fd = ((mbedtls_net_context *) ctx)->fd;
 
-  if( fd < 0 )
-  {
-    return MBEDTLS_ERR_NET_INVALID_CONTEXT;
-  }
- 
-  ret = (int32_t) read( fd, buf, len );
-
-  if( ret < 0 )
-  {
-    if(net_would_block(ctx) != 0)
+    if ( fd < 0 )
     {
-      return MBEDTLS_ERR_SSL_WANT_READ;
-    }
-    
-    if(errno == EPIPE || errno == ECONNRESET)
-    {
-      return MBEDTLS_ERR_NET_CONN_RESET;
+        return MBEDTLS_ERR_NET_INVALID_CONTEXT;
     }
 
-    if(errno == EINTR)
+    ret = (int32_t) read( fd, buf, len );
+
+    if ( ret < 0 )
     {
-      return MBEDTLS_ERR_SSL_WANT_READ;
+        if (net_would_block(ctx) != 0)
+        {
+            return MBEDTLS_ERR_SSL_WANT_READ;
+        }
+
+        if (errno == EPIPE || errno == ECONNRESET)
+        {
+            return MBEDTLS_ERR_NET_CONN_RESET;
+        }
+
+        if (errno == EINTR)
+        {
+            return MBEDTLS_ERR_SSL_WANT_READ;
+        }
+
+        return MBEDTLS_ERR_NET_RECV_FAILED;
     }
 
-    return MBEDTLS_ERR_NET_RECV_FAILED;
-  }
-
-  return ret;
+    return ret;
 }
 
 /*
  * Read at most 'len' characters, blocking for at most 'timeout' ms
  */
 int mbedtls_net_recv_timeout( void *ctx, unsigned char *buf, size_t len,
-                      uint32_t timeout )
+                              uint32_t timeout )
 {
-  int ret = 0;
-  mbedtls_printf ("%s() NOT IMPLEMENTED!!\n", __func__);
+    int ret = 0;
+    mbedtls_printf ("%s() NOT IMPLEMENTED!!\n", __func__);
 
-  return ret;  
+    return ret;
 }
 
 
 static int net_would_block( const mbedtls_net_context *ctx )
 {
-  /*
-   * Never return 'WOULD BLOCK' on a non-blocking socket
-   */
-  
-  int val = 0;
-  UNUSED(val);
-  
-  if( ( fcntl( ctx->fd, F_GETFL, val) & O_NONBLOCK ) != O_NONBLOCK )
-    return( 0 );
+    /*
+     * Never return 'WOULD BLOCK' on a non-blocking socket
+     */
 
-  switch( errno )
-  {
+    int val = 0;
+    UNUSED(val);
+
+    if ( ( fcntl( ctx->fd, F_GETFL, val) & O_NONBLOCK ) != O_NONBLOCK )
+        return ( 0 );
+
+    switch ( errno )
+    {
 #if defined EAGAIN
     case EAGAIN:
 #endif
 #if defined EWOULDBLOCK && EWOULDBLOCK != EAGAIN
     case EWOULDBLOCK:
 #endif
-    return( 1 );
-  }
+        return ( 1 );
+    }
 
-  return( 0 );
+    return ( 0 );
 }
 
 /*
@@ -302,37 +301,37 @@ static int net_would_block( const mbedtls_net_context *ctx )
  */
 int mbedtls_net_send( void *ctx, const unsigned char *buf, size_t len )
 {
-  int32_t ret;
-  int fd = ((mbedtls_net_context *) ctx)->fd;
+    int32_t ret;
+    int fd = ((mbedtls_net_context *) ctx)->fd;
 
-  if( fd < 0 )
-  {
-    return MBEDTLS_ERR_NET_INVALID_CONTEXT;
-  }
-  
-  ret = (int32_t) write(fd, buf, len);
-
-  if( ret < 0 )
-  {
-    if(net_would_block(ctx) != 0)
+    if ( fd < 0 )
     {
-      return MBEDTLS_ERR_SSL_WANT_WRITE;
-    }
-    
-    if(errno == EPIPE || errno == ECONNRESET)
-    {
-      return MBEDTLS_ERR_NET_CONN_RESET;
-    }
-    
-    if(errno == EINTR)
-    {
-      return MBEDTLS_ERR_SSL_WANT_WRITE;
+        return MBEDTLS_ERR_NET_INVALID_CONTEXT;
     }
 
-    return MBEDTLS_ERR_NET_SEND_FAILED;
-  }
+    ret = (int32_t) write(fd, buf, len);
 
-  return ret;
+    if ( ret < 0 )
+    {
+        if (net_would_block(ctx) != 0)
+        {
+            return MBEDTLS_ERR_SSL_WANT_WRITE;
+        }
+
+        if (errno == EPIPE || errno == ECONNRESET)
+        {
+            return MBEDTLS_ERR_NET_CONN_RESET;
+        }
+
+        if (errno == EINTR)
+        {
+            return MBEDTLS_ERR_SSL_WANT_WRITE;
+        }
+
+        return MBEDTLS_ERR_NET_SEND_FAILED;
+    }
+
+    return ret;
 }
 
 /*
@@ -340,13 +339,13 @@ int mbedtls_net_send( void *ctx, const unsigned char *buf, size_t len )
  */
 void mbedtls_net_free( mbedtls_net_context *ctx )
 {
-  if( ctx->fd == -1 )
-    return;
+    if ( ctx->fd == -1 )
+        return;
 
-  shutdown( ctx->fd, 2 );
-  close( ctx->fd );
+    shutdown( ctx->fd, 2 );
+    close( ctx->fd );
 
-  ctx->fd = -1;
- }
+    ctx->fd = -1;
+}
 
 #endif /* MBEDTLS_NET_C */

@@ -1159,7 +1159,7 @@
           <state>STM32F767xx</state>
           <state>USE_HAL_DRIVER</state>
           <state>USE_STM32F7XX_NUCLEO_144</state>
-          <state>UDP_CLIENT</state>
+          <state>LWIP_DNS</state>
           <state>MBEDTLS_CONFIG_FILE="stm32f7_mbedtls_config.h"</state>
         </option>
         <option>
@@ -1289,14 +1289,14 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
-          <state>$PROJ_DIR$\..\..\..\app\udp-socket\inc</state>
-          <state>$PROJ_DIR$\..\..\..\app\udp-socket\src</state>
+          <state>$PROJ_DIR$\..\..\..\app\dtls-demo\inc</state>
           <state>$PROJ_DIR$\..\..\..\drivers\bsp\stm32f7xx_nucleo_144</state>
           <state>$PROJ_DIR$\..\..\..\drivers\stm32f7xx_hal_driver\inc</state>
           <state>$PROJ_DIR$\..\..\..\drivers\cmsis\inc</state>
           <state>$PROJ_DIR$\..\..\..\drivers\cmsis\stm32f7xx\inc</state>
           <state>$PROJ_DIR$\..\..\..\external\lwip\src\include</state>
           <state>$PROJ_DIR$\..\..\..\external\lwip\system</state>
+          <state>$PROJ_DIR$\..\..\..\external\mbedtls\include</state>
           <state>$PROJ_DIR$\..\..\..\freertos\source</state>
           <state>$PROJ_DIR$\..\..\..\freertos\source\portable\iar\arm_cm7\r0p1</state>
           <state>$PROJ_DIR$\..\..\..\freertos\source\cmsis_rtos</state>

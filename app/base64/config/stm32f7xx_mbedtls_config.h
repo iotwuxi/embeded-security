@@ -1,5 +1,5 @@
-#ifndef MBEDTLS_CONFIG_H
-#define MBEDTLS_CONFIG_H
+#ifndef __STM32F7_MBEDTLS_CONFIG_H
+#define __STM32F7_MBEDTLS_CONFIG_H
 
 /* System support */
 //#define MBEDTLS_HAVE_TIME /* Optionally used in Hello messages */
