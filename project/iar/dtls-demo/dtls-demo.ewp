@@ -2025,6 +2025,9 @@
     <group>
       <name>bsp</name>
       <file>
+        <name>$PROJ_DIR$\..\..\..\drivers\bsp\stm32f7xx_nucleo_144\stm32f7xx_hal_msp.c</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\..\drivers\bsp\stm32f7xx_nucleo_144\stm32f7xx_nucleo_144.c</name>
       </file>
     </group>
