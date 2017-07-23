@@ -54,11 +54,11 @@
 #include "ethernetif.h"
 
 #include "app_ethernet.h"
-#ifdef COAP_SERVER
-#include "coap_server.h"
+#ifdef UDP_SERVER
+#include "udp_server.h"
 #endif
-#ifdef COAP_CLIENT
-#include "coap_client.h"
+#ifdef UDP_CLIENT
+#include "udp_client.h"
 #endif
 
 /* Private typedef -----------------------------------------------------------*/
