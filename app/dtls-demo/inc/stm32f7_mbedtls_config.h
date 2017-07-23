@@ -1670,7 +1670,7 @@
  *
  * This module provides debugging functions.
  */
- /* #define MBEDTLS_DEBUG_C */
+#define MBEDTLS_DEBUG_C
 
 /**
  * \def MBEDTLS_DES_C
@@ -2117,7 +2117,7 @@
  *
  * This module enables abstraction of common (libc) functions.
  */
-// #define MBEDTLS_PLATFORM_C
+#define MBEDTLS_PLATFORM_C
 
 /**
  * \def MBEDTLS_RIPEMD160_C

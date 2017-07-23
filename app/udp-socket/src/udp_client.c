@@ -8,33 +8,43 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#define UDP_CLIENT_THREAD_PRIO      (osPriorityAboveNormal)
-#define SERVER_IP                   "192.168.0.9"
+#define UDP_CLIENT_THREAD_PRIO      (osPriorityNormal)
+
+/** netcat -l -u 139.196.187.107 -p 5000 & */
+//#define SERVER_IP                   "139.196.187.107"
+//#define PORT                        5000
+
+#define SERVER_IP                   "192.168.1.106"
 #define PORT                        5000
 
 const char send_data[] = "this is udp client\n"; 
 
 void udp_client_thread(void* args)
 {
-    int sock;
-    // struct hostent *host;
-    struct sockaddr_in server_addr;
-    
-    if ((sock = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
+    for(;;)
     {
-        printf("socket error\n");
-        return;
+        int sock;
+        struct sockaddr_in server_addr;
+        
+        if ((sock = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
+        {
+            printf("socket error\n");
+            return;
+        }
+        
+        server_addr.sin_family = AF_INET;
+        server_addr.sin_port = htons(PORT);
+        server_addr.sin_addr.s_addr = inet_addr(SERVER_IP);
+        memset(&(server_addr.sin_zero), 0, sizeof(server_addr.sin_zero));
+
+        sendto(sock, send_data, strlen(send_data), 0,
+            (struct sockaddr *)&server_addr, sizeof(struct sockaddr));
+
+        printf("send data: [%ld]%s",strlen(send_data), send_data);
+        closesocket(sock);
+        
+        osDelay(2000);
     }
-    
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(PORT);
-    server_addr.sin_addr.s_addr = inet_addr(SERVER_IP);
-    memset(&(server_addr.sin_zero), 0, sizeof(server_addr.sin_zero));
-
-    sendto(sock, send_data, strlen(send_data), 0,
-        (struct sockaddr *)&server_addr, sizeof(struct sockaddr));
-
-    closesocket(sock);
 }
 
 /**

@@ -49,9 +49,11 @@
 #include "lwip/opt.h"
 #include "main.h"
 #include "lwip/dhcp.h"
+#include "lwip/sockets.h"
 #include "app_ethernet.h"
 #include "ethernetif.h"
-
+#include "dtls_client.h"
+  
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -124,7 +126,8 @@ void DHCP_thread(void const * argument)
         if (dhcp_supplied_address(netif)) 
         {
           DHCP_state = DHCP_ADDRESS_ASSIGNED;	
-          
+          printf("\n[DHCP]IP Address: %s\n", inet_ntoa(netif->ip_addr.addr));
+          dtls_client_init();
           BSP_LED_Off(LED3);
           BSP_LED_On(LED1); 
         }

@@ -49,8 +49,17 @@
 #include "lwip/opt.h"
 #include "main.h"
 #include "lwip/dhcp.h"
+#include "lwip/sockets.h"
 #include "app_ethernet.h"
 #include "ethernetif.h"
+
+#include "app_ethernet.h"
+#ifdef COAP_SERVER
+#include "coap_server.h"
+#endif
+#ifdef COAP_CLIENT
+#include "coap_client.h"
+#endif
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -124,7 +133,14 @@ void DHCP_thread(void const * argument)
         if (dhcp_supplied_address(netif)) 
         {
           DHCP_state = DHCP_ADDRESS_ASSIGNED;	
-          
+          printf("\n[DHCP]IP Address: %s\n", inet_ntoa(netif->ip_addr.addr));
+          #ifdef UDP_SERVER
+            udp_server_init();
+          #endif
+
+          #ifdef UDP_CLIENT
+            udp_client_init();
+          #endif          
           BSP_LED_Off(LED3);
           BSP_LED_On(LED1); 
         }

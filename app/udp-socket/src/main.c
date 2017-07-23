@@ -2,7 +2,11 @@
 #include "cmsis_os.h"
 #include "ethernetif.h"
 #include "lwip/netif.h"
+#include "lwip/dhcp.h"
 #include "lwip/tcpip.h"
+#include "lwip/netdb.h"
+#include "lwip/sockets.h"
+
 #include "app_ethernet.h"
 #ifdef COAP_SERVER
 #include "coap_server.h"
@@ -70,20 +74,12 @@ static void StartThread(void const * argument)
     /* 初始化 Lwip 协议栈 */
     Netif_Config();
 
-#ifdef UDP_SERVER
-  udp_server_init();
-#endif
-
-#ifdef UDP_CLIENT
-  udp_client_init();
-#endif
-
     /* 网络状态指示(LED) */
     User_notification(&gnetif);
   
 #ifdef USE_DHCP
     /* 开启 DHCP 任务 */
-    osThreadDef(DHCP, DHCP_thread, osPriorityBelowNormal, 0, configMINIMAL_STACK_SIZE * 2);
+    osThreadDef(DHCP, DHCP_thread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE * 2);
     osThreadCreate (osThread(DHCP), &gnetif);
 #endif
 
@@ -102,7 +98,6 @@ static void BlinkThread(void const * argument)
     for( ;; )
     {
         BSP_LED_Toggle(LED2);
-        // printf("blink task.\n");
         osDelay(1000);
     }
 }
@@ -115,7 +110,7 @@ static void Netif_Config(void)
     ip_addr_t ipaddr;
     ip_addr_t netmask;
     ip_addr_t gw;
-
+    
 #ifdef USE_DHCP
     ip_addr_set_zero_ip4(&ipaddr);
     ip_addr_set_zero_ip4(&netmask);

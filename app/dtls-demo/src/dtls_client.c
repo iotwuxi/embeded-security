@@ -34,15 +34,28 @@
 
 #include <string.h>
 
-#define DTLS_CLIENT_THREAD_PRIO      (osPriorityRealtime)
+#define DTLS_CLIENT_THREAD_PRIO      (osPriorityNormal)
 
 #define SERVER_PORT "4433"
 #define SERVER_NAME "aliyun"
 #define SERVER_ADDR "139.196.187.107" /* forces IPv4 */
+// #define SERVER_ADDR "192.168.1.106" /* forces IPv4 */
 #define MESSAGE     "Hello DTLS Server"
 
 #define READ_TIMEOUT_MS 1000
 #define MAX_RETRY       5
+
+#define DEBUG_LEVEL 0
+
+static void my_debug( void *ctx, int level,
+                      const char *file, int line,
+                      const char *str )
+{
+    ((void) level);
+
+    mbedtls_fprintf( (FILE *) ctx, "%s:%04d: %s", file, line, str );
+    fflush(  (FILE *) ctx  );
+}
 
 struct dtls_timing_context 
 {
@@ -106,6 +119,10 @@ int dtls_client_thread(void* args)
       mbedtls_timing_delay_context timer;
 
       int dtls_ciphersuites[3];
+
+#if defined(MBEDTLS_DEBUG_C)
+      mbedtls_debug_set_threshold( DEBUG_LEVEL );
+#endif
 
       /*
        * 0. Initialize the RNG and the session data
@@ -178,6 +195,7 @@ int dtls_client_thread(void* args)
        * in this simplified example, in which the ca chain is hardcoded.
        * Production code should set a proper ca chain and use REQUIRED. */
       mbedtls_ssl_conf_rng( &conf, mbedtls_ctr_drbg_random, &ctr_drbg );
+      mbedtls_ssl_conf_dbg( &conf, my_debug, stdout );
 
       dtls_ciphersuites[0] = MBEDTLS_TLS_PSK_WITH_AES_128_CCM;
       dtls_ciphersuites[1] = MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_CCM_8;

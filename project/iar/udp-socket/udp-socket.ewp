@@ -1976,7 +1976,13 @@
           <name>$PROJ_DIR$\..\..\..\app\udp-socket\inc\stm32f7xx_it.h</name>
         </file>
         <file>
+          <name>$PROJ_DIR$\..\..\..\app\udp-socket\inc\udp_client.h</name>
+        </file>
+        <file>
           <name>$PROJ_DIR$\..\..\..\app\udp-socket\inc\udp_server.h</name>
+          <excluded>
+            <configuration>client</configuration>
+          </excluded>
         </file>
       </group>
       <group>

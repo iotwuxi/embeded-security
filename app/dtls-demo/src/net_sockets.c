@@ -74,58 +74,14 @@
 
 #include "main.h"
 
-static struct netif netif;
+extern struct netif gnetif;
 static int net_would_block( const mbedtls_net_context *ctx );
 /*
  * Initialize LwIP stack and get a dynamic IP address.
  */
 void mbedtls_net_init( mbedtls_net_context *ctx )
 {
-
-    ip4_addr_t addr;
-    ip4_addr_t netmask;
-    ip4_addr_t gw;
-    uint32_t start;
-
-    ctx->fd = -1;
-#if 1
-    tcpip_init(NULL, NULL);
-
-    /* IP default settings, to be overridden by DHCP */
-    IP4_ADDR(&addr, IP_ADDR0, IP_ADDR1, IP_ADDR2, IP_ADDR3);
-    IP4_ADDR(&gw, GW_ADDR0, GW_ADDR1, GW_ADDR2, GW_ADDR3);
-    IP4_ADDR(&netmask, NETMASK_ADDR0, NETMASK_ADDR1, NETMASK_ADDR2, NETMASK_ADDR3);
-
-    /* add the network interface */
-    netif_add(&netif, &addr, &netmask, &gw, NULL, &ethernetif_init, &ethernet_input);
-
-    /* register the default network interface */
-    netif_set_up(&netif);
-
-#ifdef USE_DHCP
-    dhcp_start(&netif);
-#endif
-    osDelay(500);
-
-    start = HAL_GetTick();
-
-    while ((netif.ip_addr.addr == 0) && (HAL_GetTick() - start < 10000))
-    {
-    }
-
-    if (netif.ip_addr.addr == 0)
-    {
-        printf(" Failed to get ip address! Please check your network configuration.\n");
-        Error_Handler();
-    }
-    else
-    {
-        printf("\nIP Address: %s\n", inet_ntoa(netif.ip_addr.addr));
-#ifdef USE_DHCP
-        dhcp_stop(&netif);
-#endif
-    }
-#endif
+    ctx->fd = -1;    
 }
 
 /*
