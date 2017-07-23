@@ -1933,7 +1933,16 @@
   <group>
     <name>app</name>
     <group>
-      <name>udp-socket</name>
+      <name>blink</name>
+      <group>
+        <name>config</name>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\app\blink\config\FreeRTOSConfig.h</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\app\blink\config\stm32f7xx_hal_conf.h</name>
+        </file>
+      </group>
       <group>
         <name>src</name>
         <file>
@@ -1946,6 +1955,9 @@
     <name>drivers</name>
     <group>
       <name>bsp</name>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\drivers\bsp\stm32f7xx_nucleo_144\stm32f7xx_hal_msp.c</name>
+      </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\drivers\bsp\stm32f7xx_nucleo_144\stm32f7xx_nucleo_144.c</name>
       </file>
@@ -1981,6 +1993,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\drivers\stm32f7xx_hal_driver\src\stm32f7xx_hal_rcc_ex.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\drivers\stm32f7xx_hal_driver\src\stm32f7xx_hal_rng.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\drivers\stm32f7xx_hal_driver\src\stm32f7xx_hal_tim.c</name>
