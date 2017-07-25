@@ -91,7 +91,7 @@ void mbedtls_net_init( mbedtls_net_context *ctx );
  *
  * \note           Sets the socket in connected mode even with UDP.
  */
-int mbedtls_net_connect( mbedtls_net_context *ctx, const char *host, const char *port, int proto );
+int mbedtls_net_connect( mbedtls_net_context *ctx, const char *host, int port, int proto );
 
 /**
  * \brief          Create a receiving socket on bind_ip:port in the chosen

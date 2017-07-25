@@ -36,7 +36,7 @@
 
 #define DTLS_CLIENT_THREAD_PRIO      (osPriorityNormal)
 
-#define SERVER_PORT "4433"
+#define SERVER_PORT 4433
 #define SERVER_NAME "aliyun"
 #define SERVER_ADDR "139.196.187.107" /* forces IPv4 */
 // #define SERVER_ADDR "192.168.1.106" /* forces IPv4 */
@@ -163,7 +163,7 @@ int dtls_client_thread(void* args)
       /*
        * 1. Start the connection
        */
-      mbedtls_printf( "  . Connecting to [udp] %s:%s...", SERVER_ADDR, SERVER_PORT );
+      mbedtls_printf( "  . Connecting to [udp] %s:%d...", SERVER_ADDR, SERVER_PORT );
       fflush( stdout );
 
       if( ( ret = mbedtls_net_connect( &server_fd, SERVER_ADDR,
@@ -215,7 +215,7 @@ int dtls_client_thread(void* args)
       }
 
       mbedtls_ssl_set_bio( &ssl, &server_fd,
-                           mbedtls_net_send, mbedtls_net_recv, mbedtls_net_recv_timeout );
+                           mbedtls_net_send, mbedtls_net_recv, NULL );
 
       mbedtls_ssl_set_timer_cb( &ssl, &timer, dtls_timing_set_delay,
                                               dtls_timing_get_delay );
@@ -346,12 +346,15 @@ int dtls_client_thread(void* args)
       mbedtls_ssl_config_free( &conf );
       mbedtls_ctr_drbg_free( &ctr_drbg );
       mbedtls_entropy_free( &entropy );
-
-      printf("dtls client thread exit.\n");
       
       for(;;)
       {
-           
+          if(ret != 0)
+            BSP_LED_Toggle(LED3);
+          else
+            BSP_LED_Toggle(LED1);
+
+          osDelay(2000);
       }
 }
 

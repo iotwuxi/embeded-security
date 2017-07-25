@@ -14,37 +14,69 @@
 //#define SERVER_IP                   "139.196.187.107"
 //#define PORT                        5000
 
-#define SERVER_IP                   "192.168.1.106"
-#define PORT                        5000
+#define SERVER_IP                   "139.196.187.107"
+#define MAXSIZE                     256
+#define SERV_PORT                   5000
 
-const char send_data[] = "this is udp client\n"; 
+static char buff[MAXSIZE];
+static char *msg = "this is udp client\n"; 
+
+void thread_err_handle(void);
 
 void udp_client_thread(void* args)
 {
+    int sock_fd, n;
+    struct sockaddr_in servaddr;
+#if 0    
+    struct timeval timeout = 
+    {
+        .tv_sec = 3,
+        .tv_usec = 0
+    };
+#endif
+    memset(&servaddr, 0, sizeof(servaddr));
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_port = htons(SERV_PORT);
+    if((inet_pton(AF_INET , SERVER_IP, &servaddr.sin_addr)) <= 0)
+    {
+        printf("inet_pton error\n");
+        thread_err_handle();
+    }
+    
+    if((sock_fd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
+    {
+        printf("socket error\n");
+        thread_err_handle();
+    }
+
+    if (connect(sock_fd, (struct sockaddr *)&servaddr, sizeof(servaddr)) < 0)
+    {
+        printf("connect error\n");
+        thread_err_handle();
+    }   
+
     for(;;)
     {
-        int sock;
-        struct sockaddr_in server_addr;
-        
-        if ((sock = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
+        // setsockopt(socket，SOL_SOCKET,SO_SNDTIMEO，(char *)&timeout,sizeof(struct timeval));
+        if(write(sock_fd, msg, strlen(msg)) < 0)
         {
-            printf("socket error\n");
-            return;
+            printf("send error\n");
+            thread_err_handle();
         }
-        
-        server_addr.sin_family = AF_INET;
-        server_addr.sin_port = htons(PORT);
-        server_addr.sin_addr.s_addr = inet_addr(SERVER_IP);
-        memset(&(server_addr.sin_zero), 0, sizeof(server_addr.sin_zero));
 
-        sendto(sock, send_data, strlen(send_data), 0,
-            (struct sockaddr *)&server_addr, sizeof(struct sockaddr));
+        // setsockopt(sock_fd, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(struct timeval));
+        if( ( n = read(sock_fd, buff, MAXSIZE)) < 0)
+        {
+            printf("recv error\n");
+        }
+        else
+        {
+            buff[n] = '\0';
+            printf("receive data: %s\n", buff);
+        }
 
-        printf("send data: [%ld]%s",strlen(send_data), send_data);
-        closesocket(sock);
-        
         osDelay(2000);
-    }
+    }   
 }
 
 /**
@@ -53,4 +85,12 @@ void udp_client_thread(void* args)
 void udp_client_init()
 {
     sys_thread_new("UDP Server", udp_client_thread, NULL, DEFAULT_THREAD_STACKSIZE, UDP_CLIENT_THREAD_PRIO);
+}
+
+void thread_err_handle(void)
+{
+    while(1)
+    {
+
+    }
 }

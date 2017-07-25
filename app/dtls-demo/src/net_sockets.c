@@ -87,47 +87,37 @@ void mbedtls_net_init( mbedtls_net_context *ctx )
 /*
  * Initiate a TCP connection with host:port and the given protocol
  */
-int mbedtls_net_connect( mbedtls_net_context *ctx, const char *host, const char *port, int proto )
+int mbedtls_net_connect( mbedtls_net_context *ctx, const char *host, int port, int proto )
 {
-    int ret;
-    struct addrinfo hints;
-    struct addrinfo *list;
-    struct addrinfo *current;
-
-    /* Do name resolution with both IPv6 and IPv4 */
-    memset(&hints, 0, sizeof(hints));
-    hints.ai_family = AF_UNSPEC;
-    hints.ai_socktype = proto == MBEDTLS_NET_PROTO_UDP ? SOCK_DGRAM : SOCK_STREAM;
-    hints.ai_protocol = proto == MBEDTLS_NET_PROTO_UDP ? IPPROTO_UDP : IPPROTO_TCP;
-
-    if (getaddrinfo(host, port, &hints, &list) != 0)
-        return MBEDTLS_ERR_NET_UNKNOWN_HOST;
-
-    /* Try the sockaddrs until a connection succeeds */
-    ret = MBEDTLS_ERR_NET_UNKNOWN_HOST;
-    for ( current = list; current != NULL; current = current->ai_next)
+    struct sockaddr_in servaddr;
+#if 0
+    int type, protocol;
+    type = proto == MBEDTLS_NET_PROTO_UDP ? SOCK_DGRAM : SOCK_STREAM;
+    protocol = proto == MBEDTLS_NET_PROTO_UDP ? IPPROTO_UDP : IPPROTO_TCP;
+#endif
+    memset(&servaddr, 0, sizeof(servaddr));
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_port = htons(port);
+    if((inet_pton(AF_INET , host, &servaddr.sin_addr)) <= 0)
     {
-        ctx->fd = (int) socket(current->ai_family, current->ai_socktype, current->ai_protocol);
-        if (ctx->fd < 0)
-        {
-            ret = MBEDTLS_ERR_NET_SOCKET_FAILED;
-            continue;
-        }
-
-        if (connect(ctx->fd, current->ai_addr, (uint32_t)current->ai_addrlen) == 0)
-        {
-            ret = 0;
-            break;
-        }
-
-        close( ctx->fd );
-        ret = MBEDTLS_ERR_NET_CONNECT_FAILED;
+        mbedtls_printf("inet_pton error\n");
+        return -1;
+    }
+    
+    // if((ctx->fd = socket(AF_INET, type, protocol)) < 0)
+    if((ctx->fd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
+    {
+        mbedtls_printf("socket error\n");
+        return -1;
     }
 
-    freeaddrinfo(list);
-
-    return ret;
-
+    if (connect(ctx->fd, (struct sockaddr *)&servaddr, sizeof(servaddr)) < 0)
+    {
+        mbedtls_printf("connect error\n");
+        return -1;
+    }   
+    
+    return 0;
 }
 
 /*
