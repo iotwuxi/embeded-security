@@ -70,8 +70,8 @@ INCLUDES += -I ${PROJECT_PATH}/freertos/source/include
 INCLUDES += -I ${PROJECT_PATH}/external/mbedtls/include
 
 # Defines
-DEFINES = -DSTM32 -DSTM32F7 -DSTM32F767xx -DUSE_HAL_DRIVER -DUSE_STM32F7XX_NUCLEO_144 -DLWIP_DNS
-DEFINES += -I ${PROJECT_PATH}/app/dtls-demo/inc -DMBEDTLS_CONFIG_FILE='<mbedtls_config.h>'
+DEFINES = -DSTM32 -DSTM32F7 -DSTM32F767xx -DUSE_HAL_DRIVER -DUSE_STM32F7XX_NUCLEO_144 -DLWIP_DNS 
+DEFINES += -I ${PROJECT_PATH}/app/dtls-demo/inc -DMBEDTLS_CONFIG_FILE='<stm32f7_mbedtls_config.h>'
 
 # Compiler/Assembler/Linker/etc
 PREFIX = arm-none-eabi
