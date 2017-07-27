@@ -45,7 +45,7 @@
 #include "mbedtls/timing.h"
 
 #define SERVER_PORT "4433"
-#define SERVER_NAME "aliyun"
+#define SERVER_NAME "localhost"
 #define SERVER_ADDR "139.196.187.107" /* forces IPv4 */
 #define MESSAGE     "Hello DTLS Server"
 
@@ -133,7 +133,7 @@ void thread_exit(void)
 void dtls_client_thread( int argc, char *argv[] );
 void dtls_client_init()
 {
-    sys_thread_new("DTLS Client", (lwip_thread_fn)dtls_client_thread, NULL, DEFAULT_THREAD_STACKSIZE, DTLS_CLIENT_THREAD_PRIO);
+    sys_thread_new("DTLS Client", (lwip_thread_fn)dtls_client_thread, NULL, 12*DEFAULT_THREAD_STACKSIZE, DTLS_CLIENT_THREAD_PRIO);
 }
 /** port end **/
 
@@ -250,7 +250,7 @@ void dtls_client_thread( int argc, char *argv[] )
     }
 
     mbedtls_ssl_set_bio( &ssl, &server_fd,
-                         mbedtls_net_send, mbedtls_net_recv, mbedtls_net_recv_timeout );
+                         mbedtls_net_send, mbedtls_net_recv, NULL );
 
     mbedtls_ssl_set_timer_cb( &ssl, &timer, mbedtls_timing_set_delay,
                                             mbedtls_timing_get_delay );
