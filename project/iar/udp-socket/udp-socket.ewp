@@ -184,7 +184,6 @@
           <state>STM32F767xx</state>
           <state>USE_HAL_DRIVER</state>
           <state>USE_STM32F7XX_NUCLEO_144</state>
-          <state>UDP_SERVER</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -313,8 +312,9 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
-          <state>$PROJ_DIR$\..\..\..\app\udp-socket\inc</state>
-          <state>$PROJ_DIR$\..\..\..\app\udp-socket\src</state>
+          <state>$PROJ_DIR$\..\..\..\app\net</state>
+          <state>$PROJ_DIR$\..\..\..\samples\stm32\udp-socket\</state>
+          <state>$PROJ_DIR$\..\..\..\samples\stm32\udp-socket\config</state>
           <state>$PROJ_DIR$\..\..\..\drivers\bsp\stm32f7xx_nucleo_144</state>
           <state>$PROJ_DIR$\..\..\..\drivers\stm32f7xx_hal_driver\inc</state>
           <state>$PROJ_DIR$\..\..\..\drivers\cmsis\inc</state>
@@ -586,7 +586,7 @@
         </option>
         <option>
           <name>AUserIncludes</name>
-          <state>$PROJ_DIR$\..\..\..\app\udp-socket\inc</state>
+          <state>$PROJ_DIR$\..\..\..\samples\stm32\udp-socket\config</state>
         </option>
         <option>
           <name>AExtraOptionsCheckV2</name>
@@ -1286,8 +1286,9 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
-          <state>$PROJ_DIR$\..\..\..\app\udp-socket\inc</state>
-          <state>$PROJ_DIR$\..\..\..\app\udp-socket\src</state>
+          <state>$PROJ_DIR$\..\..\..\app\net</state>
+          <state>$PROJ_DIR$\..\..\..\samples\stm32\udp-socket</state>
+          <state>$PROJ_DIR$\..\..\..\samples\stm32\udp-socket\config</state>
           <state>$PROJ_DIR$\..\..\..\drivers\bsp\stm32f7xx_nucleo_144</state>
           <state>$PROJ_DIR$\..\..\..\drivers\stm32f7xx_hal_driver\inc</state>
           <state>$PROJ_DIR$\..\..\..\drivers\cmsis\inc</state>
@@ -1559,7 +1560,7 @@
         </option>
         <option>
           <name>AUserIncludes</name>
-          <state>$PROJ_DIR$\..\..\..\app\udp-socket\inc</state>
+          <state>$PROJ_DIR$\..\..\..\samples\stm32\udp-socket\config</state>
         </option>
         <option>
           <name>AExtraOptionsCheckV2</name>
@@ -1951,71 +1952,17 @@
   <group>
     <name>app</name>
     <group>
-      <name>udp-socket</name>
-      <group>
-        <name>inc</name>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\udp-socket\inc\app_ethernet.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\udp-socket\inc\ethernetif.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\udp-socket\inc\FreeRTOSConfig.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\udp-socket\inc\lwipopts.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\udp-socket\inc\main.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\udp-socket\inc\stm32f7xx_hal_conf.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\udp-socket\inc\stm32f7xx_it.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\udp-socket\inc\udp_client.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\udp-socket\inc\udp_server.h</name>
-          <excluded>
-            <configuration>client</configuration>
-          </excluded>
-        </file>
-      </group>
-      <group>
-        <name>src</name>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\udp-socket\src\app_ethernet.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\udp-socket\src\ethernetif.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\udp-socket\src\main.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\udp-socket\src\stm32f7xx_hal_timebase_tim.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\udp-socket\src\stm32f7xx_it.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\udp-socket\src\udp_client.c</name>
-          <excluded>
-            <configuration>server</configuration>
-          </excluded>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\udp-socket\src\udp_server.c</name>
-          <excluded>
-            <configuration>client</configuration>
-          </excluded>
-        </file>
-      </group>
+      <name>net</name>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\app\net\app_ethernet.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\app\net\ethernetif.c</name>
+      </file>
     </group>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\app\main.c</name>
+    </file>
   </group>
   <group>
     <name>doc</name>
@@ -2029,6 +1976,9 @@
       <name>bsp</name>
       <file>
         <name>$PROJ_DIR$\..\..\..\drivers\bsp\stm32f7xx_nucleo_144\stm32f7xx_hal_msp.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\drivers\bsp\stm32f7xx_nucleo_144\stm32f7xx_it.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\drivers\bsp\stm32f7xx_nucleo_144\stm32f7xx_nucleo_144.c</name>
@@ -2074,6 +2024,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\drivers\stm32f7xx_hal_driver\src\stm32f7xx_hal_tim_ex.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\drivers\stm32f7xx_hal_driver\src\stm32f7xx_hal_timebase_tim.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\drivers\stm32f7xx_hal_driver\src\stm32f7xx_hal_uart.c</name>
@@ -2246,6 +2199,21 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\..\freertos\source\timers.c</name>
+    </file>
+  </group>
+  <group>
+    <name>samples</name>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\samples\stm32\udp-socket\udp_client.c</name>
+      <excluded>
+        <configuration>server</configuration>
+      </excluded>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\samples\stm32\udp-socket\udp_server.c</name>
+      <excluded>
+        <configuration>client</configuration>
+      </excluded>
     </file>
   </group>
 </project>

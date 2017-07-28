@@ -184,8 +184,7 @@
           <state>STM32F767xx</state>
           <state>USE_HAL_DRIVER</state>
           <state>USE_STM32F7XX_NUCLEO_144</state>
-          <state>LWIP_DNS</state>
-          <state>MBEDTLS_CONFIG_FILE="stm32f7_mbedtls_config.h"</state>
+          <state>MBEDTLS_CONFIG_FILE="mbedtls_config.h"</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -314,8 +313,9 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
-          <state>$PROJ_DIR$\..\..\..\app\dtls-demo\inc</state>
-          <state>$PROJ_DIR$\..\..\..\app\dtls-demo\src</state>
+          <state>$PROJ_DIR$\..\..\..\app\net</state>
+          <state>$PROJ_DIR$\..\..\..\samples\stm32\dtls-demo</state>
+          <state>$PROJ_DIR$\..\..\..\samples\stm32\dtls-demo\config</state>
           <state>$PROJ_DIR$\..\..\..\drivers\bsp\stm32f7xx_nucleo_144</state>
           <state>$PROJ_DIR$\..\..\..\drivers\stm32f7xx_hal_driver\inc</state>
           <state>$PROJ_DIR$\..\..\..\drivers\cmsis\inc</state>
@@ -588,7 +588,7 @@
         </option>
         <option>
           <name>AUserIncludes</name>
-          <state>$PROJ_DIR$\..\..\..\app\udp-socket\inc</state>
+          <state>$PROJ_DIR$\..\..\..\samples\stm32\dtls-demo\config</state>
         </option>
         <option>
           <name>AExtraOptionsCheckV2</name>
@@ -1159,7 +1159,7 @@
           <state>STM32F767xx</state>
           <state>USE_HAL_DRIVER</state>
           <state>USE_STM32F7XX_NUCLEO_144</state>
-          <state>MBEDTLS_CONFIG_FILE="stm32f7_mbedtls_config.h"</state>
+          <state>MBEDTLS_CONFIG_FILE="mbedtls_config.h"</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -1288,7 +1288,9 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
-          <state>$PROJ_DIR$\..\..\..\app\dtls-demo\inc</state>
+          <state>$PROJ_DIR$\..\..\..\app\net</state>
+          <state>$PROJ_DIR$\..\..\..\samples\stm32\dtls-demo</state>
+          <state>$PROJ_DIR$\..\..\..\samples\stm32\dtls-demo\config</state>
           <state>$PROJ_DIR$\..\..\..\drivers\bsp\stm32f7xx_nucleo_144</state>
           <state>$PROJ_DIR$\..\..\..\drivers\stm32f7xx_hal_driver\inc</state>
           <state>$PROJ_DIR$\..\..\..\drivers\cmsis\inc</state>
@@ -1561,7 +1563,7 @@
         </option>
         <option>
           <name>AUserIncludes</name>
-          <state>$PROJ_DIR$\..\..\..\app\udp-socket\inc</state>
+          <state>$PROJ_DIR$\..\..\..\samples\stm32\dtls-demo\config</state>
         </option>
         <option>
           <name>AExtraOptionsCheckV2</name>
@@ -1953,65 +1955,23 @@
   <group>
     <name>app</name>
     <group>
-      <name>dtls-demo</name>
-      <group>
-        <name>inc</name>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\dtls-demo\inc\app_ethernet.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\dtls-demo\inc\dtls_client.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\dtls-demo\inc\ethernetif.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\dtls-demo\inc\FreeRTOSConfig.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\dtls-demo\inc\lwipopts.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\dtls-demo\inc\main.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\dtls-demo\inc\stm32f7_mbedtls_config.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\dtls-demo\inc\stm32f7xx_hal_conf.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\dtls-demo\inc\stm32f7xx_it.h</name>
-        </file>
-      </group>
-      <group>
-        <name>src</name>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\dtls-demo\src\app_ethernet.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\dtls-demo\src\dtls_client.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\dtls-demo\src\ethernetif.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\dtls-demo\src\hardware_rng.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\dtls-demo\src\main.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\dtls-demo\src\net_sockets.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\dtls-demo\src\stm32f7xx_hal_timebase_tim.c</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\app\dtls-demo\src\stm32f7xx_it.c</name>
-        </file>
-      </group>
+      <name>net</name>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\app\net\app_ethernet.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\app\net\ethernetif.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\app\net\net_sockets.c</name>
+      </file>
     </group>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\app\main.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\app\mbedtls_alt.c</name>
+    </file>
   </group>
   <group>
     <name>doc</name>
@@ -2025,6 +1985,9 @@
       <name>bsp</name>
       <file>
         <name>$PROJ_DIR$\..\..\..\drivers\bsp\stm32f7xx_nucleo_144\stm32f7xx_hal_msp.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\drivers\bsp\stm32f7xx_nucleo_144\stm32f7xx_it.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\drivers\bsp\stm32f7xx_nucleo_144\stm32f7xx_nucleo_144.c</name>
@@ -2070,6 +2033,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\drivers\stm32f7xx_hal_driver\src\stm32f7xx_hal_tim_ex.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\drivers\stm32f7xx_hal_driver\src\stm32f7xx_hal_timebase_tim.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\drivers\stm32f7xx_hal_driver\src\stm32f7xx_hal_uart.c</name>
@@ -2458,6 +2424,12 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\..\freertos\source\timers.c</name>
+    </file>
+  </group>
+  <group>
+    <name>samples</name>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\samples\stm32\dtls-demo\dtls_client.c</name>
     </file>
   </group>
 </project>

@@ -6,11 +6,11 @@ PROJECT_PATH ?= $(shell pwd)/../..
 SOURCES_S = ${PROJECT_PATH}/drivers/cmsis/stm32f7xx/source/gcc/startup_stm32f767xx.s
 
 # App
-SOURCES_C += $(wildcard ${PROJECT_PATH}/app/common/main.c)
+SOURCES_C += $(wildcard ${PROJECT_PATH}/app/main.c)
 SOURCES_C += $(wildcard ${PROJECT_PATH}/app/net/ethernetif.c)
 SOURCES_C += $(wildcard ${PROJECT_PATH}/app/net/app_ethernet.c)
-SOURCES_C += ${PROJECT_PATH}/app/samples/udp-socket/udp_client.c
-#SOURCES_C += ${PROJECT_PATH}/app/samples/udp-socket/udp_server.c
+SOURCES_C += ${PROJECT_PATH}/samples/stm32/udp-socket/udp_client.c
+#SOURCES_C += ${PROJECT_PATH}/samples/stm32/udp-socket/udp_server.c
 
 # Sys
 SOURCES_C += ${PROJECT_PATH}/project/gcc/sys/syscalls.c
@@ -51,8 +51,8 @@ OBJS = $(SOURCES_S:.s=.o) $(SOURCES_C:.c=.o)
 
 # Includes
 INCLUDES += -I ${PROJECT_PATH}/app/net
-INCLUDES += -I ${PROJECT_PATH}/app/samples/udp-socket
-INCLUDES += -I ${PROJECT_PATH}/app/samples/udp-socket/config
+INCLUDES += -I ${PROJECT_PATH}/samples/stm32/udp-socket
+INCLUDES += -I ${PROJECT_PATH}/samples/stm32/udp-socket/config
 INCLUDES += -I ${PROJECT_PATH}/drivers/bsp/stm32f7xx_nucleo_144
 INCLUDES += -I ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/inc
 INCLUDES += -I ${PROJECT_PATH}/drivers/cmsis/inc
