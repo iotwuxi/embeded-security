@@ -1,18 +1,16 @@
 # Makefile for udp socket project
-PROJECT = udp_socket
+PROJECT = udp_client
 PROJECT_PATH ?= $(shell pwd)/../..
 
 # Sources-asm
 SOURCES_S = ${PROJECT_PATH}/drivers/cmsis/stm32f7xx/source/gcc/startup_stm32f767xx.s
 
 # App
-SOURCES_C += ${PROJECT_PATH}/app/udp-socket/src/main.c
-SOURCES_C += ${PROJECT_PATH}/app/udp-socket/src/ethernetif.c
-SOURCES_C += ${PROJECT_PATH}/app/udp-socket/src/udp_server.c
-SOURCES_C += ${PROJECT_PATH}/app/udp-socket/src/udp_client.c
-SOURCES_C += ${PROJECT_PATH}/app/udp-socket/src/app_ethernet.c
-SOURCES_C += ${PROJECT_PATH}/app/udp-socket/src/stm32f7xx_hal_timebase_tim.c
-SOURCES_C += ${PROJECT_PATH}/app/udp-socket/src/stm32f7xx_it.c
+SOURCES_C += $(wildcard ${PROJECT_PATH}/app/common/main.c)
+SOURCES_C += $(wildcard ${PROJECT_PATH}/app/net/ethernetif.c)
+SOURCES_C += $(wildcard ${PROJECT_PATH}/app/net/app_ethernet.c)
+SOURCES_C += ${PROJECT_PATH}/app/samples/udp-socket/udp_client.c
+#SOURCES_C += ${PROJECT_PATH}/app/samples/udp-socket/udp_server.c
 
 # Sys
 SOURCES_C += ${PROJECT_PATH}/project/gcc/sys/syscalls.c
@@ -20,6 +18,7 @@ SOURCES_C += ${PROJECT_PATH}/project/gcc/sys/syscalls.c
 # Driver
 SOURCES_C += ${PROJECT_PATH}/drivers/cmsis/stm32f7xx/source/system_stm32f7xx.c
 SOURCES_C += ${PROJECT_PATH}/drivers/bsp/stm32f7xx_nucleo_144/stm32f7xx_nucleo_144.c
+SOURCES_C += ${PROJECT_PATH}/drivers/bsp/stm32f7xx_nucleo_144/stm32f7xx_it.c
 SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal.c
 SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_cortex.c
 SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_eth.c
@@ -30,6 +29,7 @@ SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_rcc_
 SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_tim.c
 SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_tim_ex.c
 SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_uart.c
+SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_timebase_tim.c
 
 # lwip
 SOURCES_C += $(wildcard ${PROJECT_PATH}/external/lwip/src/api/*.c)
@@ -50,8 +50,9 @@ SOURCES_C += ${PROJECT_PATH}/freertos/source/cmsis_rtos/cmsis_os.c
 OBJS = $(SOURCES_S:.s=.o) $(SOURCES_C:.c=.o) 
 
 # Includes
-INCLUDES = -I ${PROJECT_PATH}/app/udp-socket/inc
-INCLUDES += -I ${PROJECT_PATH}/app/udp-socket/src
+INCLUDES += -I ${PROJECT_PATH}/app/net
+INCLUDES += -I ${PROJECT_PATH}/app/samples/udp-socket
+INCLUDES += -I ${PROJECT_PATH}/app/samples/udp-socket/config
 INCLUDES += -I ${PROJECT_PATH}/drivers/bsp/stm32f7xx_nucleo_144
 INCLUDES += -I ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/inc
 INCLUDES += -I ${PROJECT_PATH}/drivers/cmsis/inc
@@ -64,7 +65,7 @@ INCLUDES += -I ${PROJECT_PATH}/freertos/source/cmsis_rtos
 INCLUDES += -I ${PROJECT_PATH}/freertos/source/include
 
 # Defines
-DEFINES = -DSTM32 -DSTM32F7 -DSTM32F767xx -DUSE_HAL_DRIVER -DUSE_STM32F7XX_NUCLEO_144 -DUDP_CLIENT
+DEFINES = -DSTM32 -DSTM32F7 -DSTM32F767xx -DUSE_HAL_DRIVER -DUSE_STM32F7XX_NUCLEO_144
 
 # Compiler/Assembler/Linker/etc
 PREFIX = arm-none-eabi

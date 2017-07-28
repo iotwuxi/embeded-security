@@ -320,6 +320,28 @@ PUTCHAR_PROTOTYPE
   return ch;
 }
 
+
+RNG_HandleTypeDef RngHandle;
+
+/* RNG init function */
+void RNG_Init(void)
+{
+  RngHandle.Instance = RNG;
+ /* DeInitialize the RNG peripheral */
+  if (HAL_RNG_DeInit(&RngHandle) != HAL_OK)
+  {
+    /* DeInitialization Error */
+    Error_Handler();
+  }    
+
+  /* Initialize the RNG peripheral */
+  if (HAL_RNG_Init(&RngHandle) != HAL_OK)
+  {
+    /* Initialization Error */
+    Error_Handler();
+  }
+}
+
 /**
   * @brief  Configures LED GPIO.
   * @param  Led: Specifies the Led to be configured. 

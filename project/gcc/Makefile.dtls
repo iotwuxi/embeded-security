@@ -2,25 +2,24 @@
 PROJECT = dtls-client
 PROJECT_PATH ?= $(shell pwd)/../..
 
-# Sources-asm
-SOURCES_S = ${PROJECT_PATH}/drivers/cmsis/stm32f7xx/source/gcc/startup_stm32f767xx.s
-
 # App
-SOURCES_C += ${PROJECT_PATH}/app/dtls-demo/src/main.c
-SOURCES_C += ${PROJECT_PATH}/app/dtls-demo/src/net_sockets.c
-SOURCES_C += ${PROJECT_PATH}/app/dtls-demo/src/dtls_client.c
-SOURCES_C += ${PROJECT_PATH}/app/dtls-demo/src/hardware_rng.c
-SOURCES_C += ${PROJECT_PATH}/app/dtls-demo/src/ethernetif.c
-SOURCES_C += ${PROJECT_PATH}/app/dtls-demo/src/app_ethernet.c
-SOURCES_C += ${PROJECT_PATH}/app/dtls-demo/src/stm32f7xx_hal_timebase_tim.c
-SOURCES_C += ${PROJECT_PATH}/app/dtls-demo/src/stm32f7xx_it.c
+SOURCES_C += $(wildcard ${PROJECT_PATH}/app/net/*.c)
+SOURCES_C += $(wildcard ${PROJECT_PATH}/app/common/*.c)
+SOURCES_C += ${PROJECT_PATH}/app/samples/dtls-demo/dtls_client.c
 
 # Sys
 SOURCES_C += ${PROJECT_PATH}/project/gcc/sys/syscalls.c
 
-# Driver
-SOURCES_C += ${PROJECT_PATH}/drivers/cmsis/stm32f7xx/source/system_stm32f7xx.c
+## BSP
+SOURCES_C += ${PROJECT_PATH}/drivers/bsp/stm32f7xx_nucleo_144/stm32f7xx_it.c
+SOURCES_C += ${PROJECT_PATH}/drivers/bsp/stm32f7xx_nucleo_144/stm32f7xx_hal_msp.c
 SOURCES_C += ${PROJECT_PATH}/drivers/bsp/stm32f7xx_nucleo_144/stm32f7xx_nucleo_144.c
+
+# cmsis
+SOURCES_S += ${PROJECT_PATH}/drivers/cmsis/stm32f7xx/source/gcc/startup_stm32f767xx.s
+SOURCES_C += ${PROJECT_PATH}/drivers/cmsis/stm32f7xx/source/system_stm32f7xx.c
+
+# HAL_Driver
 SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal.c
 SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_cortex.c
 SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_eth.c
@@ -32,6 +31,7 @@ SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_tim.
 SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_tim_ex.c
 SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_uart.c
 SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_rng.c
+SOURCES_C += ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/src/stm32f7xx_hal_timebase_tim.c
 
 # lwip
 SOURCES_C += $(wildcard ${PROJECT_PATH}/external/lwip/src/api/*.c)
@@ -55,8 +55,9 @@ SOURCES_C += ${PROJECT_PATH}/freertos/source/cmsis_rtos/cmsis_os.c
 OBJS = $(SOURCES_S:.s=.o) $(SOURCES_C:.c=.o) 
 
 # Includes
-INCLUDES = -I ${PROJECT_PATH}/app/dtls-demo/inc
-INCLUDES += -I ${PROJECT_PATH}/app/dtls-demo/src
+INCLUDES += -I ${PROJECT_PATH}/app/net
+INCLUDES += -I ${PROJECT_PATH}/app/samples/dtls-demo
+INCLUDES += -I ${PROJECT_PATH}/app/samples/dtls-demo/config
 INCLUDES += -I ${PROJECT_PATH}/drivers/bsp/stm32f7xx_nucleo_144
 INCLUDES += -I ${PROJECT_PATH}/drivers/stm32f7xx_hal_driver/inc
 INCLUDES += -I ${PROJECT_PATH}/drivers/cmsis/inc
@@ -70,8 +71,8 @@ INCLUDES += -I ${PROJECT_PATH}/freertos/source/include
 INCLUDES += -I ${PROJECT_PATH}/external/mbedtls/include
 
 # Defines
-DEFINES = -DSTM32 -DSTM32F7 -DSTM32F767xx -DUSE_HAL_DRIVER -DUSE_STM32F7XX_NUCLEO_144 -DLWIP_DNS 
-DEFINES += -I ${PROJECT_PATH}/app/dtls-demo/inc -DMBEDTLS_CONFIG_FILE='<stm32f7_mbedtls_config.h>'
+DEFINES += -DSTM32 -DSTM32F7 -DSTM32F767xx -DUSE_HAL_DRIVER -DUSE_STM32F7XX_NUCLEO_144 
+DEFINES += -I ${PROJECT_PATH}/app/samples/dtls-demo/config -DMBEDTLS_CONFIG_FILE='<mbedtls_config.h>'
 
 # Compiler/Assembler/Linker/etc
 PREFIX = arm-none-eabi
@@ -89,13 +90,13 @@ GDB = $(PREFIX)-gdb
 RM = rm -f
 
 # Compiler options
-MCUFLAGS = -mcpu=cortex-m7 -mlittle-endian
+MCUFLAGS += -mcpu=cortex-m7 -mlittle-endian
 MCUFLAGS += -mfloat-abi=hard -mfpu=fpv5-sp-d16
 MCUFLAGS += -mthumb
 
 DEBUG_OPTIMIZE_FLAGS = -O0 -g -gdwarf-2
 
-CFLAGS = -std=c11
+CFLAGS += -std=c11
 CFLAGS += -Wall -Wextra --pedantic -Wno-unused-parameter
 
 # generate listing files
@@ -108,7 +109,7 @@ CFLAGS_EXTRA += -fdata-sections -ffunction-sections
 
 CFLAGS += $(DEFINES) $(MCUFLAGS) $(DEBUG_OPTIMIZE_FLAGS) $(CFLAGS_EXTRA) $(INCLUDES)
 
-LDFLAGS = -static $(MCUFLAGS)
+LDFLAGS += -static $(MCUFLAGS)
 LDFLAGS += -Wl,--start-group -lgcc -lm -lc -lg -lstdc++ -lsupc++ -Wl,--end-group
 # LDFLAGS += -Wl,--gc-sections -Wl,--print-gc-sections -Wl,--cref,-Map=$(@:%.elf=%.map)
 LDFLAGS += -Wl,--gc-sections -Wl,--cref,-Map=$(@:%.elf=%.map)

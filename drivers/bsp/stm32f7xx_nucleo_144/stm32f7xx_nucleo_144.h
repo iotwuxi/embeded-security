@@ -336,6 +336,7 @@ void             Error_Handler(void);
 #ifdef  USE_FULL_ASSERT
 void             assert_failed(uint8_t* file, uint32_t line);
 #endif
+void             RNG_Init(void);
 void             BSP_LED_Init(Led_TypeDef Led);
 void             BSP_LED_DeInit(Led_TypeDef Led);
 void             BSP_LED_On(Led_TypeDef Led);
