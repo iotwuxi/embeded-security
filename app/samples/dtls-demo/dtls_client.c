@@ -327,4 +327,3 @@ void bsp_init(void)
 
     printf("** Hello World - Stm32f767zi-nucleo board. ** \n"); 
 }
-
