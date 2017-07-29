@@ -2428,6 +2428,21 @@
   </group>
   <group>
     <name>samples</name>
+    <group>
+      <name>config</name>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\samples\stm32\dtls-demo\config\FreeRTOSConfig.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\samples\stm32\dtls-demo\config\lwipopts.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\samples\stm32\dtls-demo\config\mbedtls_config.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\samples\stm32\dtls-demo\config\stm32f7xx_hal_conf.h</name>
+      </file>
+    </group>
     <file>
       <name>$PROJ_DIR$\..\..\..\samples\stm32\dtls-demo\dtls_client.c</name>
     </file>

@@ -7,7 +7,7 @@ extern void app_init(void);
 /**
   * @brief  呼吸灯任务
   */
-static void BlinkThread(void const * argument)
+static void blink_thread(void const * argument)
 {
     for( ;; )
     {
@@ -16,17 +16,33 @@ static void BlinkThread(void const * argument)
     }
 }
 
+/**
+  * @brief  启动任务
+  */
+static void start_thread(void const * argument)
+{ 
+    /** 任务接口初始化 */
+    app_init();
+
+    for( ;; )
+    {
+        /* 删除启动任务 */ 
+        osThreadTerminate(NULL);
+    }
+}
+
 int main(void)
 {
-	/** 硬件接口初始化 */
+    /** 硬件接口初始化 */
     bsp_init();
 
-	/** 任务接口初始化 */
-    app_init();
-    
+    /* 初始化启动任务 */
+    osThreadDef(start, start_thread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE * 5);
+    osThreadCreate (osThread(start), NULL);
+
     /* 呼吸灯任务创建 */
-    osThreadDef(Blink, BlinkThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE * 2);
-    osThreadCreate (osThread(Blink), NULL);
+    osThreadDef(blink, blink_thread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE * 2);
+    osThreadCreate (osThread(blink), NULL);
 
     /* 启动任务调度 */
     osKernelStart();
@@ -34,3 +50,4 @@ int main(void)
     /* We should never get here as control is now taken by the scheduler */
     for( ;; );
 }
+

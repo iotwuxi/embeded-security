@@ -60,10 +60,15 @@ int main( void )
 #include "mbedtls/certs.h"
 #include "mbedtls/timing.h"
 
-#define SERVER_PORT "4433"
-#define SERVER_NAME "localhost"
-#define SERVER_ADDR "127.0.0.1" /* forces IPv4 */
-#define MESSAGE     "Echo this"
+// #define SERVER_PORT "4433"
+// #define SERVER_NAME "localhost"
+// #define SERVER_ADDR "127.0.0.1" /* forces IPv4 */
+// #define MESSAGE     "Echo this"
+
+#define SERVER_PORT                     "4433"
+#define SERVER_NAME                     "localhost"
+#define SERVER_ADDR                     "139.196.187.107" 
+#define MESSAGE                         "Hello DTLS Server"
 
 #define READ_TIMEOUT_MS 1000
 #define MAX_RETRY       5

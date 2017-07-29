@@ -50,6 +50,6 @@
 #define MESSAGE     					"Hello DTLS Server"
 #define MAX_RETRY       				(5)
 #define READ_TIMEOUT_MS 				(1000)
-#define DTLS_CLIENT_THREAD_PRIO      	(osPriorityNormal)
+#define DTLS_CLIENT_THREAD_PRIO      	                (osPriorityNormal)
 
 #endif

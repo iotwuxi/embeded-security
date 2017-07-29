@@ -32,7 +32,7 @@ static void my_debug( void *ctx, int level,
 
 void dtls_client_thread( int argc, char *argv[] )
 {
-    printf("%s start.\n", __func__);
+    printf("\n%s start.\n", __func__);
 
     int ret, len;
     mbedtls_net_context server_fd;
@@ -284,13 +284,13 @@ exit:
     mbedtls_ctr_drbg_free( &ctr_drbg );
     mbedtls_entropy_free( &entropy );
 
-    printf("%s exit.\n", __func__);  
+    printf("\n%s exit.\n", __func__);  
     osThreadTerminate(NULL);
 }
 
 void dtls_client_init(void)
 {
-    sys_thread_new("DTLS Client", (lwip_thread_fn)dtls_client_thread, NULL, DEFAULT_THREAD_STACKSIZE, DTLS_CLIENT_THREAD_PRIO);
+    sys_thread_new("DTLS Client", (lwip_thread_fn)dtls_client_thread, NULL, 2*DEFAULT_THREAD_STACKSIZE, DTLS_CLIENT_THREAD_PRIO);
 }
 
 void app_init(void)
