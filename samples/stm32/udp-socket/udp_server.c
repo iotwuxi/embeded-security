@@ -162,29 +162,3 @@ void app_init(void)
 
     app_ethernet_init();
 }
-
-void bsp_init(void)
-{
-    /* 初始化MPU(ETH DMA) */
-    MPU_Config();
-
-    /* 使能Cache */
-    CPU_CACHE_Enable();
-
-    /* 初始化 HAL Liberary */
-    HAL_Init();  
-
-    /* 初始化时钟(200MHz) */
-    SystemClock_Config(); 
-
-    /* 初始化LED */
-    BSP_LED_Init(LED1);
-    BSP_LED_Init(LED2);
-    BSP_LED_Init(LED3);
-
-    /* 初始化串口 */
-    bsp_uart_init(115200); 
-
-    printf("** Hello World - Stm32f767zi-nucleo board. ** \n"); 
-}
-
