@@ -8,18 +8,7 @@
 
 #include "FreeRTOS.h"
 #include "task.h"
-
-struct mbedtls_timing_hr_time
-{
-    unsigned char opaque[4];
-};
-
-typedef struct
-{
-    struct mbedtls_timing_hr_time   timer;
-    uint32_t                        int_ms;
-    uint32_t                        fin_ms;
-} mbedtls_timing_delay_context;
+#include "mbedtls/timing_alt.h"
 
 unsigned long mbedtls_timing_get_timer( struct mbedtls_timing_hr_time *val, int reset )
 {
