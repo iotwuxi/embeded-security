@@ -57,6 +57,7 @@
 #define MBEDTLS_ECP_DP_SECP384R1_ENABLED 			/** 特殊 ECC 参数 */
 #define MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED 	/** 开启 ECDHE_ECDSA 密钥协商 */
 #define MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED 		/** 开启 ECDHE_RSA 密钥协商 */
+#define MBEDTLS_KEY_EXCHANGE_PSK_ENABLED            /** 开启 PSK 密钥协商 */
 
 /** mbedtls certificates */
 #define MBEDTLS_BASE64_C 							/** base64 编码 */
@@ -65,12 +66,14 @@
 #define MBEDTLS_X509_USE_C 							/** x509 接口 */
 #define MBEDTLS_X509_CRT_PARSE_C 					/** x509 证书解析 */
 
-/** our own ciphersuite list */
+/** 自定义套件 */
 /** MBEDTLS_TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256   密钥协商: ECDHE  认证算法: RSA 加密算法: AES_128_GCM 散列算法: SHA256 */
 /** MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 密钥协商: ECDHE  认证算法: ECDSA 加密算法: AES_128_GCM 散列算法: SHA256 */
+#if 0
 #define MBEDTLS_SSL_CIPHERSUITES                         \
 		MBEDTLS_TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,	 \
 		MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+#endif
 
 /** 用于检测宏定义正确性 */
 #include "mbedtls/check_config.h"
