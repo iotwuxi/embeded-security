@@ -12,7 +12,7 @@
 Debug/
 settings/
 *.dep
-*.ewd
+#*.ewd
 *.ewt
 
 # 忽略IAR输出文件
