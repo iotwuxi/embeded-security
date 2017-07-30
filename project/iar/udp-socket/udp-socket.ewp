@@ -1966,9 +1966,6 @@
   </group>
   <group>
     <name>doc</name>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\README.MD</name>
-    </file>
   </group>
   <group>
     <name>drivers</name>
