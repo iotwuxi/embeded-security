@@ -33,13 +33,13 @@
     ├── posix
     └── stm32
 ```
-`app` - 网络应用及主程序入口
-`doc` - 设计文档
-`drivers` - 驱动代码
-`eternal` - 第三方库文件
-`freertos` - `freertos` 源代码
-`project` - 工程文件(`iar` / `gcc`)
-`samples` - 应用示例(`posix` / `stm32`)
+`app` - 网络应用及主程序入口      
+`doc` - 设计文档    
+`drivers` - 驱动代码    
+`eternal` - 第三方库文件      
+`freertos` - `freertos` 源代码     
+`project` - 工程文件(`iar` / `gcc`)     
+`samples` - 应用示例(`posix` / `stm32`)     
 
 
 ### 开发环境
