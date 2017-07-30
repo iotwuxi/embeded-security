@@ -8,8 +8,9 @@
 ## 工程目录结构
 ```
 ├── app
-│   ├── blink
-│   └── http-server
+│   ├── net
+│   ├── main.c
+│   └── mbedtls_alt.c
 ├── doc
 │   └── README.md
 ├── drivers
@@ -18,6 +19,7 @@
 │   └── stm32f7xx_hal_driver
 ├── external
 │   ├── fatfs
+│   ├── libcoap
 │   ├── lwip
 │   └── mbedtls
 ├── freertos
@@ -26,18 +28,18 @@
 ├── project
 │   ├── gcc
 │   └── iar
-├── README.md
-└── tests
-	├── posix	
-	└── README.md
+├── README.MD
+└── samples
+    ├── posix
+    └── stm32
 ```
-- app - 应用示例
-- doc - 设计文档
-- drivers - 驱动代码
-- eternal - 第三方库文件
-- freertos - rtos源代码
-- project - 工程文件(IAR / GCC)
-- tests - 测试用例，包含posix 示例代码
+`app` - 网络应用及主程序入口      
+`doc` - 设计文档    
+`drivers` - 驱动代码    
+`eternal` - 第三方库文件      
+`freertos` - `freertos` 源代码     
+`project` - 工程文件(`iar` / `gcc`)     
+`samples` - 应用示例(`posix` / `stm32`)     
 
 
 ### 开发环境
