@@ -5,6 +5,9 @@
     <path>$WS_DIR$\dtls-demo\dtls-demo.ewp</path>
   </project>
   <project>
+    <path>$WS_DIR$\self-test\self-test.ewp</path>
+  </project>
+  <project>
     <path>$WS_DIR$\udp-socket\udp-socket.ewp</path>
   </project>
   <project>

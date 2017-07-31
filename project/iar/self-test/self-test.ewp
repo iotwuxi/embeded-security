@@ -3,7 +3,7 @@
 <project>
   <fileVersion>2</fileVersion>
   <configuration>
-    <name>standalone</name>
+    <name>debug</name>
     <toolchain>
       <name>ARM</name>
     </toolchain>
@@ -17,15 +17,15 @@
         <debug>1</debug>
         <option>
           <name>ExePath</name>
-          <state>standalone\Exe</state>
+          <state>debug\Exe</state>
         </option>
         <option>
           <name>ObjPath</name>
-          <state>standalone\Obj</state>
+          <state>debug\Obj</state>
         </option>
         <option>
           <name>ListPath</name>
-          <state>standalone\List</state>
+          <state>debug\List</state>
         </option>
         <option>
           <name>GEndianMode</name>
@@ -314,8 +314,8 @@
         <option>
           <name>CCIncludePath2</name>
           <state>$PROJ_DIR$\..\..\..\app\net</state>
-          <state>$PROJ_DIR$\..\..\..\samples\stm32\cipher-md-list</state>
-          <state>$PROJ_DIR$\..\..\..\samples\stm32\cipher-md-list\config</state>
+          <state>$PROJ_DIR$\..\..\..\samples\stm32\self-test</state>
+          <state>$PROJ_DIR$\..\..\..\samples\stm32\self-test\config</state>
           <state>$PROJ_DIR$\..\..\..\drivers\bsp\stm32f7xx_nucleo_144</state>
           <state>$PROJ_DIR$\..\..\..\drivers\stm32f7xx_hal_driver\inc</state>
           <state>$PROJ_DIR$\..\..\..\drivers\cmsis\inc</state>
@@ -588,7 +588,7 @@
         </option>
         <option>
           <name>AUserIncludes</name>
-          <state>$PROJ_DIR$\..\..\..\samples\stm32\cipher-md-list\config</state>
+          <state>$PROJ_DIR$\..\..\..\samples\stm32\dtls-demo\config</state>
         </option>
         <option>
           <name>AExtraOptionsCheckV2</name>
@@ -1456,26 +1456,23 @@
     <group>
       <name>config</name>
       <file>
-        <name>$PROJ_DIR$\..\..\..\samples\stm32\cipher-md-list\config\FreeRTOSConfig.h</name>
+        <name>$PROJ_DIR$\..\..\..\samples\stm32\self-test\config\FreeRTOSConfig.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\samples\stm32\cipher-md-list\config\lwipopts.h</name>
+        <name>$PROJ_DIR$\..\..\..\samples\stm32\self-test\config\lwipopts.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\samples\stm32\cipher-md-list\config\mbedtls_config.h</name>
+        <name>$PROJ_DIR$\..\..\..\samples\stm32\self-test\config\mbedtls_config.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\self-test\self-test.ewd</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\..\samples\stm32\cipher-md-list\config\stm32f7xx_hal_conf.h</name>
+        <name>$PROJ_DIR$\..\..\..\samples\stm32\self-test\config\stm32f7xx_hal_conf.h</name>
       </file>
     </group>
     <file>
-      <name>$PROJ_DIR$\..\..\..\samples\stm32\cipher-md-list\cipher_md_list.c</name>
+      <name>$PROJ_DIR$\..\..\..\samples\stm32\self-test\self_test.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\samples\stm32\cipher-md-list\cipher_md_list.h</name>
+      <name>$PROJ_DIR$\..\..\..\samples\stm32\self-test\self_test.h</name>
     </file>
   </group>
 </project>
