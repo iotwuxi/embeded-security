@@ -1,11 +1,12 @@
 #ifndef STM32F7_MBEDTLS_CONFIG_H
 #define STM32F7_MBEDTLS_CONFIG_H
 
-/** 平台相关 +++ >>> stm32 开启, Linux 关闭 */
-#if 1                                         
-#define MBEDTLS_TIMING_ALT                      /** 时间接口替换 */
+/** 平台相关 ++++ >  STM32: 1 / Linux: 0 */
+#if 1                                    
 #define MBEDTLS_ENTROPY_HARDWARE_ALT            /** 熵源接口替换 */
 #define MBEDTLS_NO_PLATFORM_ENTROPY             /** 无平台熵源支持 (linux: /dev/urandom 或 Windows CryptoAPI) */
+#else						
+#define MBEDTLS_TIMING_C                        /** 开启 时间延时接口(for dtls) 支持 */
 #endif
 
 /** 调试 定义 */
@@ -15,7 +16,6 @@
 #define MBEDTLS_NET_C                           /** 网络接口(net_sockets.c) */
 #define MBEDTLS_HAVE_ASM                        /** 开启 asm 支持 */
 #define MBEDTLS_HAVE_TIME                       /** 开启 time() 支持 */
-#define MBEDTLS_TIMING_C                        /** 开启 时间延时接口(for dtls) 支持 */
 
 /** SSL 定义 */
 #define MBEDTLS_SSL_TLS_C                       /** 开启 TLS, 生成 SSL 相关代码(ssl_tls.c ssl_cli.c ssl_srv.c) */
@@ -25,7 +25,6 @@
 #define MBEDTLS_SSL_DTLS_HELLO_VERIFY           /** HelloVerify */
 #define MBEDTLS_SSL_PROTO_DTLS                  /** DTLS 协议 */
 #define MBEDTLS_SSL_PROTO_TLS1_2                /** 选择 TLS 协议版本为1.2 */
-
 
 /** 数据解析 定义*/
 #define MBEDTLS_OID_C                           /** X.509 RSA等功能依赖于此定义 */

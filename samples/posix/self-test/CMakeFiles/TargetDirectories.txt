@@ -1,0 +1,4 @@
+/root/share/repo/iot/embeded-security/samples/posix/self-test/CMakeFiles/edit_cache.dir
+/root/share/repo/iot/embeded-security/samples/posix/self-test/CMakeFiles/rebuild_cache.dir
+/root/share/repo/iot/embeded-security/samples/posix/self-test/CMakeFiles/self_test.dir
+/root/share/repo/iot/embeded-security/samples/posix/self-test/CMakeFiles/mbedtls.dir

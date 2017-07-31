@@ -1,0 +1,1 @@
+/usr/bin/cc  -g   CMakeFiles/self_test.dir/self_test.c.o CMakeFiles/self_test.dir/root/share/repo/iot/embeded-security/samples/posix/net_sockets.c.o  -o self_test -rdynamic libmbedtls.a 
