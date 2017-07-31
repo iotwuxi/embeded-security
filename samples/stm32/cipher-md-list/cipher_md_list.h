@@ -41,6 +41,4 @@
 #include "ethernetif.h"
 #include "app_ethernet.h"
 
-#define STANDALONE_THREAD_PRIO      	 (osPriorityNormal)
-
 #endif

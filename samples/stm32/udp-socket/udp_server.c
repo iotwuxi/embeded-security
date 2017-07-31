@@ -155,7 +155,7 @@ void udp_server_init()
     sys_thread_new("UDP Server", udp_server_thread, NULL, DEFAULT_THREAD_STACKSIZE, UDP_SERVER_THREAD_PRIO);
 }
 
-void app_init(void)
+void sample_entry(void)
 {
     /* 注册任务接口，dhcp成功后开始执行 */
     app_net_register_thread(udp_server_init);

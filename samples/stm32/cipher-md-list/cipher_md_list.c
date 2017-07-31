@@ -1,7 +1,7 @@
 
 #include "cipher_md_list.h"
 
-void cipher_md_list_thread(void const * argument)
+void sample_cipher_md_list(void)
 {
     const int *list;
     int index = 1;
@@ -35,17 +35,9 @@ void cipher_md_list_thread(void const * argument)
         mbedtls_printf("\t[%02d]%s\n", index++, mbedtls_ssl_get_ciphersuite_name(*list));
         list++; 
     }
-        
-    for(;;) 
-    {
-        /* 删除启动任务 */ 
-        osThreadTerminate(NULL);
-    }
-        
 }
 
-void app_init(void)
+void sample_entry(void)
 {
-    osThreadDef(cipher_md_list, cipher_md_list_thread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE * 2);
-    osThreadCreate(osThread(cipher_md_list), NULL);
+    sample_cipher_md_list();
 }

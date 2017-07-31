@@ -273,7 +273,7 @@ void dtls_client_init(void)
     sys_thread_new("DTLS Client", (lwip_thread_fn)dtls_client_thread, NULL, 2*DEFAULT_THREAD_STACKSIZE, DTLS_CLIENT_THREAD_PRIO);
 }
 
-void app_init(void)
+void sample_entry(void)
 {
     /* 注册任务接口，dhcp成功后开始执行 */
     app_net_register_thread(dtls_client_init);

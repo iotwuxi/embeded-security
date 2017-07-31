@@ -1,8 +1,7 @@
 #include "cmsis_os.h"
 #include "stm32f7xx_nucleo_144.h"
 
-void bsp_init(void);
-extern void app_init(void);
+extern void sample_entry(void);
 
 void bsp_init(void)
 {
@@ -48,8 +47,8 @@ static void blink_thread(void const * argument)
   */
 static void start_thread(void const * argument)
 { 
-    /** 任务接口初始化 */
-    app_init();
+    /** 示例入口，可以为 `单独测试接口` 或 `任务接口`. */
+    sample_entry();
 
     for( ;; )
     {

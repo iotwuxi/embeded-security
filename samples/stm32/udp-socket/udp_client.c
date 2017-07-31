@@ -66,7 +66,7 @@ void udp_client_init()
 }
 
 
-void app_init(void)
+void sample_entry(void)
 {
     /* 注册任务接口，dhcp成功后开始执行 */
     app_net_register_thread(udp_client_init);
