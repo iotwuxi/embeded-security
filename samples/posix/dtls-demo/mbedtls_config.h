@@ -2,7 +2,7 @@
 #define STM32F7_MBEDTLS_CONFIG_H
 
 /** 平台相关 */
-#if 1                                         
+#if 0
 #define MBEDTLS_TIMING_ALT                      /** stm32 开启, Linux 关闭 */
 #define MBEDTLS_ENTROPY_HARDWARE_ALT            /** stm32 开启, Linux 关闭 */
 #define MBEDTLS_NO_PLATFORM_ENTROPY             /** stm32 开启, Linux 关闭 */

@@ -14,7 +14,7 @@ set(targets
 
 # include file
 include_directories(./ ../../../external/mbedtls/include)
-add_definitions(-DMBEDTLS_CONFIG_FILE=<dtls_config.h> -DCMAKE_BUILD_TYPE=Debug)
+add_definitions(-DMBEDTLS_CONFIG_FILE=<mbedtls_config.h> -DCMAKE_BUILD_TYPE=Debug)
 
 # source file
 aux_source_directory(../../../external/mbedtls/library MBEDTLS_LIB_SRC)

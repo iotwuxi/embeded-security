@@ -10,6 +10,12 @@
 #include "task.h"
 #include "mbedtls/timing_alt.h"
 
+/** 该接口功能为获取硬件时钟周期，默认熵源初始化时需要用到，待修改 */
+unsigned long mbedtls_timing_hardclock( void )
+{
+    return xTaskGetTickCount();
+}
+
 unsigned long mbedtls_timing_get_timer( struct mbedtls_timing_hr_time *val, int reset )
 {
     unsigned long delta;

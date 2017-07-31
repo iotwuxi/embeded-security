@@ -40,6 +40,15 @@ typedef struct
 } mbedtls_timing_delay_context;
 
 /**
+ * \brief          Return the CPU cycle counter value
+ *
+ * \warning        This is only a best effort! Do not rely on this!
+ *                 In particular, it is known to be unreliable on virtual
+ *                 machines.
+ */
+unsigned long mbedtls_timing_hardclock( void );
+
+/**
  * \brief          Return the elapsed time in milliseconds
  *
  * \param val      points to a timer structure
