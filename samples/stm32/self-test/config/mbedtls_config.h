@@ -1,41 +1,15 @@
 /**
- * \file config.h
- *
- * \brief Configuration options (set of defines)
- *
- *  This set of compile-time options may be used to enable
- *  or disable features selectively, and reduce the global
- *  memory footprint.
- *
- *  Copyright (C) 2006-2015, ARM Limited, All Rights Reserved
- *  SPDX-License-Identifier: Apache-2.0
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); you may
- *  not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *
- *  This file is part of mbed TLS (https://tls.mbed.org)
- */
-
+* 拷贝于 config.h 的全功能配置文件，只对平台相关部分进行了修改，用于 mbedtls 自检.
+*/
 #ifndef MBEDTLS_CONFIG_H
 #define MBEDTLS_CONFIG_H
 
-/** 平台相关  */
-#if 1
-/** STM32 */                                        
+/** 平台相关 ++++ >  STM32: 1 / Linux: 0 */
+#if 1                                     
 #define MBEDTLS_ENTROPY_HARDWARE_ALT            /** 熵源接口替换 */
 #define MBEDTLS_NO_PLATFORM_ENTROPY             /** 无平台熵源支持 (linux: /dev/urandom 或 Windows CryptoAPI) */
 #else
-/** Linux */ 
-#define MBEDTLS_FS_IO											
+#define MBEDTLS_FS_IO							/** 开启 文件系统 支持 */							
 #define MBEDTLS_TIMING_C                        /** 开启 时间延时接口(for dtls) 支持 */
 #endif
 
