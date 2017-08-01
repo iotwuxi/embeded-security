@@ -26,10 +26,10 @@ set(libs
 )
 
 # executable file
-add_executable(dtls_server dtls_server.c ../net_sockets.c)
+add_executable(dtls_server dtls_server.c)
 target_link_libraries(dtls_server ${libs})
 
-add_executable(dtls_client dtls_client.c ../net_sockets.c)
+add_executable(dtls_client dtls_client.c)
 target_link_libraries(dtls_client ${libs})
 
 

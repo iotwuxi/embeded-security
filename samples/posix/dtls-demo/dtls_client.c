@@ -61,10 +61,10 @@ int main( void )
 #include "mbedtls/timing.h"
 
 #if 1
-#define SERVER_PORT "4433"
-#define SERVER_NAME "localhost"
-#define SERVER_ADDR "127.0.0.1" /* forces IPv4 */
-#define MESSAGE     "Echo this"
+#define SERVER_PORT                     "4433"
+#define SERVER_NAME                     "localhost"
+#define SERVER_ADDR                     "127.0.0.1" /* forces IPv4 */
+#define MESSAGE                         "Echo this"
 #else
 #define SERVER_PORT                     "4433"
 #define SERVER_NAME                     "aliyun"
