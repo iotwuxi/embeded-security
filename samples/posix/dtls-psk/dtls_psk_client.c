@@ -187,12 +187,13 @@ int main( int argc, char *argv[] )
         mbedtls_printf( " failed\n  ! mbedtls_ssl_setup returned %d\n\n", ret );
         goto exit;
     }
-
+#if 0
     if( ( ret = mbedtls_ssl_set_hostname( &ssl, server_name ) ) != 0 )
     {
         mbedtls_printf( " failed\n  ! mbedtls_ssl_set_hostname returned %d\n\n", ret );
         goto exit;
     }
+#endif
 
     mbedtls_ssl_set_bio( &ssl, &server_fd,
                          mbedtls_net_send, mbedtls_net_recv, mbedtls_net_recv_timeout );
@@ -223,20 +224,14 @@ int main( int argc, char *argv[] )
     /*
      * 5. Verify the server certificate
      */
-    mbedtls_printf( "  . Verifying peer X.509 certificate..." );
+    mbedtls_printf( "  . Verifying peer ..." );
 
     /* In real life, we would have used MBEDTLS_SSL_VERIFY_REQUIRED so that the
      * handshake would not succeed if the peer's cert is bad.  Even if we used
      * MBEDTLS_SSL_VERIFY_OPTIONAL, we would bail out here if ret != 0 */
     if( ( flags = mbedtls_ssl_get_verify_result( &ssl ) ) != 0 )
     {
-        // char vrfy_buf[512];
-
         mbedtls_printf( " failed\n" );
-
-        // mbedtls_x509_crt_verify_info( vrfy_buf, sizeof( vrfy_buf ), "  ! ", flags );
-
-        // mbedtls_printf( "%s\n", vrfy_buf );
     }
     else
         mbedtls_printf( " ok\n" );
