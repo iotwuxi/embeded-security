@@ -91,9 +91,8 @@ int main( int argc, char *argv[] )
 
     if (argc < 3) 
     {
-        mbedtls_printf("Usage dtls_psk_client <server_name>, <server_port>\n");
-        mbedtls_printf("eg:\n");
-        mbedtls_printf("tls_psk_client wsncoap.org, 4433\n");
+        mbedtls_printf("\n  Usage: dtls_psk_client <server_name> <server_port>\n");
+        mbedtls_printf("  e.g. : dtls_psk_client wsncoap.org 4433\n\n");
 
         return 1;
     }
