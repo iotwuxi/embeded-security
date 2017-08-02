@@ -45,7 +45,7 @@ SOURCES_C += ${PROJECT_PATH}/external/lwip/src/netif/ethernet.c
 SOURCES_C += ${PROJECT_PATH}/external/lwip/system/OS/sys_arch.c
 
 # mbedtls
-SOURCES_C += $(wildcard ${PROJECT_PATH}/external/mbedtls/library/*.c)
+SOURCES_C += $(filter-out ${PROJECT_PATH}/external/mbedtls/library/net_sockets.c, $(wildcard ${PROJECT_PATH}/external/mbedtls/library/*.c))
 
 # freertos
 SOURCES_C += $(wildcard ${PROJECT_PATH}/freertos/source/*.c)
@@ -145,7 +145,7 @@ $(PROJECT).elf: $(OBJS)
 
 # wildcard rules
 %.elf:
-	$(LD) $(LDFLAGS) $(OBJS) -o $@
+	@$(LD) $(LDFLAGS) $(OBJS) -o $@
 	$(SIZE) -A -x $@
 
 %.bin: %.elf
