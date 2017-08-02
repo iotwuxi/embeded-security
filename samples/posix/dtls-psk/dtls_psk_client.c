@@ -39,9 +39,9 @@ int main( void )
 // #include "mbedtls/certs.h"
 #include "mbedtls/timing.h"
 
-#define SERVER_PORT "4433"
-#define SERVER_NAME "localhost"
-#define SERVER_ADDR "127.0.0.1" /* forces IPv4 */
+// #define SERVER_PORT "4433"
+// #define SERVER_NAME "localhost"
+// #define SERVER_ADDR "127.0.0.1" /* forces IPv4 */
 #define MESSAGE     "Hello DTLS Server"
 
 #define READ_TIMEOUT_MS 1000
@@ -78,12 +78,28 @@ int main( int argc, char *argv[] )
 
     int dtls_ciphersuites[3];
 
-    ((void) argc);
-    ((void) argv);
+    char *server_name = NULL;
+    char *server_addr = NULL;
+    char *server_port = NULL;
+
+    // ((void) argc);
+    // ((void) argv);
 
 #if defined(MBEDTLS_DEBUG_C)
     mbedtls_debug_set_threshold( DEBUG_LEVEL );
 #endif
+
+    if (argc < 3) 
+    {
+        mbedtls_printf("Usage dtls_psk_client <server_name>, <server_port>\n");
+        mbedtls_printf("eg:\n");
+        mbedtls_printf("tls_psk_client wsncoap.org, 4433\n");
+
+        return 1;
+    }
+
+    server_name = server_addr = argv[1];
+    server_port = argv[2];
 
     /*
      * 0. Initialize the RNG and the session data
@@ -125,11 +141,11 @@ int main( int argc, char *argv[] )
     /*
      * 1. Start the connection
      */
-    mbedtls_printf( "  . Connecting to udp/%s/%s...", SERVER_NAME, SERVER_PORT );
+    mbedtls_printf( "  . Connecting to udp/%s/%s...", server_name, server_port );
     fflush( stdout );
 
-    if( ( ret = mbedtls_net_connect( &server_fd, SERVER_ADDR,
-                                         SERVER_PORT, MBEDTLS_NET_PROTO_UDP ) ) != 0 )
+    if( ( ret = mbedtls_net_connect( &server_fd, server_addr,
+                                         server_port, MBEDTLS_NET_PROTO_UDP ) ) != 0 )
     {
         mbedtls_printf( " failed\n  ! mbedtls_net_connect returned %d\n\n", ret );
         goto exit;
@@ -172,7 +188,7 @@ int main( int argc, char *argv[] )
         goto exit;
     }
 
-    if( ( ret = mbedtls_ssl_set_hostname( &ssl, SERVER_NAME ) ) != 0 )
+    if( ( ret = mbedtls_ssl_set_hostname( &ssl, server_name ) ) != 0 )
     {
         mbedtls_printf( " failed\n  ! mbedtls_ssl_set_hostname returned %d\n\n", ret );
         goto exit;
