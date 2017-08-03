@@ -13,6 +13,9 @@
   <project>
     <path>$WS_DIR$\cipher-md-list\cipher-md-list.ewp</path>
   </project>
+  <project>
+    <path>$WS_DIR$\dtls-psk\dtls-psk.ewp</path>
+  </project>
   <batchBuild/>
 </workspace>
 
