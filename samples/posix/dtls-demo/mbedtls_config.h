@@ -27,6 +27,11 @@
 #define MBEDTLS_SSL_PROTO_DTLS                  /** DTLS 协议 */
 #define MBEDTLS_SSL_PROTO_TLS1_2                /** 选择 TLS 协议版本为1.2 */
 
+/** !!!!!! 
+	重协商开启后可去除 -0x7700 错误
+	需要注意的是此功能后存在安全隐患.
+*/
+#define MBEDTLS_SSL_RENEGOTIATION 				/** 开启 重协商 */
 
 /** 数据解析 定义*/
 #define MBEDTLS_OID_C                           /** X.509 RSA等功能依赖于此定义 */
@@ -85,6 +90,7 @@
         MBEDTLS_TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,   \
         MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
 #endif
+
 
 /** 用于检测宏定义正确性 */
 #include "mbedtls/check_config.h"

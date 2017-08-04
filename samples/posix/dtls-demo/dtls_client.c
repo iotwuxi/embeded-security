@@ -60,14 +60,14 @@ int main( void )
 #include "mbedtls/certs.h"
 #include "mbedtls/timing.h"
 
-#if 1
+#if 0
 #define SERVER_PORT                     "4433"
 #define SERVER_NAME                     "localhost"
 #define SERVER_ADDR                     "127.0.0.1" /* forces IPv4 */
 #define MESSAGE                         "Echo this"
 #else
 #define SERVER_PORT                     "4433"
-#define SERVER_NAME                     "aliyun"
+#define SERVER_NAME                     "localhost"
 #define SERVER_ADDR                     "139.196.187.107" 
 #define MESSAGE                         "Hello DTLS Server"
 #endif
@@ -311,9 +311,16 @@ send_request:
 close_notify:
     mbedtls_printf( "  . Closing the connection..." );
 
+/** 暂时注释掉客户端 close_notify 操作 
+    由于服务器与客户端 close_notify 操作顺序的不确定性，
+    使服务器侧有概率出现 -0x7900 的握手错误信息.
+*/
+#if 0 
     /* No error checking, the connection might be closed already */
     do ret = mbedtls_ssl_close_notify( &ssl );
     while( ret == MBEDTLS_ERR_SSL_WANT_WRITE );
+#endif
+
     ret = 0;
 
     mbedtls_printf( " done\n" );
