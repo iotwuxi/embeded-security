@@ -25,15 +25,22 @@ void dtls_client_thread( int argc, char *argv[] )
     mbedtls_ctr_drbg_context ctr_drbg;
     mbedtls_ssl_context ssl;
     mbedtls_ssl_config conf;
-    mbedtls_x509_crt cacert;
+    // mbedtls_x509_crt cacert;
+
     mbedtls_timing_delay_context timer;
 
-    ((void) argc);
-    ((void) argv);
+    int dtls_ciphersuites[3];
+
+    // char *server_name = NULL;
+    // char *server_addr = NULL;
+    // char *server_port = NULL;
 
 #if defined(MBEDTLS_DEBUG_C)
     mbedtls_debug_set_threshold( DEBUG_LEVEL );
 #endif
+
+    // server_name = server_addr = SERVER_NAME;
+    // server_port = SERVER_PORT;
 
     /*
      * 0. Initialize the RNG and the session data
@@ -41,7 +48,7 @@ void dtls_client_thread( int argc, char *argv[] )
     mbedtls_net_init( &server_fd );
     mbedtls_ssl_init( &ssl );
     mbedtls_ssl_config_init( &conf );
-    mbedtls_x509_crt_init( &cacert );
+    // mbedtls_x509_crt_init( &cacert );
     mbedtls_ctr_drbg_init( &ctr_drbg );
 
     mbedtls_printf( "\n  . Seeding the random number generator..." );
@@ -59,20 +66,20 @@ void dtls_client_thread( int argc, char *argv[] )
     mbedtls_printf( " ok\n" );
 
     /*
-     * 0. Load certificates
+     * 0. Load psk
      */
-    mbedtls_printf( "  . Loading the CA root certificate ..." );
+    printf( "\n  . Loading the psk and psk_identity" );
     fflush( stdout );
 
-    ret = mbedtls_x509_crt_parse( &cacert, (const unsigned char *) mbedtls_test_cas_pem,
-                          mbedtls_test_cas_pem_len );
-    if( ret < 0 )
+    ret = mbedtls_ssl_conf_psk( &conf, (const unsigned char *)DFL_PSK, strlen(DFL_PSK),
+                                       (const unsigned char *)DFL_PSK_IDENTITY, strlen(DFL_PSK_IDENTITY));
+    if( ret != 0 )
     {
-        mbedtls_printf( " failed\n  !  mbedtls_x509_crt_parse returned -0x%x\n\n", -ret );
+        printf( " failed\n  !  mbedtls_ssl_conf_psk %d\n\n", ret );
         goto exit;
     }
 
-    mbedtls_printf( " ok (%d skipped)\n", ret );
+    printf( " ok\n" );  
 
     /*
      * 1. Start the connection
@@ -88,6 +95,7 @@ void dtls_client_thread( int argc, char *argv[] )
     }
 
     mbedtls_printf( " ok\n" );
+
 
     /*
      * 2. Setup stuff
@@ -107,22 +115,28 @@ void dtls_client_thread( int argc, char *argv[] )
     /* OPTIONAL is usually a bad choice for security, but makes interop easier
      * in this simplified example, in which the ca chain is hardcoded.
      * Production code should set a proper ca chain and use REQUIRED. */
-    mbedtls_ssl_conf_authmode( &conf, MBEDTLS_SSL_VERIFY_OPTIONAL );
-    mbedtls_ssl_conf_ca_chain( &conf, &cacert, NULL );
+    // mbedtls_ssl_conf_authmode( &conf, MBEDTLS_SSL_VERIFY_OPTIONAL );
+    // mbedtls_ssl_conf_ca_chain( &conf, &cacert, NULL );
     mbedtls_ssl_conf_rng( &conf, mbedtls_ctr_drbg_random, &ctr_drbg );
     mbedtls_ssl_conf_dbg( &conf, my_debug, stdout );
+
+    dtls_ciphersuites[0] = MBEDTLS_TLS_PSK_WITH_AES_128_CCM;
+    dtls_ciphersuites[1] = MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_CCM_8;
+    dtls_ciphersuites[2] = 0;
+    mbedtls_ssl_conf_ciphersuites( &conf, dtls_ciphersuites);
 
     if( ( ret = mbedtls_ssl_setup( &ssl, &conf ) ) != 0 )
     {
         mbedtls_printf( " failed\n  ! mbedtls_ssl_setup returned %d\n\n", ret );
         goto exit;
     }
-
+#if 0
     if( ( ret = mbedtls_ssl_set_hostname( &ssl, SERVER_NAME ) ) != 0 )
     {
         mbedtls_printf( " failed\n  ! mbedtls_ssl_set_hostname returned %d\n\n", ret );
         goto exit;
     }
+#endif
 
     mbedtls_ssl_set_bio( &ssl, &server_fd,
                          mbedtls_net_send, mbedtls_net_recv, mbedtls_net_recv_timeout );
@@ -153,20 +167,14 @@ void dtls_client_thread( int argc, char *argv[] )
     /*
      * 5. Verify the server certificate
      */
-    mbedtls_printf( "  . Verifying peer X.509 certificate..." );
+    mbedtls_printf( "  . Verifying peer ..." );
 
     /* In real life, we would have used MBEDTLS_SSL_VERIFY_REQUIRED so that the
      * handshake would not succeed if the peer's cert is bad.  Even if we used
      * MBEDTLS_SSL_VERIFY_OPTIONAL, we would bail out here if ret != 0 */
     if( ( flags = mbedtls_ssl_get_verify_result( &ssl ) ) != 0 )
     {
-        char vrfy_buf[512];
-
         mbedtls_printf( " failed\n" );
-
-        mbedtls_x509_crt_verify_info( vrfy_buf, sizeof( vrfy_buf ), "  ! ", flags );
-
-        mbedtls_printf( "%s\n", vrfy_buf );
     }
     else
         mbedtls_printf( " ok\n" );
@@ -264,7 +272,8 @@ exit:
 #endif
 
     mbedtls_net_free( &server_fd );
-    mbedtls_x509_crt_free( &cacert );
+
+    // mbedtls_x509_crt_free( &cacert );
     mbedtls_ssl_free( &ssl );
     mbedtls_ssl_config_free( &conf );
     mbedtls_ctr_drbg_free( &ctr_drbg );
@@ -274,15 +283,15 @@ exit:
     osThreadTerminate(NULL);
 }
 
-void dtls_client_init(void)
+void dtls_psk_client_init(void)
 {
-    sys_thread_new("DTLS Client", (lwip_thread_fn)dtls_client_thread, NULL, 2*DEFAULT_THREAD_STACKSIZE, DTLS_CLIENT_THREAD_PRIO);
+    sys_thread_new("DTLS PSK Client", (lwip_thread_fn)dtls_client_thread, NULL, 2*DEFAULT_THREAD_STACKSIZE, DTLS_CLIENT_THREAD_PRIO);
 }
 
 void sample_entry(void)
 {
     /* 注册任务接口，dhcp成功后开始执行 */
-    app_net_register_thread(dtls_client_init);
+    app_net_register_thread(dtls_psk_client_init);
 
     app_ethernet_init();
 }

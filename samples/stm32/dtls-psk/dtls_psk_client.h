@@ -45,8 +45,12 @@
 /* define */
 #define DEBUG_LEVEL 					(0)
 #define SERVER_PORT 					"4433"
-#define SERVER_NAME 					"aliyun"
+#define SERVER_NAME 					"wsncoap.org"
 #define SERVER_ADDR 					"139.196.187.107" 
+
+#define DFL_PSK                 		"password"
+#define DFL_PSK_IDENTITY        		"identity"
+
 #define MESSAGE     					"Hello DTLS Server"
 #define MAX_RETRY       				(5)
 #define READ_TIMEOUT_MS 				(1000)

@@ -123,7 +123,9 @@ int main( int argc, char *argv[] )
 
     mbedtls_printf( " ok\n" );
 
-
+ /*
+     * 0. Load psk
+     */
     printf( "\n  . Loading the psk and psk_identity" );
     fflush( stdout );
 
