@@ -336,15 +336,15 @@ coap_opt_setheader(coap_opt_t *opt, size_t maxlen,
     return 0;
 
   if (delta < 13) {
-    opt[0] = (coap_opt_t)(delta << 4);
-  } else if (delta < 269) {
+    opt[0] = delta << 4;
+  } else if (delta < 270) {
     if (maxlen < 2) {
       debug("insufficient space to encode option delta %d\n", delta);
       return 0;
     }
 
     opt[0] = 0xd0;
-    opt[++skip] = (coap_opt_t)(delta - 13);
+    opt[++skip] = delta - 13;
   } else {
     if (maxlen < 3) {
       debug("insufficient space to encode option delta %d\n", delta);
@@ -353,19 +353,19 @@ coap_opt_setheader(coap_opt_t *opt, size_t maxlen,
 
     opt[0] = 0xe0;
     opt[++skip] = ((delta - 269) >> 8) & 0xff;
-    opt[++skip] = (delta - 269) & 0xff;
+    opt[++skip] = (delta - 269) & 0xff;    
   }
     
   if (length < 13) {
     opt[0] |= length & 0x0f;
-  } else if (length < 269) {
+  } else if (length < 270) {
     if (maxlen < skip + 2) {
       debug("insufficient space to encode option length %zu\n", length);
       return 0;
     }
     
     opt[0] |= 0x0d;
-    opt[++skip] = (coap_opt_t)(length - 13);
+    opt[++skip] = length - 13;
   } else {
     if (maxlen < skip + 3) {
       debug("insufficient space to encode option delta %d\n", delta);
@@ -374,7 +374,7 @@ coap_opt_setheader(coap_opt_t *opt, size_t maxlen,
 
     opt[0] |= 0x0e;
     opt[++skip] = ((length - 269) >> 8) & 0xff;
-    opt[++skip] = (length - 269) & 0xff;
+    opt[++skip] = (length - 269) & 0xff;    
   }
 
   return skip + 1;
@@ -497,7 +497,7 @@ coap_option_filter_op(coap_opt_filter_t filter,
   if (is_long_option(type)) {
     of->long_opts[index - 1] = type;
   } else {
-    of->short_opts[index - COAP_OPT_FILTER_LONG - 1] = (uint8_t)type;
+    of->short_opts[index - COAP_OPT_FILTER_LONG - 1] = type;
   }
 
   of->mask |= 1 << (index - 1);

@@ -117,11 +117,11 @@ strnlen(const char *s, size_t maxlen) {
 }
 #endif /* HAVE_STRNLEN */
 
-static size_t
-print_readable( const unsigned char *data, size_t len,
-		unsigned char *result, size_t buflen, int encode_always ) {
+static unsigned int
+print_readable( const unsigned char *data, unsigned int len,
+		unsigned char *result, unsigned int buflen, int encode_always ) {
   const unsigned char hex[] = "0123456789ABCDEF";
-  size_t cnt = 0;
+  unsigned int cnt = 0;
   assert(data || len == 0);
 
   if (buflen == 0) { /* there is nothing we can do here but return */
@@ -185,8 +185,7 @@ coap_print_addr(const struct coap_address_t *addr, unsigned char *buf, size_t le
     return min(22, len);
   }
 
-  /* Cast needed for Windows, since it doesn't have the correct API signature. */
-  if (inet_ntop(addr->addr.sa.sa_family, (void*)addrptr, (char *)p, len) == 0) {
+  if (inet_ntop(addr->addr.sa.sa_family, addrptr, (char *)p, len) == 0) {
     perror("coap_print_addr");
     return 0;
   }
@@ -262,7 +261,7 @@ coap_print_addr(const struct coap_address_t *addr, unsigned char *buf, size_t le
 
 /** Returns a textual description of the message type @p t. */
 static const char *
-msg_type_string(unsigned short t) {
+msg_type_string(uint8_t t) {
   static char *types[] = { "CON", "NON", "ACK", "RST", "???" };
 
   return types[min(t, sizeof(types)/sizeof(char *) - 1)];
@@ -270,9 +269,8 @@ msg_type_string(unsigned short t) {
 
 /** Returns a textual description of the method or response code. */
 static const char *
-msg_code_string(unsigned short c) {
-  static char *methods[] = { "0.00", "GET", "POST", "PUT", "DELETE",
-                             "FETCH", "PATCH", "iPATCH" };
+msg_code_string(uint8_t c) {
+  static char *methods[] = { "0.00", "GET", "POST", "PUT", "DELETE", "PATCH" };
   static char buf[5];
 
   if (c < sizeof(methods)/sizeof(char *)) {

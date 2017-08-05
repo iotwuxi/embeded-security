@@ -84,7 +84,7 @@ coap_write_block_opt(coap_block_t *block, unsigned short type,
   }
   
   avail = pdu->max_size - pdu->length - 4;
-  want = (size_t)1 << (block->szx + 4);
+  want = 1 << (block->szx + 4);
 
   /* check if entire block fits in message */
   if (want <= avail) {
@@ -100,18 +100,16 @@ coap_write_block_opt(coap_block_t *block, unsigned short type,
       /* it's the final block and everything fits in the message */
       block->m = 0;
     } else {
-      unsigned int szx;
-      int newBlockSize;
+      unsigned char szx;
 
       /* we need to decrease the block size */
       if (avail < 16) { 	/* bad luck, this is the smallest block size */
-        debug("not enough space, even the smallest block does not fit");
-        return -3;
+	debug("not enough space, even the smallest block does not fit");
+	return -3;
       }
-      newBlockSize = coap_flsll((long long)avail) - 5;
-      debug("decrease block size for %zu to %d\n", avail, newBlockSize);
+      debug("decrease block size for %zu to %d\n", avail, coap_fls(avail) - 5);
       szx = block->szx;
-      block->szx = newBlockSize;
+      block->szx = coap_fls(avail) - 5;
       block->m = 1;
       block->num <<= szx - block->szx;
     }
@@ -129,14 +127,14 @@ coap_write_block_opt(coap_block_t *block, unsigned short type,
 int 
 coap_add_block(coap_pdu_t *pdu, unsigned int len, const unsigned char *data,
 	       unsigned int block_num, unsigned char block_szx) {
-  unsigned int start;
+  size_t start;
   start = block_num << (block_szx + 4);
 
   if (len <= start)
     return 0;
   
   return coap_add_data(pdu, 
-		       min(len - start, (1U << (block_szx + 4))),
+		       min(len - start, (unsigned int)(1 << (block_szx + 4))),
 		       data + start);
 }
 #endif /* WITHOUT_BLOCK  */

@@ -51,7 +51,7 @@ strnchr(unsigned char *s, size_t len, unsigned char c) {
 int
 coap_split_uri(const unsigned char *str_var, size_t len, coap_uri_t *uri) {
   const unsigned char *p, *q;
-  int res = 0;
+  int secure = 0, res = 0;
 
   if (!str_var || !uri)
     return -1;
@@ -79,7 +79,7 @@ coap_split_uri(const unsigned char *str_var, size_t len, coap_uri_t *uri) {
   }
 
   /* There might be an additional 's', indicating the secure version: */
-  if (len && (*p == 's')) {
+  if (len && (secure = *p == 's')) {
     ++p; --len;
   }
 
@@ -137,15 +137,15 @@ coap_split_uri(const unsigned char *str_var, size_t len, coap_uri_t *uri) {
       int uri_port = 0;
     
       while (p < q)
-	      uri_port = uri_port * 10 + (*p++ - '0');
+	uri_port = uri_port * 10 + (*p++ - '0');
 
       /* check if port number is in allowed range */
       if (uri_port > 65535) {
-	      res = -4;
-	      goto error;
+	res = -4;
+	goto error;
       }
 
-      uri->port = (unsigned short)uri_port;
+      uri->port = uri_port;
     } 
   }
   
@@ -224,17 +224,18 @@ decode_segment(const unsigned char *seg, size_t length, unsigned char *buf) {
 
 /**
  * Runs through the given path (or query) segment and checks if
- * percent-encodings are correct. This function returns @c 0 on success
- * and @c -1 on error.
+ * percent-encodings are correct. This function returns @c -1 on error
+ * or the length of @p s when decoded.
  */
 static int
-check_segment(const unsigned char *s, size_t length, size_t *segment_size) {
+check_segment(const unsigned char *s, size_t length) {
+
   size_t n = 0;
 
   while (length) {
     if (*s == '%') {
       if (length < 2 || !(isxdigit(s[1]) && isxdigit(s[2])))
-	      return -1;
+	return -1;
       
       s += 2;
       length -= 2;
@@ -243,9 +244,7 @@ check_segment(const unsigned char *s, size_t length, size_t *segment_size) {
     ++s; ++n; --length;
   }
   
-  *segment_size = n;
-
-  return 0;
+  return n;
 }
 	 
 /** 
@@ -253,26 +252,24 @@ check_segment(const unsigned char *s, size_t length, size_t *segment_size) {
  * point to a (percent-encoded) path or query segment of a coap_uri_t
  * object.  The created option will have type @c 0, and the length
  * parameter will be set according to the size of the decoded string.
- * On success, this function returns @c 0 and sets @p optionsize to the option's
- * size. On error the function returns a value less than zero. This function
- * must be called from coap_split_path_impl() only.
+ * On success, this function returns the option's size, or a value
+ * less than zero on error. This function must be called from
+ * coap_split_path_impl() only.
  * 
- * @param s           The string to decode.
- * @param length      The size of the percent-encoded string @p s.
- * @param buf         The buffer to store the new coap option.
- * @param buflen      The maximum size of @p buf.
- * @param optionsize  The option's size.
+ * @param s       The string to decode.
+ * @param length  The size of the percent-encoded string @p s.
+ * @param buf     The buffer to store the new coap option.
+ * @param buflen  The maximum size of @p buf.
  * 
- * @return @c 0 on success and @c -1 on error.
+ * @return The option's size, or @c -1 on error.
  *
  * @bug This function does not split segments that are bigger than 270
  * bytes.
  */
 static int
 make_decoded_option(const unsigned char *s, size_t length, 
-		    unsigned char *buf, size_t buflen, size_t* optionsize) {
+		    unsigned char *buf, size_t buflen) {
   int res;
-  size_t segmentlen;
   size_t written;
 
   if (!buflen) {
@@ -280,12 +277,12 @@ make_decoded_option(const unsigned char *s, size_t length,
     return -1;
   }
 
-  res = check_segment(s, length, &segmentlen);
+  res = check_segment(s, length);
   if (res < 0)
     return -1;
 
   /* write option header using delta 0 and length res */
-  written = coap_opt_setheader(buf, buflen, 0, segmentlen);
+  written = coap_opt_setheader(buf, buflen, 0, res);
 
   assert(written <= buflen);
 
@@ -295,16 +292,14 @@ make_decoded_option(const unsigned char *s, size_t length,
   buf += written;		/* advance past option type/length */
   buflen -= written;
 
-  if (buflen < segmentlen) {
+  if (buflen < (size_t)res) {
     debug("buffer too small for option\n");
     return -1;
   }
 
   decode_segment(s, length, buf);
 
-  *optionsize = written + segmentlen;
-
-  return 0;
+  return written + res;
 }
 
 
@@ -371,13 +366,12 @@ static void
 write_option(unsigned char *s, size_t len, void *data) {
   struct cnt_str *state = (struct cnt_str *)data;
   int res;
-  size_t optionsize;
   assert(state);
 
-  res = make_decoded_option(s, len, state->buf.s, state->buf.length, &optionsize);
-  if (res == 0) {
-    state->buf.s += optionsize;
-    state->buf.length -= optionsize;
+  res = make_decoded_option(s, len, state->buf.s, state->buf.length);
+  if (res > 0) {
+    state->buf.s += res;
+    state->buf.length -= res;
     state->n++;
   }
 }
@@ -486,8 +480,7 @@ coap_clone_uri(const coap_uri_t *uri) {
  * segment_handler_t hence we use this wrapper as safe typecast. */
 static inline void
 hash_segment(unsigned char *s, size_t len, void *data) {
-  assert(len <= UINT_MAX);
-  coap_hash(s, (unsigned int)len, (unsigned char *)data);
+  coap_hash(s, len, data);
 }
 
 int
