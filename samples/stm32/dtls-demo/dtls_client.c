@@ -80,7 +80,7 @@ void dtls_client_thread( int argc, char *argv[] )
     mbedtls_printf( "  . Connecting to udp/%s/%s...", SERVER_NAME, SERVER_PORT );
     fflush( stdout );
 
-    if( ( ret = mbedtls_net_connect( &server_fd, SERVER_ADDR,
+    if( ( ret = mbedtls_net_connect( &server_fd, SERVER_NAME,
                                          SERVER_PORT, MBEDTLS_NET_PROTO_UDP ) ) != 0 )
     {
         mbedtls_printf( " failed\n  ! mbedtls_net_connect returned %d\n\n", ret );
