@@ -5,8 +5,8 @@
 #ifndef MBEDTLS_CONFIG_H
 #define MBEDTLS_CONFIG_H
 
-/** 平台相关 ++++ >  STM32: 1 / Linux: 0 */
-#if 0                                     
+/** 平台相关  */
+#ifdef __ICCARM__                                    
 #define MBEDTLS_ENTROPY_HARDWARE_ALT            /** 熵源接口替换 */
 #define MBEDTLS_NO_PLATFORM_ENTROPY             /** 无平台熵源支持 (linux: /dev/urandom 或 Windows CryptoAPI) */
 #else
