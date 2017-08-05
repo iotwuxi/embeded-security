@@ -124,6 +124,8 @@ a lot of data that needs to be copied, this should be set high. */
 
 /* ---------- DHCP options ---------- */
 #define LWIP_DHCP               1
+
+/* ---------- DNS options ---------- */
 #define LWIP_DNS                1
 
 

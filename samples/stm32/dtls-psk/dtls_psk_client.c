@@ -10,7 +10,7 @@ static void my_debug( void *ctx, int level,
     fflush(  (FILE *) ctx  );
 }
 
-void dtls_client_thread( int argc, char *argv[] )
+void dtls_psk_client_thread( int argc, char *argv[] )
 {
     printf("\n%s start.\n", __func__);
 
@@ -31,16 +31,9 @@ void dtls_client_thread( int argc, char *argv[] )
 
     int dtls_ciphersuites[3];
 
-    // char *server_name = NULL;
-    // char *server_addr = NULL;
-    // char *server_port = NULL;
-
 #if defined(MBEDTLS_DEBUG_C)
     mbedtls_debug_set_threshold( DEBUG_LEVEL );
 #endif
-
-    // server_name = server_addr = SERVER_NAME;
-    // server_port = SERVER_PORT;
 
     /*
      * 0. Initialize the RNG and the session data
@@ -87,7 +80,7 @@ void dtls_client_thread( int argc, char *argv[] )
     mbedtls_printf( "  . Connecting to udp/%s/%s...", SERVER_NAME, SERVER_PORT );
     fflush( stdout );
 
-    if( ( ret = mbedtls_net_connect( &server_fd, SERVER_ADDR,
+    if( ( ret = mbedtls_net_connect( &server_fd, SERVER_NAME,
                                          SERVER_PORT, MBEDTLS_NET_PROTO_UDP ) ) != 0 )
     {
         mbedtls_printf( " failed\n  ! mbedtls_net_connect returned %d\n\n", ret );
@@ -285,7 +278,7 @@ exit:
 
 void dtls_psk_client_init(void)
 {
-    sys_thread_new("DTLS PSK Client", (lwip_thread_fn)dtls_client_thread, NULL, 2*DEFAULT_THREAD_STACKSIZE, DTLS_CLIENT_THREAD_PRIO);
+    sys_thread_new("DTLS PSK Client", (lwip_thread_fn)dtls_psk_client_thread, NULL, 2*DEFAULT_THREAD_STACKSIZE, DTLS_CLIENT_THREAD_PRIO);
 }
 
 void sample_entry(void)

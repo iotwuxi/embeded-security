@@ -1465,9 +1465,6 @@
         <name>$PROJ_DIR$\..\..\..\samples\stm32\x509-info\config\mbedtls_config.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\self-test\self-test.ewd</name>
-      </file>
-      <file>
         <name>$PROJ_DIR$\..\..\..\samples\stm32\x509-info\config\stm32f7xx_hal_conf.h</name>
       </file>
     </group>
