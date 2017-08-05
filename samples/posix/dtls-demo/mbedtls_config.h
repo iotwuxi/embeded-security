@@ -68,7 +68,10 @@
 #define MBEDTLS_ECP_C                               /** ECC 算法 */
 #define MBEDTLS_ECDH_C                              /** ECDH 算法 */
 #define MBEDTLS_ECDSA_C                             /** ECDSA 算法 */
-#define MBEDTLS_ECP_DP_SECP384R1_ENABLED            /** 特殊 ECC 参数 */
+#define MBEDTLS_ECP_DP_SECP192R1_ENABLED            /** 椭圆曲线 */
+#define MBEDTLS_ECP_DP_SECP224R1_ENABLED
+#define MBEDTLS_ECP_DP_SECP256R1_ENABLED
+#define MBEDTLS_ECP_DP_SECP384R1_ENABLED
 
 /** 证书 定义 */
 #define MBEDTLS_BASE64_C                            /** base64 编码 */

@@ -38,7 +38,7 @@ int main(void)
     mbedtls_x509_crt_init(&cert);
     ret = mbedtls_x509_crt_parse(&cert, (const unsigned char *)cert_buf, cert_len);
     if (ret < 0) {
-        mbedtls_printf("failed: %dX\n", ret);
+        mbedtls_printf("failed: %d\n", ret);
         goto exit;
     }
 
