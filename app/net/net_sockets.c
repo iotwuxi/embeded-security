@@ -1,44 +1,3 @@
-/**
-  *  Portions COPYRIGHT 2016 STMicroelectronics
-  *  Copyright (C) 2006-2015, ARM Limited, All Rights Reserved
-  *
-  ******************************************************************************
-  * @file    net_sockets.c
-  * @author  MCD Application Team
-  * @version V1.2.1
-  * @date    14-April-2017
-  * @brief   TCP/IP or UDP/IP networking functions iplementation based on LwIP API
-             see the file "mbedTLS/library/net_socket_template.c" for the standard
-       implmentation
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
-  *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-  *
-  ******************************************************************************
-  */
 
 #if !defined(MBEDTLS_CONFIG_FILE)
 #include "mbedtls/config.h"
@@ -72,8 +31,6 @@
 #include "ethernetif.h"
 #include "stm32f7xx_hal.h"
 
-// #include "main.h"
-
 extern struct netif gnetif;
 static int net_would_block( const mbedtls_net_context *ctx );
 
@@ -90,46 +47,43 @@ void mbedtls_net_init( mbedtls_net_context *ctx )
  */
 int mbedtls_net_connect( mbedtls_net_context *ctx, const char *host, const char *port, int proto )
 {
-    /* Legacy IPv4-only version */
+    int ret;
+    struct addrinfo hints, *addr_list, *cur;
 
-    int type, protocol;
-    struct sockaddr_in server_addr;
-#if LWIP_DNS  
-    struct hostent *server_host;
-#endif
+    /* Do name resolution with both IPv6 and IPv4 */
+    memset( &hints, 0, sizeof( hints ) );
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = proto == MBEDTLS_NET_PROTO_UDP ? SOCK_DGRAM : SOCK_STREAM;
+    hints.ai_protocol = proto == MBEDTLS_NET_PROTO_UDP ? IPPROTO_UDP : IPPROTO_TCP;
 
-    type = ( proto == MBEDTLS_NET_PROTO_UDP ) ? SOCK_DGRAM : SOCK_STREAM;
-    protocol = ( proto == MBEDTLS_NET_PROTO_UDP ) ? IPPROTO_UDP : IPPROTO_TCP;
-
-#if LWIP_DNS
-    if( ( server_host = gethostbyname( host ) ) == NULL )
+    if( getaddrinfo( host, port, &hints, &addr_list ) != 0 )
         return( MBEDTLS_ERR_NET_UNKNOWN_HOST );
 
-    if( ( ctx->fd = (int) socket( AF_INET, type, protocol ) ) < 0 )
-        return( MBEDTLS_ERR_NET_SOCKET_FAILED );
-
-    memcpy( (void *) &server_addr.sin_addr,
-            (void *) server_host->h_addr,
-                     server_host->h_length );
-#else
-    if( ( ctx->fd = (int) socket( AF_INET, type, protocol ) ) < 0 )
-        return( MBEDTLS_ERR_NET_SOCKET_FAILED );
-
-    server_addr.sin_len = sizeof(server_addr);
-    server_addr.sin_addr.s_addr = inet_addr(host);
-#endif
-
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port   = htons( atoi(port) );
-
-    if( connect( ctx->fd, (struct sockaddr *) &server_addr,
-                 sizeof( server_addr ) ) < 0 )
+    /* Try the sockaddrs until a connection succeeds */
+    ret = MBEDTLS_ERR_NET_UNKNOWN_HOST;
+    for( cur = addr_list; cur != NULL; cur = cur->ai_next )
     {
+        ctx->fd = (int) socket( cur->ai_family, cur->ai_socktype,
+                            cur->ai_protocol );
+        if( ctx->fd < 0 )
+        {
+            ret = MBEDTLS_ERR_NET_SOCKET_FAILED;
+            continue;
+        }
+
+        if( connect( ctx->fd, cur->ai_addr, cur->ai_addrlen ) == 0 )
+        {
+            ret = 0;
+            break;
+        }
+
         close( ctx->fd );
-        return( MBEDTLS_ERR_NET_CONNECT_FAILED );
+        ret = MBEDTLS_ERR_NET_CONNECT_FAILED;
     }
 
-    return( 0 );
+    freeaddrinfo( addr_list );
+
+    return( ret );
 }
 
 /*
@@ -137,61 +91,68 @@ int mbedtls_net_connect( mbedtls_net_context *ctx, const char *host, const char 
  */
 int mbedtls_net_bind( mbedtls_net_context *ctx, const char *bind_ip, const char *port, int proto )
 {
-    /* Legacy IPv4-only version */
+    int n, ret;
+    struct addrinfo hints, *addr_list, *cur;
 
-    int n, c[4];
-    int type, protocol;
-    struct sockaddr_in server_addr;
+    /* Bind to IPv6 and/or IPv4, but only in the desired protocol */
+    memset( &hints, 0, sizeof( hints ) );
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = proto == MBEDTLS_NET_PROTO_UDP ? SOCK_DGRAM : SOCK_STREAM;
+    hints.ai_protocol = proto == MBEDTLS_NET_PROTO_UDP ? IPPROTO_UDP : IPPROTO_TCP;
+    if( bind_ip == NULL )
+        hints.ai_flags = AI_PASSIVE;
 
-    type = ( proto == MBEDTLS_NET_PROTO_UDP ) ? SOCK_DGRAM : SOCK_STREAM;
-    protocol = ( proto == MBEDTLS_NET_PROTO_UDP ) ? IPPROTO_UDP : IPPROTO_TCP;
+    if( getaddrinfo( bind_ip, port, &hints, &addr_list ) != 0 )
+        return( MBEDTLS_ERR_NET_UNKNOWN_HOST );
 
-    if( ( ctx->fd = (int) socket( AF_INET, type, protocol ) ) < 0 )
-        return( MBEDTLS_ERR_NET_SOCKET_FAILED );
-
-    n = 1;
-    setsockopt( ctx->fd, SOL_SOCKET, SO_REUSEADDR,
-                (const char *) &n, sizeof( n ) );
-
-    server_addr.sin_addr.s_addr = htonl( INADDR_ANY );
-    server_addr.sin_family      = AF_INET;
-    server_addr.sin_port        = htons( atoi(port) );
-
-    if( bind_ip != NULL )
+    /* Try the sockaddrs until a binding succeeds */
+    ret = MBEDTLS_ERR_NET_UNKNOWN_HOST;
+    for( cur = addr_list; cur != NULL; cur = cur->ai_next )
     {
-        memset( c, 0, sizeof( c ) );
-        sscanf( bind_ip, "%d.%d.%d.%d", &c[0], &c[1], &c[2], &c[3] );
+        ctx->fd = (int) socket( cur->ai_family, cur->ai_socktype,
+                            cur->ai_protocol );
+        if( ctx->fd < 0 )
+        {
+            ret = MBEDTLS_ERR_NET_SOCKET_FAILED;
+            continue;
+        }
 
-        for( n = 0; n < 4; n++ )
-            if( c[n] < 0 || c[n] > 255 )
-                break;
-
-        if( n == 4 )
-            server_addr.sin_addr.s_addr = htonl(
-                ( (uint32_t) c[0] << 24 ) |
-                ( (uint32_t) c[1] << 16 ) |
-                ( (uint32_t) c[2] <<  8 ) |
-                ( (uint32_t) c[3]       ) );
-    }
-
-    if( bind( ctx->fd, (struct sockaddr *) &server_addr,
-              sizeof( server_addr ) ) < 0 )
-    {
-        close( ctx->fd );
-        return( MBEDTLS_ERR_NET_BIND_FAILED );
-    }
-
-    /* Listen only makes sense for TCP */
-    if( proto == MBEDTLS_NET_PROTO_TCP )
-    {
-        if( listen( ctx->fd, MBEDTLS_NET_LISTEN_BACKLOG ) != 0 )
+        n = 1;
+        if( setsockopt( ctx->fd, SOL_SOCKET, SO_REUSEADDR,
+                        (const char *) &n, sizeof( n ) ) != 0 )
         {
             close( ctx->fd );
-            return( MBEDTLS_ERR_NET_LISTEN_FAILED );
+            ret = MBEDTLS_ERR_NET_SOCKET_FAILED;
+            continue;
         }
+
+        if( bind( ctx->fd, cur->ai_addr, cur->ai_addrlen ) != 0 )
+        {
+            close( ctx->fd );
+            ret = MBEDTLS_ERR_NET_BIND_FAILED;
+            continue;
+        }
+
+        /* Listen only makes sense for TCP */
+        if( proto == MBEDTLS_NET_PROTO_TCP )
+        {
+            if( listen( ctx->fd, MBEDTLS_NET_LISTEN_BACKLOG ) != 0 )
+            {
+                close( ctx->fd );
+                ret = MBEDTLS_ERR_NET_LISTEN_FAILED;
+                continue;
+            }
+        }
+
+        /* I we ever get there, it's a success */
+        ret = 0;
+        break;
     }
 
-    return( 0 );
+    freeaddrinfo( addr_list );
+
+    return( ret );
+
 }
 
 
