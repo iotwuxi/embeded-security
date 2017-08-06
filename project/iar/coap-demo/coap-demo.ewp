@@ -1298,6 +1298,7 @@
           <state>$PROJ_DIR$\..\..\..\external\lwip\src\include\posix</state>
           <state>$PROJ_DIR$\..\..\..\external\lwip\system</state>
           <state>$PROJ_DIR$\..\..\..\external\libcoap</state>
+          <state>$PROJ_DIR$\..\..\..\external\libcoap\include\</state>
           <state>$PROJ_DIR$\..\..\..\external\libcoap\include\coap</state>
           <state>$PROJ_DIR$\..\..\..\freertos\source</state>
           <state>$PROJ_DIR$\..\..\..\freertos\source\portable\iar\arm_cm7\r0p1</state>
@@ -2138,6 +2139,9 @@
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\..\external\libcoap\src\debug.c</name>
+          <excluded>
+            <configuration>server</configuration>
+          </excluded>
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\..\external\libcoap\src\encode.c</name>
