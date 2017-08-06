@@ -20,7 +20,7 @@
 
 #if !defined (CONTIKI) 
 // #include <netinet/in.h>		// xukai modify
-#include <sys/socket.h>
+// #include <sys/socket.h>
 #endif /* CONTIKI */
 
 #endif /* _LIBCOAP_H_ */

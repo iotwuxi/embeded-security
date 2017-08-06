@@ -610,12 +610,10 @@ coap_network_read(coap_endpoint_t *ep, coap_packet_t **packet) {
   (*packet)->interface = ep;
 
   return len;
-#if defined(WITH_POSIX) || defined(WITH_CONTIKI)
  error:
   coap_free_packet(*packet);
   *packet = NULL;
   return -1;
-#endif
 }
 
 #undef SIN6

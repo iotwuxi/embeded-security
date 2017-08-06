@@ -3,6 +3,7 @@
 #define _CONFIG_H_
 
 #include <lwip/opt.h>
+#include <lwip/sockets.h>
 #include <lwip/debug.h>
 #include <lwip/def.h> /* provide ntohs, htons */
 

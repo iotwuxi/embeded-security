@@ -38,7 +38,7 @@
 #endif
 
 #include "debug.h"
-#include "coap/mem.h"
+#include "mem.h"
 #include "str.h"
 #include "async.h"
 #include "resource.h"

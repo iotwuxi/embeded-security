@@ -12,10 +12,6 @@
 # include <assert.h>
 #endif
 
-#if defined(HAVE_LIMITS_H)
-#include <limits.h>
-#endif
-
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>

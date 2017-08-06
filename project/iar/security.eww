@@ -19,6 +19,9 @@
   <project>
     <path>$WS_DIR$\x509-info\x509-info.ewp</path>
   </project>
+  <project>
+    <path>$WS_DIR$\coap-demo\coap-demo.ewp</path>
+  </project>
   <batchBuild/>
 </workspace>
 
