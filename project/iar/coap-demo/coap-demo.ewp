@@ -2127,12 +2127,12 @@
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\..\external\libcoap\src\coap_io.c</name>
-          <excluded>
-            <configuration>server</configuration>
-          </excluded>
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\..\external\libcoap\src\coap_io_lwip.c</name>
+          <excluded>
+            <configuration>server</configuration>
+          </excluded>
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\..\external\libcoap\src\coap_time.c</name>
@@ -2362,16 +2362,13 @@
       </file>
     </group>
     <file>
-      <name>$PROJ_DIR$\..\..\..\samples\stm32\coap-demo\udp_client.c</name>
-      <excluded>
-        <configuration>server</configuration>
-      </excluded>
-    </file>
-    <file>
       <name>$PROJ_DIR$\..\..\..\samples\stm32\coap-demo\udp_server.c</name>
       <excluded>
         <configuration>client</configuration>
       </excluded>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\samples\stm32\coap-demo\udp_server.h</name>
     </file>
   </group>
 </project>

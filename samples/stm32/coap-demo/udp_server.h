@@ -4,6 +4,7 @@
 #include "lwip/opt.h"
 #include "lwip/arch.h"
 #include "lwip/api.h"
+#include "lwip/netdb.h"
 #include "lwip/sockets.h"
 
 #include "cmsis_os.h"

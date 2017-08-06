@@ -7,7 +7,7 @@
 #include <lwip/debug.h>
 #include <lwip/def.h> /* provide ntohs, htons */
 
-#define WITH_LWIP  1
+#define WITH_POSIX  1
 #define COAP_RESOURCES_NOHASH
 
 #define assert(x) LWIP_ASSERT("CoAP assert failed", x)
