@@ -36,8 +36,7 @@
 #if !defined(MBEDTLS_SSL_CLI_C) || !defined(MBEDTLS_SSL_PROTO_DTLS) ||    \
     !defined(MBEDTLS_NET_C)  || !defined(MBEDTLS_TIMING_C) ||             \
     !defined(MBEDTLS_ENTROPY_C) || !defined(MBEDTLS_CTR_DRBG_C) ||        \
-    !defined(MBEDTLS_X509_CRT_PARSE_C) || !defined(MBEDTLS_RSA_C) ||      \
-    !defined(MBEDTLS_CERTS_C)
+    !defined(MBEDTLS_X509_CRT_PARSE_C) || !defined(MBEDTLS_CERTS_C)
 int main( void )
 {
     mbedtls_printf( "MBEDTLS_SSL_CLI_C and/or MBEDTLS_SSL_PROTO_DTLS and/or "
@@ -62,15 +61,55 @@ int main( void )
 
 #if 0
 #define SERVER_PORT                     "4433"
-#define SERVER_NAME                     "localhost"
+#define SERVER_NAME                     "wsncoap.org"
 #define SERVER_ADDR                     "127.0.0.1" /* forces IPv4 */
 #define MESSAGE                         "Echo this"
 #else
 #define SERVER_PORT                     "4433"
-#define SERVER_NAME                     "localhost"
+#define SERVER_NAME                     "wsncoap.org"
 #define SERVER_ADDR                     "139.196.187.107" 
 #define MESSAGE                         "Hello DTLS Server"
 #endif
+
+/** DER 格式根证书，CN=CA,O=iot-wuxi,C=CN */
+unsigned char ca_crt_der[] = {
+  0X30, 0X82, 0X01, 0XA0, 0X30, 0X82, 0X01, 0X43, 0XA0, 0X03, 0X02, 0X01,
+  0X02, 0X02, 0X01, 0X01, 0X30, 0X0C, 0X06, 0X08, 0X2A, 0X86, 0X48, 0XCE,
+  0X3D, 0X04, 0X03, 0X02, 0X05, 0X00, 0X30, 0X2D, 0X31, 0X0B, 0X30, 0X09,
+  0X06, 0X03, 0X55, 0X04, 0X03, 0X13, 0X02, 0X43, 0X41, 0X31, 0X11, 0X30,
+  0X0F, 0X06, 0X03, 0X55, 0X04, 0X0A, 0X13, 0X08, 0X69, 0X6F, 0X74, 0X2D,
+  0X77, 0X75, 0X78, 0X69, 0X31, 0X0B, 0X30, 0X09, 0X06, 0X03, 0X55, 0X04,
+  0X06, 0X13, 0X02, 0X43, 0X4E, 0X30, 0X20, 0X17, 0X0D, 0X31, 0X37, 0X30,
+  0X37, 0X32, 0X36, 0X30, 0X30, 0X30, 0X30, 0X30, 0X30, 0X5A, 0X18, 0X0F,
+  0X32, 0X30, 0X36, 0X37, 0X30, 0X37, 0X32, 0X36, 0X30, 0X30, 0X30, 0X30,
+  0X30, 0X30, 0X5A, 0X30, 0X2D, 0X31, 0X0B, 0X30, 0X09, 0X06, 0X03, 0X55,
+  0X04, 0X03, 0X13, 0X02, 0X43, 0X41, 0X31, 0X11, 0X30, 0X0F, 0X06, 0X03,
+  0X55, 0X04, 0X0A, 0X13, 0X08, 0X69, 0X6F, 0X74, 0X2D, 0X77, 0X75, 0X78,
+  0X69, 0X31, 0X0B, 0X30, 0X09, 0X06, 0X03, 0X55, 0X04, 0X06, 0X13, 0X02,
+  0X43, 0X4E, 0X30, 0X59, 0X30, 0X13, 0X06, 0X07, 0X2A, 0X86, 0X48, 0XCE,
+  0X3D, 0X02, 0X01, 0X06, 0X08, 0X2A, 0X86, 0X48, 0XCE, 0X3D, 0X03, 0X01,
+  0X07, 0X03, 0X42, 0X00, 0X04, 0X30, 0X7F, 0XA0, 0X42, 0XD7, 0X8E, 0X07,
+  0X1B, 0X10, 0X86, 0XC5, 0X14, 0X8D, 0X7F, 0X45, 0X4F, 0X9A, 0X90, 0X6E,
+  0XD3, 0X50, 0X78, 0X60, 0X53, 0XB4, 0X92, 0XCE, 0X82, 0XD2, 0X9B, 0XA0,
+  0X89, 0X1D, 0X48, 0X3E, 0XCA, 0XBF, 0X0A, 0X1C, 0X65, 0X5A, 0XF7, 0X25,
+  0XFB, 0XBD, 0XED, 0X33, 0X49, 0X2B, 0XCB, 0XB4, 0XCE, 0X77, 0X91, 0X96,
+  0X64, 0XFA, 0XFB, 0X2B, 0X5A, 0X2E, 0XF4, 0X25, 0XC7, 0XA3, 0X50, 0X30,
+  0X4E, 0X30, 0X0C, 0X06, 0X03, 0X55, 0X1D, 0X13, 0X04, 0X05, 0X30, 0X03,
+  0X01, 0X01, 0XFF, 0X30, 0X1D, 0X06, 0X03, 0X55, 0X1D, 0X0E, 0X04, 0X16,
+  0X04, 0X14, 0XE7, 0XFF, 0X7E, 0X48, 0X31, 0X2A, 0X8B, 0XD6, 0X58, 0XD5,
+  0X81, 0X2F, 0XCD, 0X18, 0X73, 0X92, 0X4B, 0XA9, 0X3A, 0XF3, 0X30, 0X1F,
+  0X06, 0X03, 0X55, 0X1D, 0X23, 0X04, 0X18, 0X30, 0X16, 0X80, 0X14, 0XE7,
+  0XFF, 0X7E, 0X48, 0X31, 0X2A, 0X8B, 0XD6, 0X58, 0XD5, 0X81, 0X2F, 0XCD,
+  0X18, 0X73, 0X92, 0X4B, 0XA9, 0X3A, 0XF3, 0X30, 0X0C, 0X06, 0X08, 0X2A,
+  0X86, 0X48, 0XCE, 0X3D, 0X04, 0X03, 0X02, 0X05, 0X00, 0X03, 0X49, 0X00,
+  0X30, 0X46, 0X02, 0X21, 0X00, 0XD4, 0XE7, 0X68, 0X18, 0X6E, 0XEA, 0XE9,
+  0X55, 0XCE, 0XEC, 0XAC, 0XC8, 0XA9, 0XE6, 0X10, 0X06, 0XAE, 0X69, 0X00,
+  0X2F, 0XC0, 0X9B, 0X61, 0X08, 0XAB, 0X7F, 0X71, 0X80, 0X2D, 0XE8, 0XBB,
+  0X05, 0X02, 0X21, 0X00, 0XE8, 0X7F, 0X48, 0XD5, 0X08, 0X36, 0XFF, 0XD6,
+  0XFE, 0XEA, 0X34, 0XE0, 0XAB, 0X26, 0X15, 0XF9, 0XD7, 0XE8, 0XA1, 0X11,
+  0XAA, 0XA0, 0XF3, 0XFB, 0X60, 0X69, 0X61, 0XF2, 0X87, 0X5B, 0XC0, 0X77
+};
+unsigned int ca_crt_der_len = 420;
 
 #define READ_TIMEOUT_MS 1000
 #define MAX_RETRY       5
@@ -139,8 +178,8 @@ int main( int argc, char *argv[] )
     mbedtls_printf( "  . Loading the CA root certificate ..." );
     fflush( stdout );
 
-    ret = mbedtls_x509_crt_parse( &cacert, (const unsigned char *) mbedtls_test_cas_pem,
-                          mbedtls_test_cas_pem_len );
+    ret = mbedtls_x509_crt_parse( &cacert, (const unsigned char *) ca_crt_der,
+                          ca_crt_der_len );
     if( ret < 0 )
     {
         mbedtls_printf( " failed\n  !  mbedtls_x509_crt_parse returned -0x%x\n\n", -ret );

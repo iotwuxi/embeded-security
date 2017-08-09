@@ -37,9 +37,9 @@
 #if !defined(MBEDTLS_SSL_SRV_C) || !defined(MBEDTLS_SSL_PROTO_DTLS) ||    \
     !defined(MBEDTLS_SSL_COOKIE_C) || !defined(MBEDTLS_NET_C) ||          \
     !defined(MBEDTLS_ENTROPY_C) || !defined(MBEDTLS_CTR_DRBG_C) ||        \
-    !defined(MBEDTLS_X509_CRT_PARSE_C) || !defined(MBEDTLS_RSA_C) ||      \
-    !defined(MBEDTLS_CERTS_C) || !defined(MBEDTLS_PEM_PARSE_C) ||         \
-    !defined(MBEDTLS_TIMING_C)
+    !defined(MBEDTLS_X509_CRT_PARSE_C) || !defined(MBEDTLS_CERTS_C) ||      \
+    !defined(MBEDTLS_PEM_PARSE_C) || !defined(MBEDTLS_TIMING_C)        \
+    
 
 int main( void )
 {
@@ -75,6 +75,64 @@ int main( void )
 #if defined(MBEDTLS_SSL_CACHE_C)
 #include "mbedtls/ssl_cache.h"
 #endif
+
+/** DER 格式服务器 ecc 密钥对，使用 SECP256R1 算法生成 */
+unsigned char server_key_ec_bin[] = 
+{
+  0X30, 0X77, 0X02, 0X01, 0X01, 0X04, 0X20, 0X73, 0X68, 0X9D, 0XCA, 0X09,
+  0XF3, 0X9E, 0X3F, 0X27, 0XC6, 0XA2, 0XB6, 0X8E, 0XEA, 0XED, 0X60, 0XED,
+  0X84, 0X28, 0X4C, 0X0F, 0X37, 0X36, 0XF7, 0X7A, 0XFF, 0X8A, 0XDC, 0XF6,
+  0X0E, 0X49, 0X5C, 0XA0, 0X0A, 0X06, 0X08, 0X2A, 0X86, 0X48, 0XCE, 0X3D,
+  0X03, 0X01, 0X07, 0XA1, 0X44, 0X03, 0X42, 0X00, 0X04, 0X3C, 0X56, 0XBC,
+  0XFD, 0XE7, 0XA8, 0XBA, 0X34, 0X2A, 0XD2, 0X38, 0XD7, 0X14, 0X59, 0XEE,
+  0X61, 0XC8, 0X39, 0XB2, 0XA7, 0X0F, 0X0D, 0XAC, 0X66, 0XBE, 0X37, 0X92,
+  0X83, 0X18, 0X7D, 0X13, 0X03, 0X38, 0XD1, 0X37, 0X5A, 0XC8, 0X15, 0X03,
+  0X5C, 0X65, 0X98, 0X08, 0X92, 0X6E, 0X15, 0XBA, 0X65, 0X73, 0XFD, 0XF3,
+  0X83, 0XA9, 0X1A, 0X1F, 0X66, 0X5B, 0X1D, 0X07, 0XAE, 0X58, 0XA1, 0XE3,
+  0XC0
+};
+unsigned int server_key_ec_bin_len = 121;
+
+/** DER 格式服务器证书，CN=wsncoap.org,O=iot-wuxi,C=CN */
+unsigned char server_crt_der[] = {
+  0X30, 0X82, 0X01, 0XA4, 0X30, 0X82, 0X01, 0X49, 0XA0, 0X03, 0X02, 0X01,
+  0X02, 0X02, 0X01, 0X01, 0X30, 0X0C, 0X06, 0X08, 0X2A, 0X86, 0X48, 0XCE,
+  0X3D, 0X04, 0X03, 0X02, 0X05, 0X00, 0X30, 0X2D, 0X31, 0X0B, 0X30, 0X09,
+  0X06, 0X03, 0X55, 0X04, 0X03, 0X13, 0X02, 0X43, 0X41, 0X31, 0X11, 0X30,
+  0X0F, 0X06, 0X03, 0X55, 0X04, 0X0A, 0X13, 0X08, 0X69, 0X6F, 0X74, 0X2D,
+  0X77, 0X75, 0X78, 0X69, 0X31, 0X0B, 0X30, 0X09, 0X06, 0X03, 0X55, 0X04,
+  0X06, 0X13, 0X02, 0X43, 0X4E, 0X30, 0X20, 0X17, 0X0D, 0X31, 0X37, 0X30,
+  0X37, 0X32, 0X36, 0X30, 0X30, 0X30, 0X30, 0X30, 0X30, 0X5A, 0X18, 0X0F,
+  0X32, 0X30, 0X36, 0X37, 0X30, 0X37, 0X32, 0X36, 0X30, 0X30, 0X30, 0X30,
+  0X30, 0X30, 0X5A, 0X30, 0X36, 0X31, 0X14, 0X30, 0X12, 0X06, 0X03, 0X55,
+  0X04, 0X03, 0X13, 0X0B, 0X77, 0X73, 0X6E, 0X63, 0X6F, 0X61, 0X70, 0X2E,
+  0X6F, 0X72, 0X67, 0X31, 0X11, 0X30, 0X0F, 0X06, 0X03, 0X55, 0X04, 0X0A,
+  0X13, 0X08, 0X69, 0X6F, 0X74, 0X2D, 0X77, 0X75, 0X78, 0X69, 0X31, 0X0B,
+  0X30, 0X09, 0X06, 0X03, 0X55, 0X04, 0X06, 0X13, 0X02, 0X43, 0X4E, 0X30,
+  0X59, 0X30, 0X13, 0X06, 0X07, 0X2A, 0X86, 0X48, 0XCE, 0X3D, 0X02, 0X01,
+  0X06, 0X08, 0X2A, 0X86, 0X48, 0XCE, 0X3D, 0X03, 0X01, 0X07, 0X03, 0X42,
+  0X00, 0X04, 0X3C, 0X56, 0XBC, 0XFD, 0XE7, 0XA8, 0XBA, 0X34, 0X2A, 0XD2,
+  0X38, 0XD7, 0X14, 0X59, 0XEE, 0X61, 0XC8, 0X39, 0XB2, 0XA7, 0X0F, 0X0D,
+  0XAC, 0X66, 0XBE, 0X37, 0X92, 0X83, 0X18, 0X7D, 0X13, 0X03, 0X38, 0XD1,
+  0X37, 0X5A, 0XC8, 0X15, 0X03, 0X5C, 0X65, 0X98, 0X08, 0X92, 0X6E, 0X15,
+  0XBA, 0X65, 0X73, 0XFD, 0XF3, 0X83, 0XA9, 0X1A, 0X1F, 0X66, 0X5B, 0X1D,
+  0X07, 0XAE, 0X58, 0XA1, 0XE3, 0XC0, 0XA3, 0X4D, 0X30, 0X4B, 0X30, 0X09,
+  0X06, 0X03, 0X55, 0X1D, 0X13, 0X04, 0X02, 0X30, 0X00, 0X30, 0X1D, 0X06,
+  0X03, 0X55, 0X1D, 0X0E, 0X04, 0X16, 0X04, 0X14, 0X64, 0X6B, 0X97, 0X36,
+  0X6D, 0X19, 0X87, 0XB0, 0XB4, 0X08, 0XF1, 0X29, 0X60, 0X40, 0X50, 0X12,
+  0X25, 0XFA, 0XB4, 0X04, 0X30, 0X1F, 0X06, 0X03, 0X55, 0X1D, 0X23, 0X04,
+  0X18, 0X30, 0X16, 0X80, 0X14, 0XE7, 0XFF, 0X7E, 0X48, 0X31, 0X2A, 0X8B,
+  0XD6, 0X58, 0XD5, 0X81, 0X2F, 0XCD, 0X18, 0X73, 0X92, 0X4B, 0XA9, 0X3A,
+  0XF3, 0X30, 0X0C, 0X06, 0X08, 0X2A, 0X86, 0X48, 0XCE, 0X3D, 0X04, 0X03,
+  0X02, 0X05, 0X00, 0X03, 0X47, 0X00, 0X30, 0X44, 0X02, 0X20, 0X13, 0X7F,
+  0X0C, 0X32, 0X55, 0X3C, 0X69, 0X63, 0X54, 0X5F, 0X49, 0XFE, 0X65, 0XFA,
+  0XE7, 0X0A, 0XFC, 0XD7, 0X5B, 0X36, 0X51, 0X4B, 0X47, 0XCE, 0X05, 0X23,
+  0X60, 0X68, 0X7B, 0XA0, 0XB9, 0X6C, 0X02, 0X20, 0X71, 0X55, 0XA5, 0X58,
+  0XF7, 0X20, 0X9B, 0X3D, 0XA4, 0X59, 0XC8, 0X6F, 0X2B, 0X43, 0X44, 0X5C,
+  0X61, 0XEA, 0X2A, 0X2B, 0XF5, 0X78, 0XFB, 0X26, 0XFA, 0X3B, 0X67, 0X72,
+  0X5D, 0X52, 0X61, 0XA9
+};
+unsigned int server_crt_der_len = 424;
 
 #define READ_TIMEOUT_MS 10000   /* 5 seconds */
 #define DEBUG_LEVEL 0
@@ -138,24 +196,16 @@ int main( void )
      * Instead, you may want to use mbedtls_x509_crt_parse_file() to read the
      * server and CA certificates, as well as mbedtls_pk_parse_keyfile().
      */
-    ret = mbedtls_x509_crt_parse( &srvcert, (const unsigned char *) mbedtls_test_srv_crt,
-                          mbedtls_test_srv_crt_len );
+    ret = mbedtls_x509_crt_parse( &srvcert, (const unsigned char *) server_crt_der,
+                          server_crt_der_len );
     if( ret != 0 )
     {
         printf( " failed\n  !  mbedtls_x509_crt_parse returned %d\n\n", ret );
         goto exit;
     }
 
-    ret = mbedtls_x509_crt_parse( &srvcert, (const unsigned char *) mbedtls_test_cas_pem,
-                          mbedtls_test_cas_pem_len );
-    if( ret != 0 )
-    {
-        printf( " failed\n  !  mbedtls_x509_crt_parse returned %d\n\n", ret );
-        goto exit;
-    }
-
-    ret =  mbedtls_pk_parse_key( &pkey, (const unsigned char *) mbedtls_test_srv_key,
-                         mbedtls_test_srv_key_len, NULL, 0 );
+    ret =  mbedtls_pk_parse_key( &pkey, (const unsigned char *) server_key_ec_bin,
+                         server_key_ec_bin_len, NULL, 0 );
     if( ret != 0 )
     {
         printf( " failed\n  !  mbedtls_pk_parse_key returned %d\n\n", ret );
