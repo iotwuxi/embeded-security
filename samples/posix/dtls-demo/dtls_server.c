@@ -77,7 +77,7 @@ int main( void )
 #endif
 
 /** DER 格式服务器 ecc 密钥对，使用 SECP256R1 算法生成 */
-unsigned char server_key_ec_bin[] = 
+unsigned char server_ec_key[] = 
 {
   0X30, 0X77, 0X02, 0X01, 0X01, 0X04, 0X20, 0X73, 0X68, 0X9D, 0XCA, 0X09,
   0XF3, 0X9E, 0X3F, 0X27, 0XC6, 0XA2, 0XB6, 0X8E, 0XEA, 0XED, 0X60, 0XED,
@@ -91,7 +91,7 @@ unsigned char server_key_ec_bin[] =
   0X83, 0XA9, 0X1A, 0X1F, 0X66, 0X5B, 0X1D, 0X07, 0XAE, 0X58, 0XA1, 0XE3,
   0XC0
 };
-unsigned int server_key_ec_bin_len = 121;
+unsigned int server_ec_key_len = 121;
 
 /** DER 格式服务器证书，CN=wsncoap.org,O=iot-wuxi,C=CN */
 unsigned char server_crt_der[] = {
@@ -204,8 +204,8 @@ int main( void )
         goto exit;
     }
 
-    ret =  mbedtls_pk_parse_key( &pkey, (const unsigned char *) server_key_ec_bin,
-                         server_key_ec_bin_len, NULL, 0 );
+    ret =  mbedtls_pk_parse_key( &pkey, (const unsigned char *) server_ec_key,
+                         server_ec_key_len, NULL, 0 );
     if( ret != 0 )
     {
         printf( " failed\n  !  mbedtls_pk_parse_key returned %d\n\n", ret );

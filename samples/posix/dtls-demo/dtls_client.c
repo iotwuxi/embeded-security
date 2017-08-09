@@ -59,7 +59,7 @@ int main( void )
 #include "mbedtls/certs.h"
 #include "mbedtls/timing.h"
 
-#if 0
+#if 1
 #define SERVER_PORT                     "4433"
 #define SERVER_NAME                     "wsncoap.org"
 #define SERVER_ADDR                     "127.0.0.1" /* forces IPv4 */
