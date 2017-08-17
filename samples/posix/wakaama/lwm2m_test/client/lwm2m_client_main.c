@@ -948,9 +948,7 @@ int main( int argc, char *argv[] )
 	/* This call an internal function that create an socket. */
 	printf("Trying to bind LWM2M Client to port %s\n", serverPort);
 
-	// FIX ME
-	// data.sock = create_socket(g_proto, serverPort, data.addressFamily);
-	data.sock = create_socket(g_proto, "6683", data.addressFamily);
+	data.sock = create_socket(g_proto, serverPort, data.addressFamily);
 
 	if (data.sock < 0) {
 		fprintf(stderr, "Failed to open socket: %d %s\r\n", errno, strerror(errno));
