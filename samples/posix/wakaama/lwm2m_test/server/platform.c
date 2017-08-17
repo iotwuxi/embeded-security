@@ -21,14 +21,24 @@
 #include <sys/time.h>
 
 #ifndef LWM2M_MEMORY_TRACE
-lwm2m_trace_free
+
 void *lwm2m_malloc(size_t s)
 {
-	return malloc(s);
+	void *ptr = malloc(s);
+	if(ptr != NULL)
+	{
+		printf("===>  [%d] 0x%x = %s(%ld)\n", __LINE__, ptr, __func__, s);
+		return ptr;		
+	}
+	else
+	{
+		printf("===>  %s failed. \n", __func__);
+	}
 }
 
 void lwm2m_free(void *p)
 {
+	printf("===>  [%d] %s(0x%x)\n", __LINE__, __func__, p);
 	return free(p);
 }
 
