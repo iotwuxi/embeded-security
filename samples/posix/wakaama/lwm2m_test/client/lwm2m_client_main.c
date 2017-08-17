@@ -800,7 +800,7 @@ int lwm2m_init_object(void)
 
 void print_usage(void)
 {
-	fprintf(stdout, "Usage: lwm2mclient [OPTION]\r\n");
+	fprintf(stdout, "Usage: ./lwm2m_client [OPTION]\r\n");
 	fprintf(stdout, "Launch a LWM2M client.\r\n");
 	fprintf(stdout, "Options:\r\n");
 	fprintf(stdout, "  -h HOST\tSet the hostname of the LWM2M Server to connect to. Default: localhost\r\n");
@@ -810,10 +810,10 @@ void print_usage(void)
 	fprintf(stdout, "  -s HEXSTRING\t Set Pre-Shared-Key. The input length should be even, such as 11, 1111.\r\n");
 #endif
 	fprintf(stdout, "Examples:\r\n");
-	fprintf(stdout, "  lwm2mclient -h coap://127.0.0.1\r\n");
-	fprintf(stdout, "  lwm2mclient -h coaps://127.0.0.1 -i PSK_identity -s 11111111\r\n");
-	fprintf(stdout, "  lwm2mclient -h coap+tcp://127.0.0.1\r\n");
-	fprintf(stdout, "  lwm2mclient -h coaps+tcp://127.0.0.1 -i PSK_identity -s 11111111\r\n");
+	fprintf(stdout, "  ./lwm2m_client -h coap://127.0.0.1\r\n");
+	fprintf(stdout, "  ./lwm2m_client -h coaps://wsncoap.org -i PSK_identity -s 11111111\r\n");
+	fprintf(stdout, "  ./lwm2m_client -h coap+tcp://127.0.0.1\r\n");
+	fprintf(stdout, "  ./lwm2m_client -h coaps+tcp://127.0.0.1 -i PSK_identity -s 11111111\r\n");
 	fprintf(stdout, "\r\n");
 }
 
@@ -948,7 +948,8 @@ int main( int argc, char *argv[] )
 	/* This call an internal function that create an socket. */
 	printf("Trying to bind LWM2M Client to port %s\n", serverPort);
 
-	data.sock = create_socket(g_proto, serverPort, data.addressFamily);
+	// data.sock = create_socket(g_proto, serverPort, data.addressFamily);
+	data.sock = create_socket(g_proto, "7683", data.addressFamily);
 
 	if (data.sock < 0) {
 		fprintf(stderr, "Failed to open socket: %d %s\r\n", errno, strerror(errno));

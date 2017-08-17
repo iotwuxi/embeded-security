@@ -21,7 +21,7 @@
 #include <sys/time.h>
 
 #ifndef LWM2M_MEMORY_TRACE
-
+lwm2m_trace_free
 void *lwm2m_malloc(size_t s)
 {
 	return malloc(s);

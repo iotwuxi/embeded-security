@@ -84,7 +84,7 @@
 #include "easy_tls.h"
 #endif
 
-#define MAX_PACKET_SIZE 1024
+#define MAX_PACKET_SIZE 512
 
 /* Definitions*/
 #ifndef FD_SETSIZE

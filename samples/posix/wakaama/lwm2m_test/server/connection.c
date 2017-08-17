@@ -163,7 +163,6 @@ connection_t *connection_new_incoming(connection_t *connList,
 									  size_t addrLen)
 {
 	connection_t *connP;
-
 	connP = (connection_t *)malloc(sizeof(connection_t));
 	if (connP != NULL) {
 		connP->sock = sock;

@@ -960,7 +960,7 @@ int lwm2m_unhexify(unsigned char *output, const char *input, size_t *olen)
 
 void print_usage(void)
 {
-	fprintf(stderr, "Usage: lwm2mserver [OPTION]\r\n");
+	fprintf(stderr, "Usage: lwm2m_server [OPTION]\r\n");
 	fprintf(stderr, "Launch a LWM2M server on localhost.\r\n\n");
 	fprintf(stdout, "Options:\r\n");
 	fprintf(stdout, "  -p protocol \tSet protocol type, (0: UDP, 1: UDP+DTLS, 2: TCP, 3: TCP+TLS)\r\n");
@@ -969,10 +969,10 @@ void print_usage(void)
 	fprintf(stdout, "  -s HEXSTRING\t Set Pre-Shared-Key. The input length should be even, such as 11, 1111.\r\n");
 #endif
 	fprintf(stdout, "Examples:\r\n");
-	fprintf(stdout, "  lwm2mserver -p 0\r\n");
-	fprintf(stdout, "  lwm2mserver -p 1 -i PSK_identity -s 11111111\r\n");
-	fprintf(stdout, "  lwm2mserver -p 2\r\n");
-	fprintf(stdout, "  lwm2mserver -p 3 -i PSK_identity -s 11111111\r\n");
+	fprintf(stdout, "  ./lwm2m_server -p 0\r\n");
+	fprintf(stdout, "  ./lwm2m_server -p 1 -i PSK_identity -s 11111111\r\n");
+	fprintf(stdout, "  ./lwm2m_server -p 2\r\n");
+	fprintf(stdout, "  ./lwm2m_server -p 3 -i PSK_identity -s 11111111\r\n");
 	fprintf(stdout, "\r\n");
 }
 
@@ -1236,6 +1236,7 @@ recon:
 		}
 
 		printf("> ");
+		fflush( stdout );
 		result = select(FD_SETSIZE, &readfds, 0, 0, &tv);
 
 		if (result < 0) {

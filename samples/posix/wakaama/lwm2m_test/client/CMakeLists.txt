@@ -15,7 +15,7 @@ set(targets
 include_directories(./ ../../../../../external/wakaama ../../../../../external/wakaama/er-coap-13)
 include_directories(../../../../../external/mbedtls/include)
 
-add_definitions(-DCMAKE_BUILD_TYPE=Debug -DLWM2M_LITTLE_ENDIAN -DLWM2M_CLIENT_MODE -DLWM2M_BOOTSTRAP -DWITH_MBEDTLS)
+add_definitions(-DCMAKE_BUILD_TYPE=Debug -DLWM2M_LITTLE_ENDIAN -DLWM2M_CLIENT_MODE -DLWM2M_BOOTSTRAP -DWITH_MBEDTLS -DLWM2M_MEMORY_TRACE)
 
 # source file
 aux_source_directory(../../../../../external/wakaama WAKAAMA_LIB_SRC)
