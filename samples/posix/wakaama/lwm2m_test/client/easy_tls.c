@@ -18,8 +18,9 @@
 
 // #include <tinyara/config.h>
 #include <stdio.h>
-
-#include <easy_tls.h>
+#include <string.h>
+#include <stdlib.h>
+#include "easy_tls.h"
 
 /****************************************************************************
  * Pre-processor Definitions
@@ -341,7 +342,7 @@ tls_session *TLSSession(int fd, tls_ctx *ctx, tls_opt *opt)
 reset:
 	if (opt->server == MBEDTLS_SSL_IS_SERVER) {
 		mbedtls_ssl_session_reset(session->ssl);
-		if ((ret = mbedtls_net_accept(&listen_ctx, &session->net, ip, sizeof(ip), &ip_len)) != 0) {
+		if ((ret = mbedtls_net_accept(&listen_ctx, &session->net, ip, sizeof(ip), (size_t *)&ip_len)) != 0) {
 			EASY_TLS_DEBUG("mbedtls_net_accept failed %d\n", ret);
 			goto errout;
 		}

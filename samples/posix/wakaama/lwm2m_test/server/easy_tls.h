@@ -19,7 +19,7 @@
 #ifndef __EASY_TLS_H
 #define __EASY_TLS_H
 
-// #include <debug.h>
+#include <mbedtls/debug.h>
 
 #include <mbedtls/config.h>
 #include <mbedtls/ssl.h>
@@ -34,7 +34,8 @@
 #include <mbedtls/ssl_cache.h>
 #endif
 
-#define EASY_TLS_DEBUG	ndbg
+// #define EASY_TLS_DEBUG	ndbg
+ #define EASY_TLS_DEBUG	
 
 enum easy_tls_error {
 	TLS_SUCCESS,

@@ -28,7 +28,7 @@
 
 #include "liblwm2m.h"
 #ifdef WITH_MBEDTLS
-#include <easy_tls.h>
+#include "easy_tls.h"
 #endif
 
 #define LWM2M_STANDARD_PORT_STR "6683"

@@ -8,14 +8,14 @@ set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 
 # targets
 set(targets 
-    lwm2m_client
+    lwm2m_server
 )
 
 # include file
 include_directories(./ ../../../../../external/wakaama ../../../../../external/wakaama/er-coap-13)
 include_directories(../../../../../external/mbedtls/include)
 
-add_definitions(-DCMAKE_BUILD_TYPE=Debug -DLWM2M_LITTLE_ENDIAN -DLWM2M_SERVER_MODE -DLWM2M_BOOTSTRAP)
+add_definitions(-DCMAKE_BUILD_TYPE=Debug -DLWM2M_LITTLE_ENDIAN -DLWM2M_SERVER_MODE -DLWM2M_BOOTSTRAP -DWITH_MBEDTLS)
 
 # source file
 aux_source_directory(../../../../../external/wakaama WAKAAMA_LIB_SRC)
@@ -45,6 +45,7 @@ SET(SOURCES
     object_server.c
     platform.c
     test_object.c
+    easy_tls.c
 )
 
 # executable file
