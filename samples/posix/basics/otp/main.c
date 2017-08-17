@@ -1,5 +1,7 @@
 #include <string.h>
 #include <stdio.h>
+#include <stdint.h>
+#include "otp.h"
 #include "mbedtls/md.h"
 
 /*
@@ -39,14 +41,16 @@
 int main(void)
 {
     // 密钥
-    uint8_t key_str[] = "12345678901234567890";
+    char key_str[] = "12345678901234567890";
     uint8_t key_len = strlen((char *)key_str);
-
-    // 计数器
-    int64_t counter = 1;
     int32_t token = 0;
 
-    token = hotp_gen(key_str, key_len, counter);
+    // 计数器
+    int64_t counter = 0;
 
-    printf("TOTP: %ld\n", token);
+    for (int i = 0; i < 10; i++) 
+    {
+        token = hotp_gen((uint8_t*)key_str, key_len, counter + i);
+        printf("TOTP: %ld\n", token);
+    }
 }
