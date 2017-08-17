@@ -142,6 +142,7 @@ static int prv_checkFinished(lwm2m_transaction_t * transacP,
 }
 
 lwm2m_transaction_t * transaction_new(void * sessionH,
+                                      coap_protocol_t proto,
                                       coap_method_t method,
                                       char * altPath,
                                       lwm2m_uri_t * uriP,
@@ -167,7 +168,7 @@ lwm2m_transaction_t * transaction_new(void * sessionH,
     transacP->message = lwm2m_malloc(sizeof(coap_packet_t));
     if (NULL == transacP->message) goto error;
 
-    coap_init_message(transacP->message, COAP_TYPE_CON, method, mID);
+    coap_init_message(transacP->message, proto, COAP_TYPE_CON, method, mID);
 
     transacP->peerH = sessionH;
 
@@ -180,19 +181,16 @@ lwm2m_transaction_t * transaction_new(void * sessionH,
     }
     if (NULL != uriP)
     {
-        char stringID[LWM2M_STRING_ID_MAX_LEN];
+        result = utils_intCopy(transacP->objStringID, LWM2M_STRING_ID_MAX_LEN, uriP->objectId);
+        if (result < 0) goto error;
 
-        result = utils_intToText(uriP->objectId, (uint8_t*)stringID, LWM2M_STRING_ID_MAX_LEN);
-        if (result == 0) goto error;
-        stringID[result] = 0;
-        coap_set_header_uri_path_segment(transacP->message, stringID);
+        coap_set_header_uri_path_segment(transacP->message, transacP->objStringID);
 
         if (LWM2M_URI_IS_SET_INSTANCE(uriP))
         {
-            result = utils_intToText(uriP->instanceId, (uint8_t*)stringID, LWM2M_STRING_ID_MAX_LEN);
-            if (result == 0) goto error;
-            stringID[result] = 0;
-            coap_set_header_uri_path_segment(transacP->message, stringID);
+            result = utils_intCopy(transacP->instanceStringID, LWM2M_STRING_ID_MAX_LEN, uriP->instanceId);
+            if (result < 0) goto error;
+            coap_set_header_uri_path_segment(transacP->message, transacP->instanceStringID);
         }
         else
         {
@@ -203,10 +201,9 @@ lwm2m_transaction_t * transaction_new(void * sessionH,
         }
         if (LWM2M_URI_IS_SET_RESOURCE(uriP))
         {
-            result = utils_intToText(uriP->resourceId, (uint8_t*)stringID, LWM2M_STRING_ID_MAX_LEN);
-            if (result == 0) goto error;
-            stringID[result] = 0;
-            coap_set_header_uri_path_segment(transacP->message, stringID);
+            result = utils_intCopy(transacP->resourceStringID, LWM2M_STRING_ID_MAX_LEN, uriP->resourceId);
+            if (result < 0) goto error;
+            coap_set_header_uri_path_segment(transacP->message, transacP->resourceStringID);
         }
     }
     if (0 < token_len)
@@ -221,12 +218,28 @@ lwm2m_transaction_t * transaction_new(void * sessionH,
             time_t tv_sec = lwm2m_gettime();
 
             // initialize first 6 bytes, leave the last 2 random
-            temp_token[0] = mID;
-            temp_token[1] = mID >> 8;
-            temp_token[2] = tv_sec;
-            temp_token[3] = tv_sec >> 8;
-            temp_token[4] = tv_sec >> 16;
-            temp_token[5] = tv_sec >> 24;
+            switch(proto)
+            {
+            case COAP_TCP:
+            case COAP_TCP_TLS:
+                temp_token[0] = (uint8_t)(tv_sec & 0xFF);
+                temp_token[1] = (uint8_t)((tv_sec & 0xFF00) >> 8);
+                temp_token[2] = (uint8_t)((tv_sec & 0xFF0000) >> 16);
+                temp_token[3] = (uint8_t)((tv_sec & 0xFF000000) >> 24);
+                break;
+            case COAP_UDP:
+            case COAP_UDP_DTLS:
+                temp_token[0] = mID;
+                temp_token[1] = mID >> 8;
+                temp_token[2] = tv_sec;
+                temp_token[3] = tv_sec >> 8;
+                temp_token[4] = tv_sec >> 16;
+                temp_token[5] = tv_sec >> 24;
+                break;
+            default:
+                break;
+            }
+
             // use just the provided amount of bytes
             coap_set_header_token(transacP->message, temp_token, token_len);
         }
@@ -244,12 +257,7 @@ error:
 void transaction_free(lwm2m_transaction_t * transacP)
 {
     LOG("Entering");
-    if (transacP->message)
-    {
-       coap_free_header(transacP->message);
-       lwm2m_free(transacP->message);
-    }
-
+    if (transacP->message) lwm2m_free(transacP->message);
     if (transacP->buffer) lwm2m_free(transacP->buffer);
     lwm2m_free(transacP);
 }
@@ -271,6 +279,8 @@ bool transaction_handleResponse(lwm2m_context_t * contextP,
     bool reset = false;
     lwm2m_transaction_t * transacP;
 
+    coap_protocol_t proto = contextP->protocol;
+
     LOG("Entering");
     transacP = contextP->transactionList;
 
@@ -289,6 +299,14 @@ bool transaction_handleResponse(lwm2m_context_t * contextP,
             	        reset = COAP_TYPE_RST == message->type;
             	    }
                 }
+                // Because there is no ACK type message (with TCP/TLS), we should set
+                // transacP->ack_received, if we received CON type message from our peer.
+                else if (message->type == COAP_TYPE_CON &&
+                         (proto == COAP_TCP || proto == COAP_TCP_TLS))
+                {
+                    found = true;
+                    transacP->ack_received = true;
+                }
             }
 
             if (reset || prv_checkFinished(transacP, message))
@@ -298,9 +316,10 @@ bool transaction_handleResponse(lwm2m_context_t * contextP,
                 // So we resend transaction that were denied for authentication reason.
                 if (!reset)
                 {
-                    if (COAP_TYPE_CON == message->type && NULL != response)
+                    if (COAP_TYPE_CON == message->type && NULL != response &&
+                       (proto != COAP_TCP_TLS) && (proto != COAP_TCP))
                     {
-                        coap_init_message(response, COAP_TYPE_ACK, 0, message->mid);
+                        coap_init_message(response, proto, COAP_TYPE_ACK, 0, message->mid);
                         message_send(contextP, response, fromSessionH);
                     }
                 
@@ -348,24 +367,44 @@ int transaction_send(lwm2m_context_t * contextP,
 {
     bool maxRetriesReached = false;
 
+	coap_protocol_t proto = contextP->protocol;
+
     LOG("Entering");
     if (transacP->buffer == NULL)
     {
-        transacP->buffer_len = coap_serialize_get_size(transacP->message);
-        if (transacP->buffer_len == 0)
-        {
-           transaction_remove(contextP, transacP);
-           return COAP_500_INTERNAL_SERVER_ERROR;
-        }
+		switch (proto) {
+		case COAP_UDP:
+		case COAP_UDP_DTLS:
+			transacP->buffer_len = coap_serialize_get_size(transacP->message);
+			break;
+		case COAP_TCP:
+		case COAP_TCP_TLS:
+			transacP->buffer_len = coap_serialize_get_size_tcp(transacP->message);
+			break;
+		default:
+			break;
+		}
+		LOG_ARG("get transaction message size %d, (protocol %d)", transacP->buffer_len, proto);
+
+        if (transacP->buffer_len == 0) return COAP_500_INTERNAL_SERVER_ERROR;
 
         transacP->buffer = (uint8_t*)lwm2m_malloc(transacP->buffer_len);
-        if (transacP->buffer == NULL)
-        {
-           transaction_remove(contextP, transacP);
-           return COAP_500_INTERNAL_SERVER_ERROR;
-        }
+        if (transacP->buffer == NULL) return COAP_500_INTERNAL_SERVER_ERROR;
 
-        transacP->buffer_len = coap_serialize_message(transacP->message, transacP->buffer);
+		switch (proto) {
+		case COAP_UDP:\
+		case COAP_UDP_DTLS:
+			transacP->buffer_len = coap_serialize_message(transacP->message, transacP->buffer);
+			break;
+		case COAP_TCP:
+		case COAP_TCP_TLS:
+			transacP->buffer_len = coap_serialize_message_tcp(transacP->message, transacP->buffer);
+			break;
+		default:
+			break;
+		}
+		LOG_ARG("transaction buffer len %d, (protocol %d)", transacP->buffer_len, proto);
+
         if (transacP->buffer_len == 0)
         {
             lwm2m_free(transacP->buffer);
@@ -400,7 +439,7 @@ int transaction_send(lwm2m_context_t * contextP,
 
         if (COAP_MAX_RETRANSMIT + 1 >= transacP->retrans_counter)
         {
-            (void)lwm2m_buffer_send(transacP->peerH, transacP->buffer, transacP->buffer_len, contextP->userData);
+            (void)lwm2m_buffer_send(transacP->peerH, transacP->buffer, transacP->buffer_len, contextP->userData, contextP->protocol);
 
             transacP->retrans_time += timeout;
             transacP->retrans_counter += 1;

@@ -18,8 +18,6 @@
  *    Julien Vermillard - Please refer to git log
  *    Bosch Software Innovations GmbH - Please refer to git log
  *    Pascal Rieux - Please refer to git log
- *    Ville Skyttä - Please refer to git log
- *
  *******************************************************************************/
 
 /*
@@ -63,6 +61,8 @@ extern "C" {
 #include <stddef.h>
 #include <stdbool.h>
 #include <time.h>
+
+#include "er-coap-13/er-coap-13.h"
 
 #ifdef LWM2M_SERVER_MODE
 #ifndef LWM2M_SUPPORT_JSON
@@ -126,7 +126,8 @@ void lwm2m_close_connection(void * sessionH, void * userData);
 // sessionH: session handle identifying the peer (opaque to the core)
 // buffer, length: data to send
 // userData: parameter to lwm2m_init()
-uint8_t lwm2m_buffer_send(void * sessionH, uint8_t * buffer, size_t length, void * userData);
+// proto : parameter from lwm2m_init2(), to identifying type of protocol in er-coap
+uint8_t lwm2m_buffer_send(void * sessionH, uint8_t * buffer, size_t length, void * userData, coap_protocol_t proto);
 // Compare two session handles
 // Returns true if the two sessions identify the same peer. false otherwise.
 // userData: parameter to lwm2m_init()
@@ -170,7 +171,7 @@ bool lwm2m_session_is_equal(void * session1, void * session2, void * userData);
 #define LWM2M_CONN_STATS_OBJECT_ID          7
 
 /*
- * Resource IDs for the LWM2M Security Object
+ * Ressource IDs for the LWM2M Security Object
  */
 #define LWM2M_SECURITY_URI_ID                 0
 #define LWM2M_SECURITY_BOOTSTRAP_ID           1
@@ -187,7 +188,7 @@ bool lwm2m_session_is_equal(void * session1, void * session2, void * userData);
 #define LWM2M_SECURITY_BOOTSTRAP_TIMEOUT_ID   12
 
 /*
- * Resource IDs for the LWM2M Server Object
+ * Ressource IDs for the LWM2M Server Object
  */
 #define LWM2M_SERVER_SHORT_ID_ID    0
 #define LWM2M_SERVER_LIFETIME_ID    1
@@ -440,7 +441,9 @@ typedef enum
     BINDING_S,   // SMS
     BINDING_SQ,  // SMS queue mode
     BINDING_US,  // UDP plus SMS
-    BINDING_UQS  // UDP queue mode plus SMS
+    BINDING_UQS, // UDP queue mode plus SMS
+    BINDING_C,   // TCP
+    BINDING_T    // TCP with TLS
 } lwm2m_binding_t;
 
 /*
@@ -576,6 +579,9 @@ struct _lwm2m_transaction_
     time_t                response_timeout; // timeout to wait for response, if token is used. When 0, use calculated acknowledge timeout.
     uint8_t  retrans_counter;
     time_t   retrans_time;
+    char objStringID[LWM2M_STRING_ID_MAX_LEN];
+    char instanceStringID[LWM2M_STRING_ID_MAX_LEN];
+    char resourceStringID[LWM2M_STRING_ID_MAX_LEN];
     void * message;
     uint16_t buffer_len;
     uint8_t * buffer;
@@ -594,7 +600,6 @@ typedef struct _lwm2m_watcher_
     bool update;
     lwm2m_server_t * server;
     lwm2m_attributes_t * parameters;
-    lwm2m_media_type_t format;
     uint8_t token[8];
     size_t tokenLen;
     time_t lastTime;
@@ -667,11 +672,14 @@ typedef struct
     uint16_t                nextMID;
     lwm2m_transaction_t *   transactionList;
     void *                  userData;
+    coap_protocol_t         protocol; /**/
 } lwm2m_context_t;
 
 
 // initialize a liblwm2m context.
 lwm2m_context_t * lwm2m_init(void * userData);
+// initialize a liblwm2m context with protocol
+lwm2m_context_t * lwm2m_init2(void * userData, coap_protocol_t proto);
 // close a liblwm2m context.
 void lwm2m_close(lwm2m_context_t * contextP);
 

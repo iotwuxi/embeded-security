@@ -36,7 +36,6 @@ static void prv_handleResponse(lwm2m_server_t * bootstrapServer,
     {
         LOG("Received ACK/2.04, Bootstrap pending, waiting for DEL/PUT from BS server...");
         bootstrapServer->status = STATE_BS_PENDING;
-        bootstrapServer->registration = lwm2m_gettime() + COAP_EXCHANGE_LIFETIME;
     }
     else
     {
@@ -100,7 +99,7 @@ static void prv_requestBootstrap(lwm2m_context_t * context,
 
         LOG("Bootstrap server connection opened");
 
-        transaction = transaction_new(bootstrapServer->sessionH, COAP_POST, NULL, NULL, context->nextMID++, 4, NULL);
+        transaction = transaction_new(bootstrapServer->sessionH, context->protocol, COAP_POST, NULL, NULL, context->nextMID++, 4, NULL);
         if (transaction == NULL)
         {
             bootstrapServer->status = STATE_BS_FAILING;
@@ -163,15 +162,7 @@ void bootstrap_step(lwm2m_context_t * contextP,
             break;
 
         case STATE_BS_PENDING:
-            if (targetP->registration <= currentTime)
-            {
-               targetP->status = STATE_BS_FAILING;
-               *timeoutP = 0;
-            }
-            else if (*timeoutP > targetP->registration - currentTime)
-            {
-                *timeoutP = targetP->registration - currentTime;
-            }
+            // waiting
             break;
 
         case STATE_BS_FINISHING:
@@ -202,8 +193,8 @@ void bootstrap_step(lwm2m_context_t * contextP,
     }
 }
 
-uint8_t bootstrap_handleFinish(lwm2m_context_t * context,
-                               void * fromSessionH)
+coap_status_t bootstrap_handleFinish(lwm2m_context_t * context,
+                                     void * fromSessionH)
 {
     lwm2m_server_t * bootstrapServer;
 
@@ -212,16 +203,9 @@ uint8_t bootstrap_handleFinish(lwm2m_context_t * context,
     if (bootstrapServer != NULL
      && bootstrapServer->status == STATE_BS_PENDING)
     {
-        if (object_getServers(context, true) == 0)
-        {
-            LOG("Bootstrap server status changed to STATE_BS_FINISHING");
-            bootstrapServer->status = STATE_BS_FINISHING;
-            return COAP_204_CHANGED;
-        }
-        else
-        {
-           return COAP_406_NOT_ACCEPTABLE;
-        }
+        LOG("Bootstrap server status changed to STATE_BS_FINISHING");
+        bootstrapServer->status = STATE_BS_FINISHING;
+        return COAP_204_CHANGED;
     }
 
     return COAP_IGNORE;
@@ -279,7 +263,6 @@ lwm2m_status_t bootstrap_getStatus(lwm2m_context_t * contextP)
             case STATE_BS_INITIATED:
             case STATE_BS_PENDING:
             case STATE_BS_FINISHING:
-            case STATE_BS_FAILING:
                 bs_status = STATE_BS_PENDING;
                 break;
 
@@ -294,7 +277,7 @@ lwm2m_status_t bootstrap_getStatus(lwm2m_context_t * contextP)
     return bs_status;
 }
 
-static uint8_t prv_checkServerStatus(lwm2m_server_t * serverP)
+static coap_status_t prv_checkServerStatus(lwm2m_server_t * serverP)
 {
     LOG_ARG("Initial status: %s", STR_STATUS(serverP->status));
 
@@ -314,7 +297,7 @@ static uint8_t prv_checkServerStatus(lwm2m_server_t * serverP)
     case STATE_DEREGISTERED:
         // server initiated bootstrap
     case STATE_BS_PENDING:
-        serverP->registration = lwm2m_gettime() + COAP_EXCHANGE_LIFETIME;
+        // do nothing
         break;
 
     case STATE_BS_FINISHED:
@@ -367,13 +350,13 @@ static void prv_tagAllServer(lwm2m_context_t * contextP,
     }
 }
 
-uint8_t bootstrap_handleCommand(lwm2m_context_t * contextP,
-                                lwm2m_uri_t * uriP,
-                                lwm2m_server_t * serverP,
-                                coap_packet_t * message,
-                                coap_packet_t * response)
+coap_status_t bootstrap_handleCommand(lwm2m_context_t * contextP,
+                                      lwm2m_uri_t * uriP,
+                                      lwm2m_server_t * serverP,
+                                      coap_packet_t * message,
+                                      coap_packet_t * response)
 {
-    uint8_t result;
+    coap_status_t result;
     lwm2m_media_type_t format;
 
     LOG_ARG("Code: %02X", message->code);
@@ -447,7 +430,7 @@ uint8_t bootstrap_handleCommand(lwm2m_context_t * contextP,
                                     prv_tagServer(contextP, dataP[i].id);
                                 }
                             }
-
+                            
                             if(result != COAP_204_CHANGED) // Stop object create or write when result is error
                             {
                                 break;
@@ -510,11 +493,11 @@ uint8_t bootstrap_handleCommand(lwm2m_context_t * contextP,
     return result;
 }
 
-uint8_t bootstrap_handleDeleteAll(lwm2m_context_t * contextP,
-                                  void * fromSessionH)
+coap_status_t bootstrap_handleDeleteAll(lwm2m_context_t * contextP,
+                                        void * fromSessionH)
 {
     lwm2m_server_t * serverP;
-    uint8_t result;
+    coap_status_t result;
     lwm2m_object_t * objectP;
 
     LOG("Entering");
@@ -663,7 +646,7 @@ int lwm2m_bootstrap_delete(lwm2m_context_t * contextP,
     bs_data_t * dataP;
 
     LOG_URI(uriP);
-    transaction = transaction_new(sessionH, COAP_DELETE, NULL, uriP, contextP->nextMID++, 4, NULL);
+    transaction = transaction_new(sessionH, contextP->protocol, COAP_DELETE, NULL, uriP, contextP->nextMID++, 4, NULL);
     if (transaction == NULL) return COAP_500_INTERNAL_SERVER_ERROR;
 
     dataP = (bs_data_t *)lwm2m_malloc(sizeof(bs_data_t));
@@ -710,7 +693,7 @@ int lwm2m_bootstrap_write(lwm2m_context_t * contextP,
         return COAP_400_BAD_REQUEST;
     }
 
-    transaction = transaction_new(sessionH, COAP_PUT, NULL, uriP, contextP->nextMID++, 4, NULL);
+    transaction = transaction_new(sessionH, contextP->protocol, COAP_PUT, NULL, uriP, contextP->nextMID++, 4, NULL);
     if (transaction == NULL) return COAP_500_INTERNAL_SERVER_ERROR;
 
     coap_set_header_content_type(transaction->message, format);
@@ -742,7 +725,7 @@ int lwm2m_bootstrap_finish(lwm2m_context_t * contextP,
     bs_data_t * dataP;
 
     LOG("Entering");
-    transaction = transaction_new(sessionH, COAP_POST, NULL, NULL, contextP->nextMID++, 4, NULL);
+    transaction = transaction_new(sessionH, contextP->protocol, COAP_POST, NULL, NULL, contextP->nextMID++, 4, NULL);
     if (transaction == NULL) return COAP_500_INTERNAL_SERVER_ERROR;
 
     coap_set_header_uri_path(transaction->message, "/"URI_BOOTSTRAP_SEGMENT);

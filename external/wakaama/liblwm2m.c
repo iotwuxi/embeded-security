@@ -69,6 +69,24 @@ lwm2m_context_t * lwm2m_init(void * userData)
         contextP->userData = userData;
         srand((int)lwm2m_gettime());
         contextP->nextMID = rand();
+        contextP->protocol = COAP_UDP;
+    }
+
+    return contextP;
+}
+
+lwm2m_context_t * lwm2m_init2(void * userData, coap_protocol_t proto)
+{
+    lwm2m_context_t * contextP;
+
+    LOG("Entering");
+    contextP = (lwm2m_context_t *)lwm2m_malloc(sizeof(lwm2m_context_t));
+    if (NULL != contextP) {
+        memset(contextP, 0, sizeof(lwm2m_context_t));
+        contextP->userData = userData;
+        srand((int)lwm2m_gettime());
+        contextP->nextMID = rand();
+        contextP->protocol = proto;
     }
 
     return contextP;
@@ -87,13 +105,9 @@ void lwm2m_deregister(lwm2m_context_t * context)
     }
 }
 
-static void prv_deleteServer(lwm2m_server_t * serverP, void *userData)
+static void prv_deleteServer(lwm2m_server_t * serverP)
 {
     // TODO parse transaction and observation to remove the ones related to this server
-    if (serverP->sessionH != NULL)
-    {
-         lwm2m_close_connection(serverP->sessionH, userData);
-    }
     if (NULL != serverP->location)
     {
         lwm2m_free(serverP->location);
@@ -109,18 +123,14 @@ static void prv_deleteServerList(lwm2m_context_t * context)
         lwm2m_server_t * server;
         server = context->serverList;
         context->serverList = server->next;
-        prv_deleteServer(server, context->userData);
+        prv_deleteServer(server);
     }
 }
 
-static void prv_deleteBootstrapServer(lwm2m_server_t * serverP, void *userData)
+static void prv_deleteBootstrapServer(lwm2m_server_t * serverP)
 {
     // TODO should we free location as in prv_deleteServer ?
     // TODO should we parse transaction and observation to remove the ones related to this server ?
-    if (serverP->sessionH != NULL)
-    {
-         lwm2m_close_connection(serverP->sessionH, userData);
-    }
     free_block1_buffer(serverP->block1Data);
     lwm2m_free(serverP);
 }
@@ -132,7 +142,7 @@ static void prv_deleteBootstrapServerList(lwm2m_context_t * context)
         lwm2m_server_t * server;
         server = context->bootstrapServerList;
         context->bootstrapServerList = server->next;
-        prv_deleteBootstrapServer(server, context->userData);
+        prv_deleteBootstrapServer(server);
     }
 }
 
@@ -226,7 +236,7 @@ static int prv_refreshServerList(lwm2m_context_t * contextP)
         }
         else
         {
-            prv_deleteServer(targetP, contextP->userData);
+            prv_deleteServer(targetP);
         }
         targetP = nextP;
     }
@@ -243,12 +253,12 @@ static int prv_refreshServerList(lwm2m_context_t * contextP)
         }
         else
         {
-            prv_deleteServer(targetP, contextP->userData);
+            prv_deleteServer(targetP);
         }
         targetP = nextP;
     }
 
-    return object_getServers(contextP, false);
+    return object_getServers(contextP);
 }
 
 int lwm2m_configure(lwm2m_context_t * contextP,
@@ -365,7 +375,9 @@ int lwm2m_step(lwm2m_context_t * contextP,
                time_t * timeoutP)
 {
     time_t tv_sec;
+#ifdef LWM2M_CLIENT_MODE
     int result;
+#endif
 
     LOG_ARG("timeoutP: %" PRId64, *timeoutP);
     tv_sec = lwm2m_gettime();

@@ -462,9 +462,9 @@ static bool prv_convertValue(_record_t * recordP,
         {
             int64_t value;
 
-            if ( 1 != utils_textToInt(recordP->value,
-                                      recordP->valueLen,
-                                      &value))
+            if ( 1 != utils_plainTextToInt64(recordP->value,
+                                             recordP->valueLen,
+                                             &value))
             {
                 return false;
             }
@@ -475,9 +475,9 @@ static bool prv_convertValue(_record_t * recordP,
         {
             double value;
 
-            if ( 1 != utils_textToFloat(recordP->value,
-                                        recordP->valueLen,
-                                        &value))
+            if ( 1 != utils_plainTextToFloat64(recordP->value,
+                                               recordP->valueLen,
+                                               &value))
             {
                 return false;
             }
@@ -896,7 +896,7 @@ int json_parse(lwm2m_uri_t * uriP,
         lwm2m_uri_t baseURI;
         lwm2m_uri_t * baseUriP;
         lwm2m_data_t * resultP;
-        int size;
+        int size = 0;
 
         memset(&baseURI, 0, sizeof(lwm2m_uri_t));
         if (bnFound == false)
