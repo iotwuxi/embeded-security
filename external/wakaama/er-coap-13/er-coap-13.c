@@ -480,7 +480,7 @@ size_t coap_serialize_get_size_tcp(void *packet)
 		length += 2;
 	} else if (len < ((1 << 8) + 13)) {
 		length += 3;
-	} else if (len < ((1 << 16) + 269)) {
+	} else if (len < ((1 << 16) + 269)) { // 需要确认 - xianrenqiu
 		length += 4;
 	} else {
 		length += 6;

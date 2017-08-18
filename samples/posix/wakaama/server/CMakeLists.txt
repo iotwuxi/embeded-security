@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.6)
-project("lwm2m_test")
+project("lwm2m_server")
 
 # gdb debug   $ gdbtui dtls_server
 set(CMAKE_BUILD_TYPE "Debug")
@@ -8,21 +8,21 @@ set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 
 # targets
 set(targets 
-    lwm2m_client
+    lwm2m_server
 )
 
 # include file
-include_directories(./ ../../../../../external/wakaama ../../../../../external/wakaama/er-coap-13)
-include_directories(../../../../../external/mbedtls/include)
-
-add_definitions(-DCMAKE_BUILD_TYPE=Debug -DLWM2M_LITTLE_ENDIAN -DLWM2M_CLIENT_MODE -DLWM2M_BOOTSTRAP -DWITH_MBEDTLS)
+include_directories(./ ../../../../external/wakaama ../../../../external/wakaama/er-coap-13)
+include_directories(../../../../external/mbedtls/include)
+add_definitions(-DCMAKE_BUILD_TYPE=Debug -DLWM2M_LITTLE_ENDIAN -DLWM2M_SERVER_MODE -DLWM2M_BOOTSTRAP -DWITH_MBEDTLS)
+add_definitions(-DMBEDTLS_CONFIG_FILE=<mbedtls_config.h>)
 
 # source file
-aux_source_directory(../../../../../external/wakaama WAKAAMA_LIB_SRC)
-aux_source_directory(../../../../../external/wakaama/er-coap-13 WAKAAMA_LIB_SRC)
+aux_source_directory(../../../../external/wakaama WAKAAMA_LIB_SRC)
+aux_source_directory(../../../../external/wakaama/er-coap-13 WAKAAMA_LIB_SRC)
 add_library(wakaama ${WAKAAMA_LIB_SRC})
 
-aux_source_directory(../../../../../external/mbedtls/library MBEDTLS_LIB_SRC)
+aux_source_directory(../../../../external/mbedtls/library MBEDTLS_LIB_SRC)
 add_library(mbedtls ${MBEDTLS_LIB_SRC})
 
 # lib
@@ -34,7 +34,7 @@ set(libs
 SET(SOURCES
     commandline.c
     connection.c
-    lwm2m_client_main.c
+    lwm2m_server_main.c
     object_access_control.c
     object_connectivity_moni.c
     object_connectivity_stat.c
@@ -49,5 +49,5 @@ SET(SOURCES
 )
 
 # executable file
-add_executable(lwm2m_client ${SOURCES} lwm2m_client_main.c)
-target_link_libraries(lwm2m_client ${libs})
+add_executable(lwm2m_server ${SOURCES} lwm2m_server_main.c)
+target_link_libraries(lwm2m_server ${libs})
