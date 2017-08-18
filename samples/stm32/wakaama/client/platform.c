@@ -39,7 +39,7 @@ void *lwm2m_malloc(size_t s)
 void lwm2m_free(void *p)
 {
 	// printf("===>  [%d] %s(0x%x)\n", __LINE__, __func__, p);
-	return free(p);
+	free(p);
 }
 
 char *lwm2m_strdup(const char *str)

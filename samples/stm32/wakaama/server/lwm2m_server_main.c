@@ -185,7 +185,7 @@ static void prv_dump_client(lwm2m_client_t *targetP)
 	if (targetP->altPath) {
 		fprintf(stdout, "\talternative path: \"%s\"\r\n", targetP->altPath);
 	}
-	fprintf(stdout, "\tlifetime: %d sec\r\n", targetP->lifetime);
+	fprintf(stdout, "\tlifetime: %ld sec\r\n", targetP->lifetime);
 	fprintf(stdout, "\tobjects: ");
 	for (objectP = targetP->objectList; objectP != NULL ; objectP = objectP->next) {
 		if (objectP->instanceList == NULL) {
@@ -976,13 +976,13 @@ void print_usage(void)
 	fprintf(stdout, "\r\n");
 }
 
-int main( int argc, char *argv[] )
+void lwm2m_server_thread(void* args)
 {
-	// int argc;
-	// char **argv;
+	int argc;
+	char **argv;
 
-	// argc = ((struct pthread_arg *)args)->argc;
-	// argv = ((struct pthread_arg *)args)->argv;
+	argc = ((struct pthread_arg *)args)->argc;
+	argv = ((struct pthread_arg *)args)->argv;
 	g_quit = 0;
 	int sock = -1;
 	fd_set readfds;
@@ -1104,20 +1104,20 @@ int main( int argc, char *argv[] )
 			|| argv[opt][0] != '-'
 			|| argv[opt][2] != 0) {
 			print_usage();
-			return 0;
+			return;
 		}
 		switch (argv[opt][1]) {
 		case 'p':
 			opt++;
 			if (opt >= argc) {
 				print_usage();
-				return 0;
+				return;
 			}
 			proto = (coap_protocol_t)atoi(argv[opt]);
 			if (proto >= COAP_PROTOCOL_MAX || proto < 0) {
 				printf("Error : not supported protocol\n");
 				print_usage();
-				return 0;
+				return;
 			} else {
 				printf("INFO : selected protocol : %s\n", g_coap_protocol[proto]);
 			}
@@ -1127,7 +1127,7 @@ int main( int argc, char *argv[] )
 			opt++;
 			if (opt >= argc) {
 				print_usage();
-				return 0;
+				return;
 			}
 			pskId = argv[opt];
 			break;
@@ -1135,14 +1135,14 @@ int main( int argc, char *argv[] )
 			opt++;
 			if (opt >= argc) {
 				print_usage();
-				return 0;
+				return;
 			}
 			pskBuffer = argv[opt];
 			break;
 #endif
 		default:
 			print_usage();
-			return 0;
+			return;
 		}
 		opt += 1;
 	}
@@ -1249,10 +1249,12 @@ recon:
 			if (FD_ISSET(connP->sock, &readfds)) {
 				numBytes = connection_read(proto, connP, connP->sock, buffer, MAX_PACKET_SIZE, &addr, &addrLen);
 				if (numBytes > 0) {
-					char s[INET6_ADDRSTRLEN];
+					char s[INET_ADDRSTRLEN];
+					// char s[INET6_ADDRSTRLEN];
 					struct sockaddr_in *saddr = (struct sockaddr_in *)&addr;
-					inet_ntop(saddr->sin_family, &saddr->sin_addr, s, INET6_ADDRSTRLEN);
-					printf("from : %s  fromLen : %d\n", s, addrLen);
+					// inet_ntop(saddr->sin_family, &saddr->sin_addr, s, INET6_ADDRSTRLEN);
+					inet_ntop(saddr->sin_family, &saddr->sin_addr, s, INET_ADDRSTRLEN);
+					printf("from : %s  fromLen : %ld\n", s, addrLen);
 
 					if (connP->addrLen != addrLen || memcmp(&(connP->addr), &addr, addrLen) != 0) {
 						numBytes = -1;
@@ -1308,5 +1310,20 @@ exit:
 		close(sock);
 	}
 
-	return 0;
+	return;
+}
+
+
+void lwm2m_server_init()
+{
+    sys_thread_new("LWM2M Server", lwm2m_server_thread, NULL, DEFAULT_THREAD_STACKSIZE, LWM2M_SERVER_THREAD_PRIO);
+}
+
+
+void sample_entry(void)
+{
+    /* 注册任务接口，dhcp成功后开始执行 */
+    app_net_register_thread(lwm2m_server_init);
+
+    app_ethernet_init();
 }

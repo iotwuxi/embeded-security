@@ -56,21 +56,21 @@
 #ifndef __LWM2M_SERVER_MAIN
 #define __LWM2M_SERVER_MAIN
 
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <ctype.h>
-#include <sys/select.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <sys/stat.h>
-#include <errno.h>
-#include <signal.h>
-#include <inttypes.h>
+// #include <string.h>
+// #include <stdlib.h>
+// #include <unistd.h>
+// #include <stdio.h>
+// #include <ctype.h>
+// #include <sys/select.h>
+// #include <sys/types.h>
+// #include <sys/socket.h>
+// #include <netinet/in.h>
+// #include <arpa/inet.h>
+// #include <netdb.h>
+// #include <sys/stat.h>
+// #include <errno.h>
+// #include <signal.h>
+// #include <inttypes.h>
 
 #include "liblwm2m.h"
 
@@ -83,6 +83,30 @@
 #include "mbedtls/certs.h"
 #include "easy_tls.h"
 #endif
+
+#include <stdlib.h>
+#include <unistd.h>
+#include <ctype.h>
+#include <inttypes.h>
+
+#include "lwip/opt.h"
+#include "lwip/arch.h"
+#include "lwip/api.h"
+#include "lwip/sockets.h"
+#include "lwip/netdb.h"
+
+#include "cmsis_os.h"
+#include "stm32f7xx_hal.h"
+#include "stm32f7xx_nucleo_144.h"
+
+#include "ethernetif.h"
+#include "app_ethernet.h"
+
+#include <string.h>
+#include <stdio.h>
+#include <stdint.h>
+
+#define LWM2M_SERVER_THREAD_PRIO  (osPriorityNormal)
 
 #define MAX_PACKET_SIZE 512
 

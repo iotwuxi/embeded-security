@@ -18,13 +18,22 @@
 #ifndef CONNECTION_H_
 #define CONNECTION_H_
 
+// #include <stdio.h>
+// #include <unistd.h>
+// #include <netinet/in.h>
+// #include <arpa/inet.h>
+// #include <netdb.h>
+// #include <sys/socket.h>
+// #include <sys/stat.h>
+
 #include <stdio.h>
 #include <unistd.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <sys/socket.h>
-#include <sys/stat.h>
+
+#include "lwip/opt.h"
+#include "lwip/arch.h"
+#include "lwip/api.h"
+#include "lwip/sockets.h"
+#include "lwip/netdb.h"
 
 #include "liblwm2m.h"
 #ifdef WITH_MBEDTLS

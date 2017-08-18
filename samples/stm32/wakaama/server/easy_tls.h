@@ -19,9 +19,14 @@
 #ifndef __EASY_TLS_H
 #define __EASY_TLS_H
 
-#include <mbedtls/debug.h>
 
-#include <mbedtls/config.h>
+#if !defined(MBEDTLS_CONFIG_FILE)
+#include "mbedtls/config.h"
+#else
+#include MBEDTLS_CONFIG_FILE
+#endif
+
+#include <mbedtls/debug.h>
 #include <mbedtls/ssl.h>
 #include <mbedtls/net.h>
 #include <mbedtls/entropy.h>

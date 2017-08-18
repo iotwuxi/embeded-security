@@ -293,7 +293,7 @@ int connection_send(connection_t *connP,
 	int nbSent;
 	size_t offset;
 
-	char s[INET6_ADDRSTRLEN];
+	char s[INET_ADDRSTRLEN];
 	in_port_t port = 0;
 
 	s[0] = 0;
@@ -302,12 +302,10 @@ int connection_send(connection_t *connP,
 	
 	if (AF_INET == connP->addr.sin_family) {
 		struct sockaddr_in *saddr = (struct sockaddr_in *)&connP->addr;
-		inet_ntop(saddr->sin_family, &saddr->sin_addr, s, INET6_ADDRSTRLEN);
+		inet_ntop(saddr->sin_family, &saddr->sin_addr, s, INET_ADDRSTRLEN);
 		port = saddr->sin_port;
 	} else if (AF_INET6 == connP->addr.sin_family) {
-		struct sockaddr_in6 *saddr = (struct sockaddr_in6 *)&connP->addr;
-		inet_ntop(saddr->sin6_family, &saddr->sin6_addr, s, INET6_ADDRSTRLEN);
-		port = saddr->sin6_port;
+		printf("unsupported ipv6.\n");
 	}
 
 #if 0
@@ -321,7 +319,7 @@ int connection_send(connection_t *connP,
 		port = saddr->sin6_port;
 	}
 #endif
-	printf("Sending %ld bytes to [%s]:%hu\n", length, s, ntohs(port));
+	printf("Sending %d bytes to [%s]:%hu\n", length, s, ntohs(port));
 	output_buffer(stderr, buffer, length, 0);
 
 	offset = 0;

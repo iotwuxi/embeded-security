@@ -26,7 +26,7 @@
 
 #ifndef LWM2MCLIENT_H_
 #define LWM2MCLIENT_H_
-// #include <pthread.h>
+
 
 #include "liblwm2m.h"
 
