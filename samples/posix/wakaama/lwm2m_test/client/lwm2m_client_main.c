@@ -1082,7 +1082,6 @@ exit:
 #endif
 
 	if (data.sock >= 0) {
-		printf("Closing %d\n", data.sock);
 		shutdown(data.sock, 3);
 		if ((i = close(data.sock)) != 0) {
 			printf("Fail to close %d\n", errno);
@@ -1090,7 +1089,8 @@ exit:
 	}
 
 	if (data.connP) {
-		connection_free(data.connP);
+		// 需要修改 - xianrenqiu
+		// connection_free(data.connP);
 	}
 
 	clean_security_object(objArray[0]);
@@ -1105,53 +1105,5 @@ exit:
 	lwm2m_free(objArray[0]);
 	lwm2m_free(objArray[1]);
 
-	return 0;
-}
-
-int lwm2m_client_main(int argc, char *argv[])
-{
-#if 0
-	pthread_t tid;
-	pthread_attr_t attr;
-	struct sched_param sparam;
-	int r;
-
-	struct pthread_arg args;
-	args.argc = argc;
-	args.argv = argv;
-
-	/* Initialize the attribute variable */
-	if ((r = pthread_attr_init(&attr)) != 0) {
-		printf("%s: pthread_attr_init failed, status=%d\n", __func__, r);
-		return -1;
-	}
-
-	/* 1. set a priority */
-	sparam.sched_priority = LWM2M_CLIENT_PRIORITY;
-	if ((r = pthread_attr_setschedparam(&attr, &sparam)) != 0) {
-		printf("%s: pthread_attr_setschedparam failed, status=%d\n", __func__, r);
-		return -1;
-	}
-
-	if ((r = pthread_attr_setschedpolicy(&attr, LWM2M_CLIENT_SCHED_POLICY)) != 0) {
-		printf("%s: pthread_attr_setschedpolicy failed, status=%d\n", __func__, r);
-		return -1;
-	}
-
-	/* 2. set a stacksize */
-	if ((r = pthread_attr_setstacksize(&attr, LWM2M_CLIENT_STACK_SIZE)) != 0) {
-		printf("%s: pthread_attr_setstacksize failed, status=%d\n", __func__, r);
-		return -1;
-	}
-
-	/* 3. create pthread with entry function */
-	if ((r = pthread_create(&tid, &attr, (pthread_startroutine_t)lwm2m_client_cb, (void *)&args)) != 0) {
-		printf("%s: pthread_create failed, status=%d\n", __func__, r);
-		return -1;
-	}
-
-	/* Wait for the threads to stop */
-	pthread_join(tid, NULL);
-#endif
 	return 0;
 }

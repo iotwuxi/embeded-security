@@ -128,7 +128,9 @@ connection_t *create_session(int sockfd, struct sockaddr_storage *caddr, socklen
 #endif
 		break;
 	case COAP_UDP:
+		// 需要确认 caddr, caddrLen - xianrenqiu 
 		ret = recvfrom(sockfd, buf, sizeof(buf), MSG_PEEK, (struct sockaddr *)caddr, caddrLen);
+
 		if (ret > 0) {
 			newsock = sockfd;
 		}
@@ -141,6 +143,10 @@ connection_t *create_session(int sockfd, struct sockaddr_storage *caddr, socklen
 		// printf("create_session : Failed to accept, errno %d\n", errno);
 		printf("create_session : Failed to accept, errno \n");
 	} else {
+
+		// 需要确认 - xianrenqiu
+		*caddrLen = 16;
+
 		connP = connection_new_incoming(NULL, newsock, (struct sockaddr *)caddr, *caddrLen);
 #ifdef WITH_MBEDTLS
 		connP->session = session;
@@ -166,7 +172,10 @@ connection_t *connection_new_incoming(connection_t *connList,
 	connP = (connection_t *)malloc(sizeof(connection_t));
 	if (connP != NULL) {
 		connP->sock = sock;
+
+		// 需要确认 - xianrenqiu
 		memcpy(&(connP->addr), addr, addrLen);
+
 		connP->addrLen = addrLen;
 		connP->next = connList;
 #ifdef WITH_MBEDTLS
@@ -240,6 +249,8 @@ connection_t *connection_create(coap_protocol_t protocol,
 #ifdef CONFIG_NET_LWIP
 		freeaddrinfo(servinfo);
 #else
+
+// 需要确认 - xianrenqiu
 #if 0
 		if (servinfo->ai_addr) {
 			free(servinfo->ai_addr);
@@ -287,6 +298,19 @@ int connection_send(connection_t *connP,
 
 	s[0] = 0;
 
+// 需要确认 - xianrenqiu 
+	
+	if (AF_INET == connP->addr.sin_family) {
+		struct sockaddr_in *saddr = (struct sockaddr_in *)&connP->addr;
+		inet_ntop(saddr->sin_family, &saddr->sin_addr, s, INET6_ADDRSTRLEN);
+		port = saddr->sin_port;
+	} else if (AF_INET6 == connP->addr.sin_family) {
+		struct sockaddr_in6 *saddr = (struct sockaddr_in6 *)&connP->addr;
+		inet_ntop(saddr->sin6_family, &saddr->sin6_addr, s, INET6_ADDRSTRLEN);
+		port = saddr->sin6_port;
+	}
+
+#if 0
 	if (AF_INET == connP->addr.sin6_family) {
 		struct sockaddr_in *saddr = (struct sockaddr_in *)&connP->addr;
 		inet_ntop(saddr->sin_family, &saddr->sin_addr, s, INET6_ADDRSTRLEN);
@@ -296,7 +320,7 @@ int connection_send(connection_t *connP,
 		inet_ntop(saddr->sin6_family, &saddr->sin6_addr, s, INET6_ADDRSTRLEN);
 		port = saddr->sin6_port;
 	}
-
+#endif
 	printf("Sending %ld bytes to [%s]:%hu\n", length, s, ntohs(port));
 	output_buffer(stderr, buffer, length, 0);
 

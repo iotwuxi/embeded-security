@@ -241,6 +241,8 @@ connection_t *connection_create(coap_protocol_t protocol,
 #ifdef CONFIG_NET_LWIP
 		freeaddrinfo(servinfo);
 #else
+
+// 需要确认 - xianrenqiu
 #if 0
 		if (servinfo->ai_addr) {
 			free(servinfo->ai_addr);
