@@ -42,7 +42,6 @@ typedef struct _connection_t {
 	struct _connection_t	*next;
 	int						sock;
 	struct sockaddr_in6		addr;
-    sockaddr
 	size_t					addrLen;
 #ifdef WITH_MBEDTLS
 	tls_session *session;
