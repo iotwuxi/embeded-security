@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
-#include <unistd.h>
+//#include <unistd.h>
 #include <inttypes.h>
 
 #include "lwm2mclient.h"

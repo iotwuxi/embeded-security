@@ -32,7 +32,7 @@
 #endif
 
 #include <stdio.h>
-#include <unistd.h>
+//#include <unistd.h>
 
 #include "lwip/opt.h"
 #include "lwip/arch.h"

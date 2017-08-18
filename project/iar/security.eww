@@ -5,6 +5,9 @@
     <path>$WS_DIR$\dtls-demo\dtls-demo.ewp</path>
   </project>
   <project>
+    <path>$WS_DIR$\lwm2m-demo\lwm2m-demo.ewp</path>
+  </project>
+  <project>
     <path>$WS_DIR$\self-test\self-test.ewp</path>
   </project>
   <project>

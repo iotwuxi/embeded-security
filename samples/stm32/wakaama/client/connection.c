@@ -29,8 +29,8 @@ int create_socket(coap_protocol_t protocol, const char *portStr, int addressFami
 {
 	int s = -1;
 	struct addrinfo hints;
-	struct addrinfo *res;
-	struct addrinfo *p;
+	struct addrinfo *addr_list;
+	struct addrinfo *cur;
 
 	memset(&hints, 0, sizeof hints);
 	hints.ai_family = addressFamily;
@@ -38,40 +38,32 @@ int create_socket(coap_protocol_t protocol, const char *portStr, int addressFami
 	case COAP_TCP:
 	case COAP_TCP_TLS:
 		hints.ai_socktype = SOCK_STREAM;
+		hints.ai_protocol = IPPROTO_TCP;
 		break;
 	case COAP_UDP:
 	case COAP_UDP_DTLS:
 		hints.ai_socktype = SOCK_DGRAM;
+		hints.ai_protocol = IPPROTO_UDP;
 		break;
 	default:
 		break;
 	}
 	hints.ai_flags = AI_PASSIVE;
 
-	if (0 != getaddrinfo(NULL, portStr, &hints, &res)) {
+	if (0 != getaddrinfo(NULL, portStr, &hints, &addr_list)) {
 		return -1;
 	}
 
-	for (p = res ; p != NULL; p = p->ai_next) {
-		s = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
-		if (s >= 0) {
-			int reuse;
-			if (setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse)) < 0) {
-				close(s);
-				s = -1;
-				continue;
-			}
-
-			if (-1 == bind(s, p->ai_addr, p->ai_addrlen)) {
-				close(s);
-				s = -1;
-				continue;
-			}
-			break;
+	for (cur = addr_list ; cur != NULL; cur = cur->ai_next) 
+	{
+		s = socket(cur->ai_family, cur->ai_socktype, cur->ai_protocol);
+		if(s > 0)
+		{
+			break;				
 		}
 	}
 
-	freeaddrinfo(res);
+	freeaddrinfo(addr_list);
 
 	return s;
 }
@@ -138,8 +130,7 @@ connection_t *create_session(int sockfd, struct sockaddr_storage *caddr, socklen
 	}
 
 	if (newsock < 0) {
-		// printf("create_session : Failed to accept, errno %d\n", errno);
-		printf("create_session : Failed to accept, errno \n");
+		printf("create_session : Failed to accept, errno %d\n", errno);
 	} else {
 		connP = connection_new_incoming(NULL, newsock, (struct sockaddr *)caddr, *caddrLen);
 #ifdef WITH_MBEDTLS
@@ -220,7 +211,7 @@ connection_t *connection_create(coap_protocol_t protocol,
 		sa->sa_len = p->ai_addrlen;
 #endif
 		sl = p->ai_addrlen;
-
+                
 		/* Set send and receive timeout values */
 		tv.tv_sec = 10;
 		tv.tv_usec = 0;
@@ -228,8 +219,7 @@ connection_t *connection_create(coap_protocol_t protocol,
 			printf("connect: setsockopt fail\n");
 		}
 		if (-1 == connect(sock, sa, sl)) {
-			fprintf(stderr, "connection_create : failed to connect, errno\r\n");
-			// fprintf(stderr, "connection_create : failed to connect, errno %d\r\n", errno);
+			fprintf(stderr, "connection_create : failed to connect, errno %d\r\n", errno);
 			return NULL;
 		} else {
 			break;
@@ -257,6 +247,7 @@ connection_t *connection_create(coap_protocol_t protocol,
 
 	return connP;
 }
+
 
 void connection_free(connection_t *connList)
 {
@@ -332,8 +323,7 @@ int connection_send(connection_t *connP,
 			break;
 		}
 		if (nbSent < 0) {
-			// printf("Send fail nbSent : %d , error: %s\n", nbSent, strerror(errno));
-			printf("Send fail nbSent : %d , error: \n", nbSent);
+			printf("Send fail nbSent : %d , error: %s\n", nbSent, strerror(errno));
 			return -1;
 		}
 

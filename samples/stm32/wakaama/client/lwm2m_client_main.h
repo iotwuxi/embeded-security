@@ -107,7 +107,7 @@
 
 #define MAX_PACKET_SIZE 512
 #define DEFAULT_SERVER_IPV6 "[::1]"
-#define DEFAULT_SERVER_IPV4 "coap://127.0.0.1"
+#define DEFAULT_SERVER_IPV4 "coap://wsncoap.org"
 
 /* Definitions*/
 #ifndef FD_SETSIZE

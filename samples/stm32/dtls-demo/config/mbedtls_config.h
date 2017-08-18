@@ -16,7 +16,7 @@
 #define MBEDTLS_NET_C                           /** 网络接口(net_sockets.c) */
 #define MBEDTLS_HAVE_ASM                        /** 开启 asm 支持 */
 #define MBEDTLS_HAVE_TIME                       /** 开启 time() 支持 */
-#define MBEDTLS_TIMING_C                        /** 开启 时间延时接口(for dtls) 支持 */
+//#define MBEDTLS_TIMING_C                        /** 开启 时间延时接口(for dtls) 支持 */
 
 /** SSL 定义 */
 #define MBEDTLS_SSL_TLS_C                       /** 开启 TLS, 生成 SSL 相关代码(ssl_tls.c ssl_cli.c ssl_srv.c) */

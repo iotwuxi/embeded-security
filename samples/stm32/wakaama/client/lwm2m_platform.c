@@ -18,7 +18,12 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdarg.h>
-#include <sys/time.h>
+#include <time.h>
+
+#include "FreeRTOS.h"
+#include "task.h"
+
+#include "lwip/sockets.h"
 
 #ifndef LWM2M_MEMORY_TRACE
 
@@ -34,6 +39,7 @@ void *lwm2m_malloc(size_t s)
 	{
 		printf("===>  %s failed. \n", __func__);
 	}
+        return ptr;
 }
 
 void lwm2m_free(void *p)
@@ -58,13 +64,20 @@ int lwm2m_strncmp(const char *s1,
 
 time_t lwm2m_gettime(void)
 {
+        struct timeval tv;
+        uint32_t tick = xTaskGetTickCount();
+        tv.tv_sec = tick / 1000;
+        
+        return tv.tv_sec;
+        
+#if 0
 	struct timeval tv;
-
 	if (0 != gettimeofday(&tv, NULL)) {
 		return -1;
 	}
 
 	return tv.tv_sec;
+#endif
 }
 
 void lwm2m_printf(const char *format, ...)
