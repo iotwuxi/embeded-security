@@ -41,7 +41,7 @@
 typedef struct _connection_t {
 	struct _connection_t	*next;
 	int						sock;
-	// struct sockaddr_in6		addr;
+	// struct sockaddr_in6		addr; // 需要确认 - xianrenqiu
 	struct sockaddr_in		addr;
 	size_t					addrLen;
 #ifdef WITH_MBEDTLS
