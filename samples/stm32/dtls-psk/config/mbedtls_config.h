@@ -5,6 +5,8 @@
 #if __ICCARM__                                   
 #define MBEDTLS_ENTROPY_HARDWARE_ALT            /** 熵源接口替换 */
 #define MBEDTLS_NO_PLATFORM_ENTROPY             /** 无平台熵源支持 (linux: /dev/urandom 或 Windows CryptoAPI) */
+#define MBEDTLS_TIMING_C 
+#define MBEDTLS_TIMING_ALT
 #else						
 #define MBEDTLS_TIMING_C                        /** 开启 时间延时接口(for dtls) 支持 */
 #endif
