@@ -12,6 +12,18 @@
 
 extern RNG_HandleTypeDef RngHandle;
 
+/**
+ * \brief           Entropy poll callback
+ *
+ * \param data      Callback-specific data pointer
+ * \param output    Data to fill
+ * \param len       Maximum size to provide
+ * \param olen      The actual amount of bytes put into the buffer (Can be 0)
+ *
+ * \return          0 if no critical failures occurred,
+ *                  MBEDTLS_ERR_ENTROPY_SOURCE_FAILED otherwise
+ */
+
 int mbedtls_hardware_poll( void *Data, unsigned char *Output, size_t Len, size_t *oLen )
 {
     uint32_t index;

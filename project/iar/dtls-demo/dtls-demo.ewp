@@ -313,6 +313,7 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
+          <state>$PROJ_DIR$\..\..\..\app</state>
           <state>$PROJ_DIR$\..\..\..\app\net</state>
           <state>$PROJ_DIR$\..\..\..\samples\stm32\dtls-demo</state>
           <state>$PROJ_DIR$\..\..\..\samples\stm32\dtls-demo\config</state>
@@ -1971,6 +1972,9 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\..\app\mbedtls_alt.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\app\timing_alt.c</name>
     </file>
   </group>
   <group>
