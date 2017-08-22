@@ -313,6 +313,7 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
+          <state>$PROJ_DIR$\..\..\..\app</state>
           <state>$PROJ_DIR$\..\..\..\app\net</state>
           <state>$PROJ_DIR$\..\..\..\samples\stm32\self-test</state>
           <state>$PROJ_DIR$\..\..\..\samples\stm32\self-test\config</state>
