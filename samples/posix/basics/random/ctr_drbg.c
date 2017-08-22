@@ -30,7 +30,7 @@ int main( void )
     printf("Generating %ld byte random data : ", sizeof(random));
     for(int i = 0; i < sizeof(random); i++)
     {
-        printf("%s%02x%s", i % 16 == 0 ? "\n":" ", random[i], i == sizeof(random) - 1 ? "\n":"");
+        printf("%s%02X%s", i % 16 == 0 ? "\n":" ", random[i], i == sizeof(random) - 1 ? "\n":"");
     }
 
 exit:
