@@ -64,12 +64,14 @@ static void create_entropy_seed_file( void )
 }
 #endif
 
+#if defined(MBEDTLS_MEMORY_BUFFER_ALLOC_C) && defined(MBEDTLS_SELF_TEST)
+    unsigned char buf[10*1024];
+#endif
+
 void mbedtls_self_test(void)
 {
     int v, suites_tested = 0, suites_failed = 0;
-#if defined(MBEDTLS_MEMORY_BUFFER_ALLOC_C) && defined(MBEDTLS_SELF_TEST)
-    unsigned char buf[1000000];
-#endif
+
     void *pointer;
 
     /*
@@ -357,10 +359,6 @@ void mbedtls_self_test(void)
         {
             mbedtls_printf( "  [ All tests PASS ]\n\n" );
         }
-#if defined(_WIN32)
-        mbedtls_printf( "  Press Enter to exit this program.\n" );
-        fflush( stdout ); getchar();
-#endif
     }
 
     if( suites_failed > 0)
