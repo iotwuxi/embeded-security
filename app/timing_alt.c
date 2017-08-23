@@ -10,6 +10,7 @@
 #include "task.h"
 #include "mbedtls/timing.h"
 
+// 该接口需要修改
 unsigned long mbedtls_timing_hardclock( void )
 {
     uint32_t offset;

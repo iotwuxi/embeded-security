@@ -22,6 +22,9 @@
   <project>
     <path>$WS_DIR$\x509-info\x509-info.ewp</path>
   </project>
+  <project>
+    <path>$WS_DIR$\random\random.ewp</path>
+  </project>
   <batchBuild/>
 </workspace>
 
