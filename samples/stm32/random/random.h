@@ -1,5 +1,5 @@
-#ifndef __DTLS_CLIENT_H
-#define __DTLS_CLIENT_H
+#ifndef __RANDOM_H
+#define __RANDOM_H
 
 /* include */
 #if !defined(MBEDTLS_CONFIG_FILE)
@@ -20,11 +20,10 @@
 
 #include "mbedtls/net_sockets.h"
 #include "mbedtls/debug.h"
-#include "mbedtls/ssl.h"
 #include "mbedtls/entropy.h"
 #include "mbedtls/ctr_drbg.h"
+#include "mbedtls/hmac_drbg.h"
 #include "mbedtls/error.h"
-#include "mbedtls/certs.h"
 #include "mbedtls/timing.h"
 
 #include "cmsis_os.h"
