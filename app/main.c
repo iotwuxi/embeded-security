@@ -22,6 +22,7 @@ void bsp_init(void)
     BSP_LED_Init(LED2);
     BSP_LED_Init(LED3);
 
+    /* 初始化熵源 */
     RNG_Init();
 
     /* 初始化串口 */

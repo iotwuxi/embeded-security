@@ -9,15 +9,15 @@ static int entropy_source(void *data, unsigned char *output, size_t len,
     uint32_t index;
     uint32_t random_value;
 
-    for (index = 0; index < len/4; index++)
+    for (index = 0; index < len / 4; index++)
     {
         if (HAL_RNG_GenerateRandomNumber(&RngHandle, &random_value) == HAL_OK)
         {
             *olen += 4;
-            memset(&(output[index * 4]), (int)random_value, 4);
-        }
+            memcpy(&(output[index * 4]), &random_value, 4);
+        } 
     }
-
+    
     return 0;
 }
 

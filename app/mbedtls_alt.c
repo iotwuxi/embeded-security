@@ -34,7 +34,7 @@ int mbedtls_hardware_poll( void *Data, unsigned char *Output, size_t Len, size_t
         if (HAL_RNG_GenerateRandomNumber(&RngHandle, &randomValue) == HAL_OK)
         {
             *oLen += 4;
-            memset(&(Output[index * 4]), (int)randomValue, 4);
+            memcpy(&(Output[index * 4]), &randomValue, 4);
         }
         else
         {
