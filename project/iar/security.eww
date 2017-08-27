@@ -20,10 +20,7 @@
     <path>$WS_DIR$\dtls-psk\dtls-psk.ewp</path>
   </project>
   <project>
-    <path>$WS_DIR$\x509-info\x509-info.ewp</path>
-  </project>
-  <project>
-    <path>$WS_DIR$\random\random.ewp</path>
+    <path>$WS_DIR$\basics\basics.ewp</path>
   </project>
   <batchBuild/>
 </workspace>
