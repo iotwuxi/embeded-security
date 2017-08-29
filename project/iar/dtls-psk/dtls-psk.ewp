@@ -743,7 +743,6 @@
         </option>
         <option>
           <name>IlinkIcfFile</name>
-          <state>$PROJ_DIR$\..\..\..\drivers\cmsis\stm32f7xx\source\iar\linker\stm32f767xx_flash.icf</state>
           <state>$PROJ_DIR$\..\..\..\samples\stm32\dtls-psk\config\stm32f767xx_flash.icf</state>
         </option>
         <option>
