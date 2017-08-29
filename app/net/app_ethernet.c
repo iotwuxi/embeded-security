@@ -239,7 +239,7 @@ void app_ethernet_init(void)
   
 #ifdef USE_DHCP
     /* 开启 DHCP 任务 */
-    osThreadDef(DHCP, DHCP_thread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE * 2);
+    osThreadDef(DHCP, DHCP_thread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE);
     osThreadCreate (osThread(DHCP), &gnetif);
 #endif    
 }

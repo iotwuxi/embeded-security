@@ -269,6 +269,7 @@ exit:
     mbedtls_entropy_free( &entropy );
 
     printf("\n%s exit.\n", __func__);  
+    
     osThreadTerminate(NULL);
 }
 
