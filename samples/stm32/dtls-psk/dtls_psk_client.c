@@ -272,13 +272,16 @@ exit:
     osThreadTerminate(NULL);
 }
 
+/**
+ * @brief 创建DTLS Client任务
+ */
 void dtls_psk_client_init(void)
 {
     sys_thread_new("DTLS PSK Client", (lwip_thread_fn)dtls_psk_client_thread, NULL, 2*DEFAULT_THREAD_STACKSIZE, DTLS_CLIENT_THREAD_PRIO);
 }
 
 /**
- * @brief freertos 平台calloc和free
+ * @brief FreeRTOS平台calloc和free
  */
 void *platform_calloc(size_t n, size_t size)
 {
@@ -292,11 +295,29 @@ void platform_free(void* ptr)
     vPortFree(ptr);
 }
 
+static TimerHandle_t m_monitor_timer; 
+static void monitor_timeout_handler(TimerHandle_t xTimer)
+{
+    size_t free = xPortGetFreeHeapSize();
+    printf("Free: %zd\n", free);
+    
+    char *buffer = pvPortMalloc(1024);
+    vTaskList(buffer);
+    printf("\n%s\n", buffer);
+    vPortFree(buffer);
+}
+
 void sample_entry(void)
 {
     mbedtls_platform_set_calloc_free(platform_calloc, platform_free);
     /* 注册任务接口，DHCP成功后开始执行 */
     app_net_register_thread(dtls_psk_client_init);
+    
+    /* 创建一个监控定时器 */
+    m_monitor_timer = xTimerCreate("Monitor", 5000,
+                               pdTRUE, NULL,
+                               monitor_timeout_handler);
+    xTimerStart(m_monitor_timer, 10);
 
     app_ethernet_init();
 }

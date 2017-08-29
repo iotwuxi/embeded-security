@@ -68,7 +68,7 @@ int main(void)
     osThreadCreate (osThread(start), NULL);
 
     /* 呼吸灯任务创建 */
-    osThreadDef(blink, blink_thread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE * 2);
+    osThreadDef(blink, blink_thread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE);
     osThreadCreate (osThread(blink), NULL);
 
     /* 启动任务调度 */
