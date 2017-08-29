@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "connection.h"
+#include "lwm2m_connection.h"
 
 // from commandline.c
 void output_buffer(FILE *stream, uint8_t *buffer, int length, int indent);

@@ -16,7 +16,6 @@
  *
  ****************************************************************************/
 
-// #include <tinyara/config.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -382,7 +381,7 @@ reset:
 	return session;
 errout:
 	TLSSession_free(session);
-	TLS_FREE(session);
+	// TLS_FREE(session); // err? - xianrenqiu
 	return NULL;
 }
 
