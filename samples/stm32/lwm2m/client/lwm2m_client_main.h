@@ -78,7 +78,7 @@
 
 #include "lwm2mclient.h"
 #include "commandline.h"
-#include "connection.h"
+#include "lwm2m_connection.h"
 
 #ifdef WITH_MBEDTLS
 #include "mbedtls/certs.h"

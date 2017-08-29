@@ -318,8 +318,10 @@
         <option>
           <name>CCIncludePath2</name>
           <state>$PROJ_DIR$\..\..\..\app\net</state>
-          <state>$PROJ_DIR$\..\..\..\samples\stm32\wakaama\client</state>
-          <state>$PROJ_DIR$\..\..\..\samples\stm32\wakaama\client\config</state>
+          <state>$PROJ_DIR$\..\..\..\app\lwm2m</state>
+          <state>$PROJ_DIR$\..\..\..\app\mbedtls_alt</state>
+          <state>$PROJ_DIR$\..\..\..\samples\stm32\lwm2m\client</state>
+          <state>$PROJ_DIR$\..\..\..\samples\stm32\lwm2m\client\config</state>
           <state>$PROJ_DIR$\..\..\..\drivers\bsp\stm32f7xx_nucleo_144</state>
           <state>$PROJ_DIR$\..\..\..\drivers\stm32f7xx_hal_driver\inc</state>
           <state>$PROJ_DIR$\..\..\..\drivers\cmsis\inc</state>
@@ -986,6 +988,54 @@
   <group>
     <name>app</name>
     <group>
+      <name>lwm2m</name>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\app\lwm2m\commandline.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\app\lwm2m\easy_tls.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\app\lwm2m\object_access_control.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\app\lwm2m\object_connectivity_moni.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\app\lwm2m\object_connectivity_stat.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\app\lwm2m\object_device.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\app\lwm2m\object_firmware.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\app\lwm2m\object_location.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\app\lwm2m\object_security.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\app\lwm2m\object_server.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\app\lwm2m\test_object.c</name>
+      </file>
+    </group>
+    <group>
+      <name>mbedtls_alt</name>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\app\mbedtls_alt\entropy_alt.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\app\mbedtls_alt\timing_alt.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\app\mbedtls_alt\timing_alt.h</name>
+      </file>
+    </group>
+    <group>
       <name>net</name>
       <file>
         <name>$PROJ_DIR$\..\..\..\app\net\app_ethernet.c</name>
@@ -999,9 +1049,6 @@
     </group>
     <file>
       <name>$PROJ_DIR$\..\..\..\app\main.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\app\mbedtls_alt.c</name>
     </file>
   </group>
   <group>
@@ -1544,61 +1591,13 @@
       </file>
     </group>
     <file>
-      <name>$PROJ_DIR$\..\..\..\samples\stm32\wakaama\client\commandline.c</name>
+      <name>$PROJ_DIR$\..\..\..\samples\stm32\lwm2m\client\lwm2m_client_main.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\samples\stm32\wakaama\client\commandline.h</name>
+      <name>$PROJ_DIR$\..\..\..\samples\stm32\lwm2m\client\lwm2m_connection.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\samples\stm32\wakaama\client\connection.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\samples\stm32\wakaama\client\connection.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\samples\stm32\wakaama\client\easy_tls.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\samples\stm32\wakaama\client\easy_tls.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\samples\stm32\wakaama\client\lwm2m_client_main.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\samples\stm32\wakaama\client\lwm2m_client_main.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\samples\stm32\wakaama\client\lwm2m_platform.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\samples\stm32\wakaama\client\lwm2mclient.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\samples\stm32\wakaama\client\object_access_control.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\samples\stm32\wakaama\client\object_connectivity_moni.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\samples\stm32\wakaama\client\object_connectivity_stat.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\samples\stm32\wakaama\client\object_device.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\samples\stm32\wakaama\client\object_firmware.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\samples\stm32\wakaama\client\object_location.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\samples\stm32\wakaama\client\object_security.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\samples\stm32\wakaama\client\object_server.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\samples\stm32\wakaama\client\test_object.c</name>
+      <name>$PROJ_DIR$\..\..\..\samples\stm32\lwm2m\client\lwm2m_platform.c</name>
     </file>
   </group>
 </project>

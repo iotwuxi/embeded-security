@@ -4,6 +4,8 @@
 /** 平台相关  */                             
 #define MBEDTLS_ENTROPY_HARDWARE_ALT            /** 熵源接口替换 */
 #define MBEDTLS_NO_PLATFORM_ENTROPY             /** 无平台熵源支持 (linux: /dev/urandom 或 Windows CryptoAPI) */
+#define MBEDTLS_TIMING_C
+#define MBEDTLS_TIMING_ALT
 
 /** 调试 定义 */
 #define MBEDTLS_DEBUG_C                         /** 调试(需要修改 DEBUG_LEVEL 值，默认为0) */
