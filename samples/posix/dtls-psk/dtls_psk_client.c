@@ -36,7 +36,6 @@ int main( void )
 #include "mbedtls/entropy.h"
 #include "mbedtls/ctr_drbg.h"
 #include "mbedtls/error.h"
-// #include "mbedtls/certs.h"
 #include "mbedtls/timing.h"
 
 // #define SERVER_PORT "4433"
@@ -72,7 +71,6 @@ int main( int argc, char *argv[] )
     mbedtls_ctr_drbg_context ctr_drbg;
     mbedtls_ssl_context ssl;
     mbedtls_ssl_config conf;
-    // mbedtls_x509_crt cacert;
 
     mbedtls_timing_delay_context timer;
 
@@ -81,9 +79,6 @@ int main( int argc, char *argv[] )
     char *server_name = NULL;
     char *server_addr = NULL;
     char *server_port = NULL;
-
-    // ((void) argc);
-    // ((void) argv);
 
 #if defined(MBEDTLS_DEBUG_C)
     mbedtls_debug_set_threshold( DEBUG_LEVEL );
@@ -106,7 +101,6 @@ int main( int argc, char *argv[] )
     mbedtls_net_init( &server_fd );
     mbedtls_ssl_init( &ssl );
     mbedtls_ssl_config_init( &conf );
-    // mbedtls_x509_crt_init( &cacert );
     mbedtls_ctr_drbg_init( &ctr_drbg );
 
     mbedtls_printf( "\n  . Seeding the random number generator..." );
@@ -123,7 +117,7 @@ int main( int argc, char *argv[] )
 
     mbedtls_printf( " ok\n" );
 
- /*
+    /*
      * 0. Load psk
      */
     printf( "\n  . Loading the psk and psk_identity" );
@@ -331,16 +325,10 @@ exit:
 
     mbedtls_net_free( &server_fd );
 
-    // mbedtls_x509_crt_free( &cacert );
     mbedtls_ssl_free( &ssl );
     mbedtls_ssl_config_free( &conf );
     mbedtls_ctr_drbg_free( &ctr_drbg );
     mbedtls_entropy_free( &entropy );
-
-#if defined(_WIN32)
-    mbedtls_printf( "  + Press Enter to exit this program.\n" );
-    fflush( stdout ); getchar();
-#endif
 
     /* Shell can not handle large exit numbers -> 1 for errors */
     if( ret < 0 )
