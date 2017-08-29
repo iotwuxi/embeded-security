@@ -315,6 +315,7 @@
           <name>CCIncludePath2</name>
           <state>$PROJ_DIR$\..\..\..\app</state>
           <state>$PROJ_DIR$\..\..\..\app\net</state>
+          <state>$PROJ_DIR$\..\..\..\app\mbedtls_alt</state>
           <state>$PROJ_DIR$\..\..\..\samples\stm32\dtls-psk</state>
           <state>$PROJ_DIR$\..\..\..\samples\stm32\dtls-psk\config</state>
           <state>$PROJ_DIR$\..\..\..\drivers\bsp\stm32f7xx_nucleo_144</state>
@@ -981,6 +982,15 @@
   <group>
     <name>app</name>
     <group>
+      <name>mbedtls_alt</name>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\app\mbedtls_alt\entropy_alt.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\app\mbedtls_alt\timing_alt.c</name>
+      </file>
+    </group>
+    <group>
       <name>net</name>
       <file>
         <name>$PROJ_DIR$\..\..\..\app\net\app_ethernet.c</name>
@@ -994,12 +1004,6 @@
     </group>
     <file>
       <name>$PROJ_DIR$\..\..\..\app\main.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\app\mbedtls_alt.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\app\timing_alt.c</name>
     </file>
   </group>
   <group>
