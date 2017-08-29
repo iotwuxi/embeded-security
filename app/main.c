@@ -78,3 +78,23 @@ int main(void)
     for( ;; );
 }
 
+/**
+ * @brief FreeRTOS 钩子函数
+ */
+void vApplicationMallocFailedHook(void)
+{
+    taskDISABLE_INTERRUPTS();
+    printf("Malloc Failed Hook\r\n");
+    for(;;);
+}
+
+/**
+ * @brief FreeRTOS 钩子函数
+ */
+void vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
+{
+    (void) pxTask;
+    printf("Stack Overflow Hook\r\n");
+    for(;;);
+}
+

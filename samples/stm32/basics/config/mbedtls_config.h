@@ -1,13 +1,10 @@
 #ifndef STM32F7_MBEDTLS_CONFIG_H
 #define STM32F7_MBEDTLS_CONFIG_H
 
-/** 平台相关  */
-#ifdef __ICCARM__                                 
-#define MBEDTLS_ENTROPY_HARDWARE_ALT            /** 熵源接口替换 */
 #define MBEDTLS_NO_PLATFORM_ENTROPY             /** 无平台熵源支持 (linux: /dev/urandom 或 Windows CryptoAPI) */
-#else						
-#define MBEDTLS_TIMING_C                        /** 开启 时间延时接口(for dtls) 支持 */
-#endif
+#define MBEDTLS_NO_DEFAULT_ENTROPY_SOURCES
+#define MBEDTLS_TIMING_C 
+#define MBEDTLS_TIMING_ALT
 
 /** 调试 定义 */
 #define MBEDTLS_DEBUG_C                         /** 调试(需要修改 DEBUG_LEVEL 值，默认为0) */
@@ -35,6 +32,7 @@
 /** (熵)随机数 定义 */
 #define MBEDTLS_ENTROPY_C                       /** 熵 */
 #define MBEDTLS_CTR_DRBG_C                      /** 随机数发生器 */
+#define MBEDTLS_HMAC_DRBG_C                 /** 随机数发生器 */
 
 /** 对称密码 定义 */
 #define MBEDTLS_AES_C                           /** AES 加密 */
@@ -79,14 +77,6 @@
 #define MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED      /** 开启 ECDHE_RSA 密钥协商 */
 #define MBEDTLS_KEY_EXCHANGE_PSK_ENABLED            /** 开启 PSK 密钥协商 */
 
-/** 密码套件 定义 */
-/** MBEDTLS_TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256   密钥协商: ECDHE  认证算法: RSA 加密算法: AES_128_GCM 散列算法: SHA256 */
-/** MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 密钥协商: ECDHE  认证算法: ECDSA 加密算法: AES_128_GCM 散列算法: SHA256 */
-#if 0
-#define MBEDTLS_SSL_CIPHERSUITES                         \
-        MBEDTLS_TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,   \
-        MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
-#endif
 
 /** 用于检测宏定义正确性 */
 #include "mbedtls/check_config.h"

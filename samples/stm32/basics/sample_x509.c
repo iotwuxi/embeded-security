@@ -1,5 +1,4 @@
-
-#include "x509_info.h"
+#include "basics.h"
 
 char buf[2048];
 
@@ -8,14 +7,15 @@ struct cert_list {
     size_t len;
 };
 
-void sample_x509_info(void)
+void sample_x509(void)
 {
     int ret;
     const char *cert_buf;
     int cert_len = 0;
     mbedtls_x509_crt cert;
     
-    /* mbedtls中所有预定义证书 */
+    mbedtls_printf("\n==========X509 Sample=========\n");
+    /* mbedtls涓墍鏈夐瀹氫箟璇佷功 */
     struct cert_list list[] = {
         {mbedtls_test_ca_crt_ec, mbedtls_test_ca_crt_ec_len},
         {mbedtls_test_srv_crt_ec, mbedtls_test_srv_crt_ec_len},
@@ -43,12 +43,6 @@ void sample_x509_info(void)
         mbedtls_printf("%s", buf); 
     }
 
-
 exit:
     mbedtls_x509_crt_free(&cert);
-}
-
-void sample_entry(void)
-{
-    sample_x509_info();
 }

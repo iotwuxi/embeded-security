@@ -1,4 +1,4 @@
-#include "random.h"
+#include "basics.h"
 
 static unsigned char random[64];
 
@@ -21,12 +21,14 @@ static int entropy_source(void *data, unsigned char *output, size_t len,
     return 0;
 }
 
-void gen_random(void)
+void sample_random(void)
 {
     mbedtls_entropy_context entropy;
     mbedtls_hmac_drbg_context hmac_drbg;
     const mbedtls_md_info_t *md_info = mbedtls_md_info_from_type(MBEDTLS_MD_SHA1);
 
+    mbedtls_printf("\n==========Random Sample=========\n");
+    
     mbedtls_entropy_init(&entropy);
     mbedtls_entropy_add_source(&entropy, entropy_source, NULL,
                     MBEDTLS_ENTROPY_MAX_GATHER,
@@ -59,9 +61,4 @@ void gen_random(void)
 exit:
     mbedtls_hmac_drbg_free(&hmac_drbg);
     mbedtls_entropy_free(&entropy);  
-}
-
-void sample_entry(void)
-{
-    gen_random();
 }

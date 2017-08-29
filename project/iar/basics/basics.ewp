@@ -313,9 +313,10 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
+          <state>$PROJ_DIR$\..\..\..\app</state>
           <state>$PROJ_DIR$\..\..\..\app\net</state>
-          <state>$PROJ_DIR$\..\..\..\samples\stm32\x509-info</state>
-          <state>$PROJ_DIR$\..\..\..\samples\stm32\x509-info\config</state>
+          <state>$PROJ_DIR$\..\..\..\samples\stm32\basics</state>
+          <state>$PROJ_DIR$\..\..\..\samples\stm32\basics\config</state>
           <state>$PROJ_DIR$\..\..\..\drivers\bsp\stm32f7xx_nucleo_144</state>
           <state>$PROJ_DIR$\..\..\..\drivers\stm32f7xx_hal_driver\inc</state>
           <state>$PROJ_DIR$\..\..\..\drivers\cmsis\inc</state>
@@ -588,7 +589,7 @@
         </option>
         <option>
           <name>AUserIncludes</name>
-          <state>$PROJ_DIR$\..\..\..\samples\stm32\x509-info\config</state>
+          <state>$PROJ_DIR$\..\..\..\samples\stm32\basics\config</state>
         </option>
         <option>
           <name>AExtraOptionsCheckV2</name>
@@ -996,6 +997,9 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\..\app\mbedtls_alt.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\app\timing_alt.c</name>
     </file>
   </group>
   <group>
@@ -1456,23 +1460,32 @@
     <group>
       <name>config</name>
       <file>
-        <name>$PROJ_DIR$\..\..\..\samples\stm32\x509-info\config\FreeRTOSConfig.h</name>
+        <name>$PROJ_DIR$\..\..\..\samples\stm32\basics\config\FreeRTOSConfig.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\samples\stm32\x509-info\config\lwipopts.h</name>
+        <name>$PROJ_DIR$\..\..\..\samples\stm32\basics\config\lwipopts.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\samples\stm32\x509-info\config\mbedtls_config.h</name>
+        <name>$PROJ_DIR$\..\..\..\samples\stm32\basics\config\mbedtls_config.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\samples\stm32\x509-info\config\stm32f7xx_hal_conf.h</name>
+        <name>$PROJ_DIR$\..\..\..\samples\stm32\basics\config\stm32f7xx_hal_conf.h</name>
       </file>
     </group>
     <file>
-      <name>$PROJ_DIR$\..\..\..\samples\stm32\x509-info\x509_info.c</name>
+      <name>$PROJ_DIR$\..\..\..\samples\stm32\basics\basics.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\samples\stm32\x509-info\x509_info.h</name>
+      <name>$PROJ_DIR$\..\..\..\samples\stm32\basics\basics.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\samples\stm32\basics\sample_cipher_md.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\samples\stm32\basics\sample_random.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\samples\stm32\basics\sample_x509.c</name>
     </file>
   </group>
 </project>

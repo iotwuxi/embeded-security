@@ -7,6 +7,8 @@
 #define MBEDTLS_NO_PLATFORM_ENTROPY             /** 无平台熵源支持 (linux: /dev/urandom 或 Windows CryptoAPI) */
 #define MBEDTLS_TIMING_C 
 #define MBEDTLS_TIMING_ALT
+#define MBEDTLS_PLATFORM_C
+#define MBEDTLS_PLATFORM_MEMORY
 #else						
 #define MBEDTLS_TIMING_C                        /** 开启 时间延时接口(for dtls) 支持 */
 #endif
@@ -46,6 +48,7 @@
 
 /** 对称密码 定义 */
 #define MBEDTLS_AES_C                           /** AES 加密 */
+#define MBEDTLS_AES_ROM_TABLES                 /** TABLE全部定义到Flash空间中 */
 #define MBEDTLS_CCM_C                           /** CCM 模式 */
 #define MBEDTLS_GCM_C                           /** GCM 模式 */
 #define MBEDTLS_CIPHER_C                        /** 开启 加密模块接口 */
@@ -82,8 +85,8 @@
 #define MBEDTLS_X509_CRT_PARSE_C                    /** x509 证书解析 */
 
 /** 密钥协商 定义*/
-#define MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED    /** 开启 ECDHE_ECDSA 密钥协商 */
-#define MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED      /** 开启 ECDHE_RSA 密钥协商 */
+// #define MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED    /** 开启 ECDHE_ECDSA 密钥协商 */
+// #define MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED      /** 开启 ECDHE_RSA 密钥协商 */
 #define MBEDTLS_KEY_EXCHANGE_PSK_ENABLED            /** 开启 PSK 密钥协商 */
 
 /** 密码套件 定义 */
@@ -95,6 +98,8 @@
         MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
 #endif
 
+#define MBEDTLS_SSL_MAX_CONTENT_LEN  2048            /** 节约内存 */
+            
 /** 用于检测宏定义正确性 */
 #include "mbedtls/check_config.h"
 

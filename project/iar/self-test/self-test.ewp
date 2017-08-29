@@ -678,7 +678,7 @@
         </option>
         <option>
           <name>IlinkOutputFile</name>
-          <state>security.out</state>
+          <state>self-test.out</state>
         </option>
         <option>
           <name>IlinkDebugInfoEnable</name>

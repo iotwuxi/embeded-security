@@ -1,12 +1,14 @@
 
-#include "cipher_md_list.h"
+#include "basics.h"
 
-void sample_cipher_md_list(void)
+void sample_cipher_md(void)
 {
     const int *list;
     int index = 1;
     const mbedtls_md_info_t *md_info;    
     const mbedtls_cipher_info_t *cipher_info;
+    
+    mbedtls_printf("\n==========Cipher and MD Sample=========\n");
 
     printf( "Available ciphers:\n" );
     list = mbedtls_cipher_list();
@@ -35,9 +37,4 @@ void sample_cipher_md_list(void)
         mbedtls_printf("\t[%02d]%s\n", index++, mbedtls_ssl_get_ciphersuite_name(*list));
         list++; 
     }
-}
-
-void sample_entry(void)
-{
-    sample_cipher_md_list();
 }

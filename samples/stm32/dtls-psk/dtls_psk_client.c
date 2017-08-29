@@ -25,11 +25,10 @@ void dtls_psk_client_thread( int argc, char *argv[] )
     mbedtls_ctr_drbg_context ctr_drbg;
     mbedtls_ssl_context ssl;
     mbedtls_ssl_config conf;
-    // mbedtls_x509_crt cacert;
 
     mbedtls_timing_delay_context timer;
 
-    int dtls_ciphersuites[3];
+    int dtls_ciphersuites[2];       // 仅支持一种密钥套件
 
 #if defined(MBEDTLS_DEBUG_C)
     mbedtls_debug_set_threshold( DEBUG_LEVEL );
@@ -113,8 +112,7 @@ void dtls_psk_client_thread( int argc, char *argv[] )
     mbedtls_ssl_conf_dbg( &conf, my_debug, stdout );
 
     dtls_ciphersuites[0] = MBEDTLS_TLS_PSK_WITH_AES_128_CCM;
-    dtls_ciphersuites[1] = MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_CCM_8;
-    dtls_ciphersuites[2] = 0;
+    dtls_ciphersuites[1] = 0;
     mbedtls_ssl_conf_ciphersuites( &conf, dtls_ciphersuites);
 
     if( ( ret = mbedtls_ssl_setup( &ssl, &conf ) ) != 0 )
@@ -265,7 +263,6 @@ exit:
 
     mbedtls_net_free( &server_fd );
 
-    // mbedtls_x509_crt_free( &cacert );
     mbedtls_ssl_free( &ssl );
     mbedtls_ssl_config_free( &conf );
     mbedtls_ctr_drbg_free( &ctr_drbg );
@@ -280,9 +277,25 @@ void dtls_psk_client_init(void)
     sys_thread_new("DTLS PSK Client", (lwip_thread_fn)dtls_psk_client_thread, NULL, 2*DEFAULT_THREAD_STACKSIZE, DTLS_CLIENT_THREAD_PRIO);
 }
 
+/**
+ * @brief freertos 平台calloc和free
+ */
+void *platform_calloc(size_t n, size_t size)
+{
+    void *ptr = NULL; 
+    ptr = pvPortMalloc(n * size);
+    return ptr;
+}
+
+void platform_free(void* ptr)
+{
+    vPortFree(ptr);
+}
+
 void sample_entry(void)
 {
-    /* 注册任务接口，dhcp成功后开始执行 */
+    mbedtls_platform_set_calloc_free(platform_calloc, platform_free);
+    /* 注册任务接口，DHCP成功后开始执行 */
     app_net_register_thread(dtls_psk_client_init);
 
     app_ethernet_init();

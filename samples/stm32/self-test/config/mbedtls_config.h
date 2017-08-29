@@ -24,7 +24,7 @@
 #define MBEDTLS_CIPHER_MODE_CFB
 #define MBEDTLS_CIPHER_MODE_CTR
 
-#define MBEDTLS_DES_C
+// #define MBEDTLS_DES_C
 #define MBEDTLS_AES_C
 
 #define MBEDTLS_BASE64_C
@@ -32,7 +32,7 @@
 #define MBEDTLS_GCM_C
 #define MBEDTLS_CCM_C
 
-#define MBEDTLS_CMAC_C
+// #define MBEDTLS_CMAC_C
 
 #define MBEDTLS_OID_C                           /** X.509 RSA等功能依赖于此定义 */
 #define MBEDTLS_ASN1_PARSE_C                    /** X.509 相关功能依赖于此定义 */
