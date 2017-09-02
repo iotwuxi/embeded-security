@@ -987,6 +987,9 @@
         <name>$PROJ_DIR$\..\..\..\app\mbedtls_alt\entropy_alt.c</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\..\app\mbedtls_alt\memory_alt.c</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\..\app\mbedtls_alt\timing_alt.c</name>
       </file>
     </group>

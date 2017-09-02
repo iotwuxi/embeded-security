@@ -49,6 +49,8 @@
 
 #if defined(MBEDTLS_MEMORY_BUFFER_ALLOC_C)
 #include "mbedtls/memory_buffer_alloc.h"
+#else
+#include "memory_alt.h"
 #endif
 
 

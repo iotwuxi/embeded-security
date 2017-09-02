@@ -370,5 +370,8 @@ void mbedtls_self_test(void)
 
 void sample_entry(void)
 {
+#if !defined(MBEDTLS_MEMORY_BUFFER_ALLOC_C)
+    mbedtls_platform_set_calloc_free(platform_calloc, platform_free);
+#endif
     mbedtls_self_test();
 }

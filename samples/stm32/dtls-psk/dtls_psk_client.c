@@ -281,21 +281,6 @@ void dtls_psk_client_init(void)
     sys_thread_new("DTLS PSK Client", (lwip_thread_fn)dtls_psk_client_thread, NULL, 2*DEFAULT_THREAD_STACKSIZE, DTLS_CLIENT_THREAD_PRIO);
 }
 
-/**
- * @brief FreeRTOS平台calloc和free
- */
-void *platform_calloc(size_t n, size_t size)
-{
-    void *ptr = NULL; 
-    ptr = pvPortMalloc(n * size);
-    return ptr;
-}
-
-void platform_free(void* ptr)
-{
-    vPortFree(ptr);
-}
-
 static TimerHandle_t m_monitor_timer; 
 static void monitor_timeout_handler(TimerHandle_t xTimer)
 {

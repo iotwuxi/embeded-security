@@ -16,6 +16,12 @@
 #define mbedtls_fprintf    fprintf
 #endif
 
+#if defined(MBEDTLS_MEMORY_BUFFER_ALLOC_C)
+#include "mbedtls/memory_buffer_alloc.h"
+#else
+#include "memory_alt.h"
+#endif
+
 #include <string.h>
 
 #include "mbedtls/net_sockets.h"

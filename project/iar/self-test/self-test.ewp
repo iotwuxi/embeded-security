@@ -743,7 +743,7 @@
         </option>
         <option>
           <name>IlinkIcfFile</name>
-          <state>$PROJ_DIR$\..\..\..\drivers\cmsis\stm32f7xx\source\iar\linker\stm32f767xx_flash.icf</state>
+          <state>$PROJ_DIR$\..\..\..\samples\stm32\self-test\config\stm32f767xx_flash.icf</state>
         </option>
         <option>
           <name>IlinkIcfFileSlave</name>
@@ -985,6 +985,9 @@
       <name>mbedtls_alt</name>
       <file>
         <name>$PROJ_DIR$\..\..\..\app\mbedtls_alt\entropy_alt.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\app\mbedtls_alt\memory_alt.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\app\mbedtls_alt\timing_alt.c</name>

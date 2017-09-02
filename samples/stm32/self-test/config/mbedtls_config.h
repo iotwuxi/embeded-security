@@ -3,11 +3,9 @@
 
 
 #define MBEDTLS_SELF_TEST
-
-#if __ICCARM__                                   
+                                
 #define MBEDTLS_ENTROPY_HARDWARE_ALT            /** 熵源接口替换 */
 #define MBEDTLS_NO_PLATFORM_ENTROPY             /** 无平台熵源支持 (linux: /dev/urandom 或 Windows CryptoAPI) */
-#endif
 
 #define MBEDTLS_MD_C
 
@@ -26,6 +24,7 @@
 
 // #define MBEDTLS_DES_C
 #define MBEDTLS_AES_C
+#define MBEDTLS_AES_ROM_TABLES
 
 #define MBEDTLS_BASE64_C
 
@@ -48,7 +47,7 @@
 
 #define MBEDTLS_PLATFORM_C
 #define MBEDTLS_PLATFORM_MEMORY
-#define MBEDTLS_MEMORY_BUFFER_ALLOC_C
+// #define MBEDTLS_MEMORY_BUFFER_ALLOC_C
 
 #include "mbedtls/check_config.h"
 
