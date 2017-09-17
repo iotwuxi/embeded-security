@@ -32,13 +32,17 @@
 /** (熵)随机数 定义 */
 #define MBEDTLS_ENTROPY_C                       /** 熵 */
 #define MBEDTLS_CTR_DRBG_C                      /** 随机数发生器 */
-#define MBEDTLS_HMAC_DRBG_C                 /** 随机数发生器 */
+#define MBEDTLS_HMAC_DRBG_C                 	/** 随机数发生器 */
 
 /** 对称密码 定义 */
 #define MBEDTLS_AES_C                           /** AES 加密 */
 #define MBEDTLS_CCM_C                           /** CCM 模式 */
 #define MBEDTLS_GCM_C                           /** GCM 模式 */
 #define MBEDTLS_CIPHER_C                        /** 开启 加密模块接口 */
+#define MBEDTLS_CIPHER_MODE_CBC					/** CBC 模式 */
+#define MBEDTLS_CIPHER_MODE_WITH_PADDING
+#define MBEDTLS_CIPHER_PADDING_PKCS7
+
 
 /** 消息摘要 定义 */
 #define MBEDTLS_SHA1_C                          /** SHA1 */

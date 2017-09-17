@@ -18,6 +18,7 @@
 
 #include <string.h>
 
+#include "mbedtls/cipher.h"
 #include "mbedtls/net_sockets.h"
 #include "mbedtls/debug.h"
 #include "mbedtls/ssl.h"
@@ -45,5 +46,6 @@
 void sample_random(void);
 void sample_cipher_md(void);
 void sample_x509(void);
+void sample_aes(void);
 
 #endif

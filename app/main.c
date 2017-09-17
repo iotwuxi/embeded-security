@@ -84,7 +84,7 @@ int main(void)
 void vApplicationMallocFailedHook(void)
 {
     taskDISABLE_INTERRUPTS();
-    printf("Malloc Failed Hook\r\n");
+    printf("Malloc Failed Hook\n");
     for(;;);
 }
 
@@ -94,7 +94,8 @@ void vApplicationMallocFailedHook(void)
 void vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
 {
     (void) pxTask;
-    printf("Stack Overflow Hook\r\n");
+    printf("Stack Overflow Hook\n");
+    printf("%s\n", pcTaskName);
     for(;;);
 }
 

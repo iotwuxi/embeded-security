@@ -1483,6 +1483,9 @@
       <name>$PROJ_DIR$\..\..\..\samples\stm32\basics\basics.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\..\..\samples\stm32\basics\sample_aes.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\..\samples\stm32\basics\sample_cipher_md.c</name>
     </file>
     <file>
