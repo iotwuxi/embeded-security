@@ -42,6 +42,7 @@
 
 #include "ethernetif.h"
 #include "app_ethernet.h"
+#include "memory_alt.h"
 
 void sample_random(void);
 void sample_cipher_md(void);

@@ -3,8 +3,9 @@
 
 void sample_entry(void)
 {
-    sample_random();
+	mbedtls_platform_set_calloc_free(platform_calloc, platform_free);
+    // sample_random();
     sample_cipher_md();
-    // sample_x509();
+    sample_x509();
     sample_aes();
 }

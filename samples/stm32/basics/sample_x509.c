@@ -25,7 +25,7 @@ void sample_x509(void)
         {mbedtls_test_cli_crt, mbedtls_test_cli_crt_len},
         {NULL, 0}
     };
-
+    
     for (int i = 0; list[i].buf != NULL; i++) {
         cert_buf = list[i].buf;
         cert_len = list[i].len;
@@ -33,7 +33,7 @@ void sample_x509(void)
         mbedtls_x509_crt_init(&cert);
         ret = mbedtls_x509_crt_parse(&cert, (const unsigned char *)cert_buf, cert_len);
         if (ret < 0) {
-            mbedtls_printf("failed: %d\n", ret);
+            mbedtls_printf("failed: -0x%04x\n", -ret);
             goto exit;
         }
 

@@ -2,9 +2,12 @@
 #define STM32F7_MBEDTLS_CONFIG_H
 
 #define MBEDTLS_NO_PLATFORM_ENTROPY             /** 无平台熵源支持 (linux: /dev/urandom 或 Windows CryptoAPI) */
+// #define MBEDTLS_ENTROPY_HARDWARE_ALT
 #define MBEDTLS_NO_DEFAULT_ENTROPY_SOURCES
 #define MBEDTLS_TIMING_C 
 #define MBEDTLS_TIMING_ALT
+#define MBEDTLS_PLATFORM_C
+#define MBEDTLS_PLATFORM_MEMORY
 
 /** 调试 定义 */
 #define MBEDTLS_DEBUG_C                         /** 调试(需要修改 DEBUG_LEVEL 值，默认为0) */
