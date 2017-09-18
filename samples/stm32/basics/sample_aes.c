@@ -71,11 +71,13 @@ void sample_aes(void)
         goto exit;
     }
 
+    /*
     if (mbedtls_cipher_set_padding_mode(&cipher_ctx, MBEDTLS_PADDING_PKCS7) != 0)
     {
         mbedtls_printf("mbedtls_cipher_set_padding_mode() returned error\n" );
         goto exit;   
     }
+    */
 
     if( mbedtls_cipher_reset( &cipher_ctx ) != 0 )
     {
