@@ -39,6 +39,7 @@
 
 /** 对称密码 定义 */
 #define MBEDTLS_AES_C                           /** AES 加密 */
+#define MBEDTLS_AES_ROM_TABLES                 	/** TABLE全部定义到Flash空间中 */
 #define MBEDTLS_CCM_C                           /** CCM 模式 */
 #define MBEDTLS_GCM_C                           /** GCM 模式 */
 #define MBEDTLS_CIPHER_C                        /** 开启 加密模块接口 */

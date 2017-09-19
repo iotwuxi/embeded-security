@@ -22,9 +22,6 @@
 #include "mbedtls/net_sockets.h"
 #include "mbedtls/debug.h"
 #include "mbedtls/ssl.h"
-#include "mbedtls/entropy.h"
-#include "mbedtls/ctr_drbg.h"
-#include "mbedtls/hmac_drbg.h"
 #include "mbedtls/error.h"
 #include "mbedtls/certs.h"
 #include "mbedtls/timing.h"
@@ -44,7 +41,8 @@
 #include "app_ethernet.h"
 #include "memory_alt.h"
 
-void sample_random(void);
+void sample_hmac_random(void);
+void sample_ctr_random(void);
 void sample_cipher_md(void);
 void sample_x509(void);
 void sample_aes(void);
