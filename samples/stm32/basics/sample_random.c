@@ -24,6 +24,45 @@ static int entropy_source(void *data, unsigned char *output, size_t len,
 void sample_random(void)
 {
     mbedtls_entropy_context entropy;
+    mbedtls_ctr_drbg_context ctr_drbg;
+
+    mbedtls_printf("\n==========Random Sample=========\n");
+
+    mbedtls_entropy_init( &entropy );
+    mbedtls_entropy_add_source(&entropy, entropy_source, NULL,
+                    MBEDTLS_ENTROPY_MAX_GATHER,
+                    MBEDTLS_ENTROPY_SOURCE_STRONG);
+    
+    mbedtls_ctr_drbg_init( &ctr_drbg );
+
+    int ret = mbedtls_ctr_drbg_seed( &ctr_drbg, mbedtls_entropy_func, &entropy, (const unsigned char *) "RANDOM_GEN", 10 );
+    if( ret != 0 )
+    {
+        printf( "failed in mbedtls_ctr_drbg_seed: %d\n", ret );
+        goto exit;
+    }
+    mbedtls_ctr_drbg_set_prediction_resistance( &ctr_drbg, MBEDTLS_CTR_DRBG_PR_OFF );
+
+    ret = mbedtls_ctr_drbg_random( &ctr_drbg, random, sizeof(random) );
+    if( ret != 0 )
+    {
+        printf( "failed in mbedtls_ctr_drbg_random: %d\n", ret );
+        goto exit;
+    }
+
+    printf("Generating %ld byte random data : ", sizeof(random));
+    for(int i = 0; i < sizeof(random); i++)
+    {
+        printf("%s%02X%s", i % 16 == 0 ? "\n":" ", random[i], i == sizeof(random) - 1 ? "\n":"");
+    }
+
+exit:
+    mbedtls_ctr_drbg_free( &ctr_drbg );
+    mbedtls_entropy_free( &entropy );
+    
+
+    #if 0
+    mbedtls_entropy_context entropy;
     mbedtls_hmac_drbg_context hmac_drbg;
     const mbedtls_md_info_t *md_info = mbedtls_md_info_from_type(MBEDTLS_MD_SHA1);
 
@@ -61,4 +100,5 @@ void sample_random(void)
 exit:
     mbedtls_hmac_drbg_free(&hmac_drbg);
     mbedtls_entropy_free(&entropy);  
+    #endif
 }
