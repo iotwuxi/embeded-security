@@ -71,14 +71,6 @@ void sample_aes(void)
         goto exit;
     }
 
-    /*
-    if (mbedtls_cipher_set_padding_mode(&cipher_ctx, MBEDTLS_PADDING_PKCS7) != 0)
-    {
-        mbedtls_printf("mbedtls_cipher_set_padding_mode() returned error\n" );
-        goto exit;   
-    }
-    */
-
     if( mbedtls_cipher_reset( &cipher_ctx ) != 0 )
     {
         mbedtls_printf("mbedtls_cipher_reset() returned error\n" );
@@ -87,7 +79,7 @@ void sample_aes(void)
 
 
     msg_size = strlen(msg);
-    mbedtls_printf("Message size: %d\n", msg_size);
+    mbedtls_printf("Message Size: %d\n", msg_size);
 
     for( offset = 0; offset < msg_size; offset += mbedtls_cipher_get_block_size( &cipher_ctx ) )
     {
@@ -115,7 +107,6 @@ void sample_aes(void)
     print_hexdump(output, olen);
 
 exit:
-
     mbedtls_cipher_free( &cipher_ctx );
 
 }

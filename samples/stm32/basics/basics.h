@@ -1,7 +1,6 @@
 #ifndef __BASICS_CLIENT_H
 #define __BASICS_CLIENT_H
 
-/* include */
 #if !defined(MBEDTLS_CONFIG_FILE)
 #include "mbedtls/config.h"
 #else
@@ -21,10 +20,14 @@
 #include "mbedtls/cipher.h"
 #include "mbedtls/net_sockets.h"
 #include "mbedtls/debug.h"
+#include "mbedtls/entropy.h"
+#include "mbedtls/ctr_drbg.h"
+#include "mbedtls/hmac_drbg.h"
 #include "mbedtls/ssl.h"
 #include "mbedtls/error.h"
 #include "mbedtls/certs.h"
 #include "mbedtls/timing.h"
+#include "mbedtls/rsa.h"
 
 #include "lwip/opt.h"
 #include "lwip/arch.h"
@@ -46,5 +49,6 @@ void sample_ctr_random(void);
 void sample_cipher_md(void);
 void sample_x509(void);
 void sample_aes(void);
+void sample_rsa_enc(void);
 
 #endif

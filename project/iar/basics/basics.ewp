@@ -1495,6 +1495,9 @@
       <name>$PROJ_DIR$\..\..\..\samples\stm32\basics\sample_random.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\..\..\samples\stm32\basics\sample_rsa_enc.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\..\samples\stm32\basics\sample_x509.c</name>
     </file>
   </group>

@@ -19,7 +19,7 @@ void sample_cipher_md(void)
         list++; 
     }
 
-    printf( "\nAvailable message digests:\n" );
+    printf( "\nAvailable Message Digests:\n" );
     index = 1;
     list = mbedtls_md_list();
     while( *list )
