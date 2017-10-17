@@ -29,7 +29,6 @@ void sample_entry(void)
 #endif
 
 #if SAMPLE_MOD_OPERATE
-    taskENTER_CRITICAL();
     sample_mod_operate();
 #endif
     
