@@ -44,11 +44,13 @@
 #include "app_ethernet.h"
 #include "memory_alt.h"
 
-void sample_hmac_random(void);
-void sample_ctr_random(void);
-void sample_cipher_md(void);
-void sample_x509(void);
-void sample_aes(void);
-void sample_rsa_enc(void);
+int sample_hmac_random(void);
+int sample_ctr_random(void);
+int sample_cipher_md(void);
+int sample_x509(void);
+int sample_aes(void);
+int sample_rsa_enc(void);
+int sample_mod_operate(void);
+int sample_gcd(void);
 
 #endif

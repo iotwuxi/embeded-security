@@ -4,8 +4,9 @@
 #define SAMPLE_RANDOM 				0
 #define SAMPLE_AES 					0
 #define SAMPLE_CIPHER_MD 			0
-#define SAMPLE_RSA_ENC 				1
+#define SAMPLE_RSA_ENC 				0
 #define SAMPLE_X509 				0
+#define SAMPLE_MOD_OPERATE			1
 
 void sample_entry(void)
 {
@@ -25,6 +26,11 @@ void sample_entry(void)
 
 #if SAMPLE_RSA_ENC
     sample_rsa_enc();
+#endif
+
+#if SAMPLE_MOD_OPERATE
+    sample_gcd();
+    sample_mod_operate();
 #endif
     
     // 可能存在问题

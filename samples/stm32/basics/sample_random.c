@@ -25,7 +25,7 @@ static int entropy_source(void *data, unsigned char *output, size_t len,
     return 0;
 }
 
-void sample_ctr_random(void)
+int sample_ctr_random(void)
 {
     mbedtls_ctr_drbg_context ctr_drbg;
     mbedtls_entropy_context entropy;
@@ -62,9 +62,11 @@ void sample_ctr_random(void)
 exit:
     mbedtls_ctr_drbg_free( &ctr_drbg );
     mbedtls_entropy_free( &entropy );
+    
+    return ret;
 }
 
-void sample_hmac_random(void)
+int sample_hmac_random(void)
 {
     mbedtls_entropy_context entropy;
     mbedtls_hmac_drbg_context hmac_drbg;
@@ -103,7 +105,9 @@ void sample_hmac_random(void)
 
 exit:
     mbedtls_hmac_drbg_free(&hmac_drbg);
-    mbedtls_entropy_free(&entropy);      
+    mbedtls_entropy_free(&entropy);    
+    
+    return ret;
 }
 
 

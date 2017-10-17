@@ -25,7 +25,7 @@ int myrand( void *rng_state, unsigned char *output, size_t len )
     return( 0 );
 }
 
-void sample_rsa_enc(void)
+int sample_rsa_enc(void)
 {
     int ret = 0;
     size_t len;
@@ -52,7 +52,7 @@ void sample_rsa_enc(void)
         mbedtls_rsa_check_privkey( &rsa ) != 0 )
     {
         printf( "failed\n" );
-        return;
+        goto cleanup;
     }
     else
     {
@@ -67,7 +67,7 @@ void sample_rsa_enc(void)
                            rsa_plaintext, rsa_ciphertext ) != 0 )
     {
         printf( "failed\n" );
-        return;
+        goto cleanup;
     }
     else
     {
@@ -81,13 +81,13 @@ void sample_rsa_enc(void)
                            sizeof(rsa_decrypted) ) != 0 )
     {
         printf( "failed\n" );
-        return;
+        goto cleanup;
     }
 
     if( memcmp( rsa_decrypted, rsa_plaintext, len ) != 0 )
     {
         printf( "failed\n" );
-        return;
+        goto cleanup;
     }
 
     printf( "success\n  Plaintext: %s\n", rsa_decrypted );
@@ -95,5 +95,5 @@ void sample_rsa_enc(void)
 cleanup:
     mbedtls_rsa_free( &rsa );
 
-    return;
+    return ret;
 }

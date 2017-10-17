@@ -1,7 +1,7 @@
 
 #include "basics.h"
 
-void sample_cipher_md(void)
+int sample_cipher_md(void)
 {
     const int *list;
     int index = 1;
@@ -37,4 +37,6 @@ void sample_cipher_md(void)
         mbedtls_printf("\t[%02d]%s\n", index++, mbedtls_ssl_get_ciphersuite_name(*list));
         list++; 
     }
+    
+    return 0;
 }

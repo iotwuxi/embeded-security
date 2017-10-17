@@ -26,7 +26,7 @@ static void print_hexdump(unsigned char *output, unsigned int olen)
      mbedtls_printf("\n");
 }
 
-void sample_aes(void)
+int sample_aes(void)
 {
     int ret = 1;
     const mbedtls_cipher_info_t *cipher_info;
@@ -108,5 +108,6 @@ void sample_aes(void)
 
 exit:
     mbedtls_cipher_free( &cipher_ctx );
-
+    
+    return ret;
 }

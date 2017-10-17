@@ -7,7 +7,7 @@ struct cert_list {
     size_t len;
 };
 
-void sample_x509(void)
+int sample_x509(void)
 {
     int ret;
     const char *cert_buf;
@@ -45,4 +45,6 @@ void sample_x509(void)
 
 exit:
     mbedtls_x509_crt_free(&cert);
+    
+    return ret;
 }

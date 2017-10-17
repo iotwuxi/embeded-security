@@ -1492,6 +1492,12 @@
       <name>$PROJ_DIR$\..\..\..\samples\stm32\basics\sample_cipher_md.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\..\..\samples\stm32\basics\sample_gcd.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\samples\stm32\basics\sample_mod_operate.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\..\samples\stm32\basics\sample_random.c</name>
     </file>
     <file>
