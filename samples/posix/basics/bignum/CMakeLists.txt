@@ -8,8 +8,12 @@ set(libs
 
 set(targets
     gcd
+    operate
 )
 
 add_executable(gcd gcd.c)
 target_link_libraries(gcd ${libs})
+
+add_executable(operate operate.c)
+target_link_libraries(operate ${libs})
 

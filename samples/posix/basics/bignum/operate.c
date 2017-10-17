@@ -2,6 +2,8 @@
 #include <string.h>
 #include "mbedtls/bignum.h"
 
+#define mbedtls_printf printf
+
 int main()
 {
     int ret, i;
@@ -89,7 +91,7 @@ int main()
     if( mbedtls_mpi_cmp_mpi( &X, &U ) != 0 )
     {
 
-            mbedtls_printf( "failed\n" );
+        mbedtls_printf( "failed\n" );
 
         goto cleanup;
     }
@@ -119,12 +121,6 @@ int main()
     }
 
 
-    mbedtls_printf( "  MPI test #5 (simple gcd): " );
-
-
-
-    if( verbose != 0 )
-        mbedtls_printf( "passed\n" );
 
 cleanup:
     mbedtls_mpi_free( &A ); mbedtls_mpi_free( &E ); mbedtls_mpi_free( &N ); mbedtls_mpi_free( &X );
