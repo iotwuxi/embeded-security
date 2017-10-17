@@ -57,7 +57,7 @@ void main(void)
         mbedtls_rsa_check_privkey( &rsa ) != 0 )
     {
         printf( "failed\n" );
-        goto exit;
+        goto cleanup;
     }
 
     printf( "success\n  PKCS#1 encryption : " );
@@ -68,7 +68,7 @@ void main(void)
                            rsa_plaintext, rsa_ciphertext ) != 0 )
     {
         printf( "failed\n" );
-        goto exit;
+        goto cleanup;
     }
 
     printf( "success\n  PKCS#1 decryption : " );
@@ -78,18 +78,19 @@ void main(void)
                            sizeof(rsa_decrypted) ) != 0 )
     {
         printf( "failed\n" );
-        goto exit;
+        goto cleanup;
     }
 
     if( memcmp( rsa_decrypted, rsa_plaintext, len ) != 0 )
     {
         printf( "failed\n" );
-        goto exit;
+        goto cleanup;
     }
 
     printf( "success\n  Plaintext: %s\n", rsa_decrypted );
 
-exit:
+
+cleanup:
     mbedtls_rsa_free( &rsa );
     return;
 }
