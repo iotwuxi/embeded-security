@@ -29,7 +29,7 @@ void sample_entry(void)
 #endif
 
 #if SAMPLE_MOD_OPERATE
-    sample_gcd();
+    taskENTER_CRITICAL();
     sample_mod_operate();
 #endif
     

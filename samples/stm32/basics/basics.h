@@ -51,6 +51,6 @@ int sample_x509(void);
 int sample_aes(void);
 int sample_rsa_enc(void);
 int sample_mod_operate(void);
-int sample_gcd(void);
+int sample_smallint(void);
 
 #endif

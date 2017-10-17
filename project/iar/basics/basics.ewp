@@ -245,7 +245,7 @@
         <option>
           <name>CCAllowList</name>
           <version>1</version>
-          <state>11111110</state>
+          <state>00000000</state>
         </option>
         <option>
           <name>CCDebugInfo</name>
@@ -348,7 +348,7 @@
         </option>
         <option>
           <name>CCOptLevel</name>
-          <state>3</state>
+          <state>0</state>
         </option>
         <option>
           <name>CCOptStrategy</name>
@@ -357,7 +357,7 @@
         </option>
         <option>
           <name>CCOptLevelSlave</name>
-          <state>3</state>
+          <state>0</state>
         </option>
         <option>
           <name>CompilerMisraRules98</name>
@@ -1492,9 +1492,6 @@
       <name>$PROJ_DIR$\..\..\..\samples\stm32\basics\sample_cipher_md.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\samples\stm32\basics\sample_gcd.c</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\..\..\..\samples\stm32\basics\sample_mod_operate.c</name>
     </file>
     <file>
@@ -1502,6 +1499,9 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\..\samples\stm32\basics\sample_rsa_enc.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\samples\stm32\basics\sample_smallint.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\..\samples\stm32\basics\sample_x509.c</name>

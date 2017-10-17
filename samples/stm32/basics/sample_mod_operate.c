@@ -5,7 +5,7 @@
 
 int sample_mod_operate()
 {
-    int ret, i;
+    int ret;
     mbedtls_mpi A, E, N, X, Y, U, V;
 
     mbedtls_mpi_init( &A ); mbedtls_mpi_init( &E ); mbedtls_mpi_init( &N ); mbedtls_mpi_init( &X );
@@ -44,12 +44,12 @@ int sample_mod_operate()
 
     if( mbedtls_mpi_cmp_mpi( &X, &U ) != 0 )
     {
-        mbedtls_printf( "failed\n" );
+        mbedtls_printf( " failed\n" );
         goto cleanup;
     }
     else
     {
-        mbedtls_printf( "passed\n" );
+        mbedtls_printf( " passed\n" );
     }
         
 
@@ -77,7 +77,6 @@ int sample_mod_operate()
         mbedtls_printf( "passed\n" );
     }
 
-
     MBEDTLS_MPI_CHK( mbedtls_mpi_exp_mod( &X, &A, &E, &N, NULL ) );
 
     MBEDTLS_MPI_CHK( mbedtls_mpi_read_string( &U, 16,
@@ -98,6 +97,7 @@ int sample_mod_operate()
     {
         mbedtls_printf( "passed\n" );
     }
+    
 
     MBEDTLS_MPI_CHK( mbedtls_mpi_inv_mod( &X, &A, &N ) );
 
@@ -106,9 +106,7 @@ int sample_mod_operate()
         "C3DBA76456363A10869622EAC2DD84EC" \
         "C5B8A74DAC4D09E03B5E0BE779F2DF61" ) );
 
-
     mbedtls_printf( "  MPI test #4 (inv_mod): " );
-
     if( mbedtls_mpi_cmp_mpi( &X, &U ) != 0 )
     {
         mbedtls_printf( "failed\n" );
