@@ -30,11 +30,26 @@ int sample_rsa_enc(void)
     int ret = 0;
     size_t len;
     mbedtls_rsa_context rsa;
+    mbedtls_entropy_context entropy;
+    mbedtls_ctr_drbg_context ctr_drbg;
+
     unsigned char rsa_plaintext[PT_LEN];
     unsigned char rsa_decrypted[PT_LEN];
     unsigned char rsa_ciphertext[KEY_LEN];
+    const char *pers = "simple_rsa";
     
     mbedtls_rsa_init( &rsa, MBEDTLS_RSA_PKCS_V15, 0 );
+    mbedtls_ctr_drbg_init( &ctr_drbg );
+    mbedtls_entropy_init( &entropy );
+
+    ret = mbedtls_ctr_drbg_seed( &ctr_drbg, mbedtls_entropy_func,
+                                        &entropy, (const unsigned char *) pers,
+                                        strlen( pers ) );
+    if( ret != 0 )
+    {
+        mbedtls_printf( " failed\n  ! mbedtls_ctr_drbg_seed returned %d\n", ret );
+        goto cleanup;
+    }
 
     rsa.len = KEY_LEN;
     MBEDTLS_MPI_CHK( mbedtls_mpi_read_string( &rsa.N , 16, RSA_N  ) );
@@ -63,7 +78,7 @@ int sample_rsa_enc(void)
 
     memcpy( rsa_plaintext, RSA_PT, PT_LEN );
 
-    if( mbedtls_rsa_pkcs1_encrypt( &rsa, mbedtls_entropy_func, NULL, MBEDTLS_RSA_PUBLIC, PT_LEN,
+    if( mbedtls_rsa_pkcs1_encrypt( &rsa, mbedtls_ctr_drbg_random, NULL, MBEDTLS_RSA_PUBLIC, PT_LEN,
                            rsa_plaintext, rsa_ciphertext ) != 0 )
     {
         printf( "failed\n" );
@@ -76,7 +91,7 @@ int sample_rsa_enc(void)
 
 
     printf( "PKCS#1 decryption : " );
-    if( mbedtls_rsa_pkcs1_decrypt( &rsa, mbedtls_entropy_func, NULL, MBEDTLS_RSA_PRIVATE, &len,
+    if( mbedtls_rsa_pkcs1_decrypt( &rsa, mbedtls_ctr_drbg_random, NULL, MBEDTLS_RSA_PRIVATE, &len,
                            rsa_ciphertext, rsa_decrypted,
                            sizeof(rsa_decrypted) ) != 0 )
     {
@@ -93,6 +108,8 @@ int sample_rsa_enc(void)
     printf( "success\n  Plaintext: %s\n", rsa_decrypted );
 
 cleanup:
+    mbedtls_entropy_free( &entropy );
+    mbedtls_ctr_drbg_free( &ctr_drbg );
     mbedtls_rsa_free( &rsa );
 
     return ret;
