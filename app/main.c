@@ -54,7 +54,7 @@ static void start_thread(void const * argument)
     for( ;; )
     {
         /* 删除启动任务 */ 
-        osThreadTerminate(NULL);
+        // osThreadTerminate(NULL);
     }
 }
 

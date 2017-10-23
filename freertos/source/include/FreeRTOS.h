@@ -566,12 +566,22 @@ extern "C" {
 	#define traceTIMER_COMMAND_RECEIVED( pxTimer, xMessageID, xMessageValue )
 #endif
 
+#if 0
+#ifndef traceMALLOC
+    #define traceMALLOC( pvAddress, uiSize ) printf("malloc(0x%x, %d);\n", pvAddress, uiSize)
+#endif
+
+#ifndef traceFREE
+    #define traceFREE( pvAddress, uiSize ) printf("free(0x%x, %d);\n", pvAddress, uiSize)
+#endif
+#else
 #ifndef traceMALLOC
     #define traceMALLOC( pvAddress, uiSize )
 #endif
 
 #ifndef traceFREE
     #define traceFREE( pvAddress, uiSize )
+#endif
 #endif
 
 #ifndef traceEVENT_GROUP_CREATE

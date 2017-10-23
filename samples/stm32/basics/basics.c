@@ -1,16 +1,17 @@
 
 #include "basics.h"
 
-#define SAMPLE_RANDOM 				1
-#define SAMPLE_AES 					0
-#define SAMPLE_CIPHER_MD 			1
-#define SAMPLE_RSA_ENC 				0
-#define SAMPLE_X509 				0
-#define SAMPLE_MOD_OPERATE			1
+#define SAMPLE_RANDOM               1
+#define SAMPLE_AES                  1
+#define SAMPLE_CIPHER_MD            1
+#define SAMPLE_RSA_ENC              1
+#define SAMPLE_X509                 1
+#define SAMPLE_MOD_OPERATE          1
 
 void sample_entry(void)
 {
-	mbedtls_platform_set_calloc_free(platform_calloc, platform_free);
+    printf("\nbasics sample start.\n");
+    mbedtls_platform_set_calloc_free(platform_calloc, platform_free);
     
 #if SAMPLE_CIPHER_MD
     sample_cipher_md();
@@ -33,7 +34,9 @@ void sample_entry(void)
 #endif
     
 #if SAMPLE_RANDOM 
-	sample_ctr_random();
-	sample_hmac_random();
+    sample_ctr_random();
+    sample_hmac_random();
 #endif
+
+    printf("\nbasics sample done.\n");
 }
