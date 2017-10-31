@@ -990,10 +990,10 @@
         <name>$PROJ_DIR$\..\..\app\mbedtls_alt\memory_alt.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\app\mbedtls_alt\timing_alt.c</name>
+        <name>$PROJ_DIR$\..\..\app\mbedtls_alt\net_sockets.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\app\mbedtls_alt\net_sockets.c</name>
+        <name>$PROJ_DIR$\..\..\app\mbedtls_alt\timing_alt.c</name>
       </file>
     </group>
     <group>
@@ -1032,7 +1032,7 @@
     <group>
       <name>cmsis</name>
       <file>
-        <name>$PROJ_DIR$\..\..\drivers\cmsis</name>
+        <name>$PROJ_DIR$\..\..\drivers\cmsis\startup_stm32f767xx.s</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\drivers\cmsis\stm32f7xx\source\system_stm32f7xx.c</name>

@@ -1021,7 +1021,7 @@
     <group>
       <name>cmsis</name>
       <file>
-        <name>$PROJ_DIR$\..\..\drivers\cmsis</name>
+        <name>$PROJ_DIR$\..\..\drivers\cmsis\startup_stm32f767xx.s</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\drivers\cmsis\stm32f7xx\source\system_stm32f7xx.c</name>
