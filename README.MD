@@ -9,29 +9,29 @@
 ```
 ├── app
 │   ├── net
-│   ├── main.c
-│   └── mbedtls_alt.c
+│   ├── lwm2m
+│   ├── mbedtls
+│   └── main.c
 ├── doc
-│   └── README.md
 ├── drivers
 │   ├── bsp
 │   ├── cmsis
 │   └── stm32f7xx_hal_driver
 ├── external
+│   ├── coap
 │   ├── fatfs
 │   ├── libcoap
 │   ├── lwip
+│   ├── wakaama
 │   └── mbedtls
 ├── freertos
 │   ├── license
 │   └── source
 ├── project
-│   ├── gcc
-│   └── iar
-├── README.MD
 └── samples
     ├── posix
-    └── stm32
+    ├── stm32
+    └── node
 ```
 `app` - 网络应用及主程序入口      
 `doc` - 设计文档    
@@ -43,11 +43,5 @@
 
 
 ### 开发环境
-- Linux: GDB + STLink 
-- Windows: IAR + STLink  
+- Windows: IAR + STLink 
 
-### 软件库
-- [Mbedtls](https://github.com/ARMmbed/mbedtls)
-- Lwip
-- coap
-- cJson
