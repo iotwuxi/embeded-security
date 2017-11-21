@@ -27,6 +27,10 @@ int exgcd(int m,int n,int *s,int *t)
     return n;
 }
 
+/** 
+*   示例来自《深入浅出密码学 p154 示例 6.6》 
+*   tools: http://people.math.sc.edu/sumner/numbertheory/euclidean/euclidean.html
+*/
 int main(int argc, char const *argv[])
 {
     int s, t;
