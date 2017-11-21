@@ -3,12 +3,12 @@ project("algo")
 
 set(targets
     exgcd
-    gen_tables
+    galois
 )
 
 add_executable(exgcd exgcd.c)
 target_link_libraries(exgcd)
 
-add_executable(gen_tables gen_tables.c)
-target_link_libraries(gen_tables)
+add_executable(galois galois.c)
+target_link_libraries(galois)
 
