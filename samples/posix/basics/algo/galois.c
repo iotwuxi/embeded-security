@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <string.h>
 
+#define SET_G_ENABLE 1
 #define XTIME(x) ( ( x << 1 ) ^ ( ( x & 0x80 ) ? 0x1B : 0x00 ) )
 
 #define TABLES_HEARD    \
@@ -45,6 +46,29 @@ uint8_t gmul(uint8_t a, uint8_t b)
     return p;
 }
 
+#if SET_G_ENABLE
+/*
+ * compute pow, log, inv tables over GF(2^8)
+ */
+void gen_tables(int g, int *pow, int *log, int *inv, int len)
+{
+    int i, x = g;
+    pow[0] = 1; pow[1] = g;
+    log[0] = 0; log[1] = 0xff;
+
+    for(i = 2; i < len; i++)
+    {
+        g = gmul(g, x);
+        pow[i] = g;
+        log[g] = i;
+    }
+
+    for(i = 1; i < len; i++)
+    {
+        inv[i] = pow[(255 - log[i])];
+    }
+}
+#else
 /*
  * compute pow, log, inv tables over GF(2^8)
  */
@@ -63,6 +87,7 @@ void gen_tables(int *pow, int *log, int *inv, int len)
         inv[i] = pow[(255 - log[i])];
     }  
 }
+#endif
 
 /** 
 *   http://www.samiam.org/logtables.txt  Generator: 0x03
@@ -82,7 +107,11 @@ int main(int argc, char const *argv[])
     memset(log, 0, sizeof(log));
     memset(inv, 0, sizeof(inv));
 
+#if SET_G_ENABLE
+    gen_tables(0x03, pow, log, inv, 256);
+#else
     gen_tables(pow, log, inv, 256);
+#endif
 
     dump_tables("Log table:", log, 256);
     dump_tables("Pow table:", pow, 256);
