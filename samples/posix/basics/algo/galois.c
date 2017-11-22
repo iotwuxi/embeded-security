@@ -70,8 +70,8 @@ void gen_tables(int *pow, int *log, int *inv, int len)
 */
 int main(int argc, char const *argv[])
 {
-    uint8_t a = 0xe5;
-    uint8_t b = 0xe5;
+    uint8_t a = 0x03;
+    uint8_t b = 0x03;
     printf("gmul(%02x, %02x) = %02x\n\n", a, b, gmul(a, b));
 
     int pow[256];
