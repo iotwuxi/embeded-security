@@ -10,9 +10,7 @@
 
 void dump_tables(char *info, int *tables, int len)
 {
-    printf("%s\n", info);
-    printf("%s\n", TABLES_HEARD);
-
+    printf("%s\n%s\n", info, TABLES_HEARD);
     for(int i = 0; i < len/16; i++)
     {
         printf("%02x |", i*16);
@@ -28,23 +26,18 @@ void dump_tables(char *info, int *tables, int len)
 uint8_t gmul(uint8_t a, uint8_t b) 
 {
     uint8_t p = 0;
-    uint8_t counter;
-    uint8_t hi_bit_set;
+    uint8_t hbit;
 
-    for(counter = 0; counter < 8; counter++) 
+    for(uint8_t i = 0; i < 8; i++) 
     {
-        if((b & 1) == 1) 
-        {
+        if((b & 1) == 1)
             p ^= a;
-        }
 
-        hi_bit_set = (a & 0x80);
+        hbit = (a & 0x80);
         a <<= 1;
 
-        if(hi_bit_set == 0x80) 
-        {
-            a ^= 0x1b;      
-        }
+        if(hbit == 0x80)
+            a ^= 0x1b;
 
         b >>= 1;
     }
@@ -53,9 +46,9 @@ uint8_t gmul(uint8_t a, uint8_t b)
 }
 
 /*
- * compute pow and log tables over GF(2^8)
+ * compute pow, log, inv tables over GF(2^8)
  */
-void gen_tables(int *pow, int *log, int len)
+void gen_tables(int *pow, int *log, int *inv, int len)
 {
     int i, x;
     for( i = 0, x = 1; i < len; i++ )
@@ -63,7 +56,12 @@ void gen_tables(int *pow, int *log, int len)
         *(pow + i) = x;
         *(log + x) = i;
         x = ( x ^ XTIME( x ) ) & 0xFF;
-    }    
+    }  
+
+    for(i = 1; i < len; i++)
+    {
+        inv[i] = pow[(255 - log[i])];
+    }  
 }
 
 /** 
@@ -78,14 +76,17 @@ int main(int argc, char const *argv[])
 
     int pow[256];
     int log[256];
+    int inv[256];
 
     memset(pow, 0, sizeof(pow));
     memset(log, 0, sizeof(log));
+    memset(inv, 0, sizeof(inv));
 
-    gen_tables(pow, log, 256);
+    gen_tables(pow, log, inv, 256);
 
     dump_tables("Log table:", log, 256);
     dump_tables("Pow table:", pow, 256);
+    dump_tables("Inv table:", inv, 256);
 
     return 0;
 }
