@@ -53,14 +53,14 @@ uint8_t gmul(uint8_t a, uint8_t b)
 void gen_tables(int g, int *pow, int *log, int *inv, int len)
 {
     int i, x = g;
-    pow[0] = 1; pow[1] = g;
+    pow[0] = 1; pow[1] = x;
     log[0] = 0; log[1] = 0xff;
 
     for(i = 2; i < len; i++)
     {
-        g = gmul(g, x);
-        pow[i] = g;
-        log[g] = i;
+        x = gmul(x, g);
+        pow[i] = x;
+        log[x] = i;
     }
 
     for(i = 1; i < len; i++)
@@ -108,7 +108,7 @@ int main(int argc, char const *argv[])
     memset(inv, 0, sizeof(inv));
 
 #if SET_G_ENABLE
-    gen_tables(0x03, pow, log, inv, 256);
+    gen_tables(0x05, pow, log, inv, 256);
 #else
     gen_tables(pow, log, inv, 256);
 #endif
