@@ -616,8 +616,7 @@ exit:
     }
 
     if (data.connP) {
-        // 需要修改 - xianrenqiu
-        // connection_free(data.connP);
+        connection_free(data.connP);
     }
 
     clean_security_object(objArray[0]);

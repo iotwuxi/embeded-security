@@ -107,7 +107,7 @@
 
 #define MAX_PACKET_SIZE 512
 #define DEFAULT_SERVER_IPV6 "[::1]"
-#define DEFAULT_SERVER_IPV4 "coap://wsncoap.org"
+#define DEFAULT_SERVER_IPV4 "coap://leshan.eclipse.org"
 
 /* Definitions*/
 #ifndef FD_SETSIZE

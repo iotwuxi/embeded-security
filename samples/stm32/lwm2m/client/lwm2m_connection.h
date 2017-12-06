@@ -18,21 +18,12 @@
 #ifndef CONNECTION_H_
 #define CONNECTION_H_
 
-// #include <stdio.h>
-// #include <unistd.h>
-// #include <netinet/in.h>
-// #include <arpa/inet.h>
-// #include <netdb.h>
-// #include <sys/socket.h>
-// #include <sys/stat.h>
-
 #include "liblwm2m.h"
 #ifdef WITH_MBEDTLS
 #include "easy_tls.h"
 #endif
 
 #include <stdio.h>
-//#include <unistd.h>
 
 #include "lwip/opt.h"
 #include "lwip/arch.h"
@@ -50,9 +41,12 @@
 typedef struct _connection_t {
 	struct _connection_t	*next;
 	int						sock;
-	// struct sockaddr_in6		addr;
-	struct sockaddr_in		addr;
-	size_t					addrLen;
+#if 0
+	struct sockaddr_in6		addr;
+#else
+    struct sockaddr_in		addr;
+#endif
+    size_t					addrLen;
 #ifdef WITH_MBEDTLS
 	tls_session *session;
 #endif

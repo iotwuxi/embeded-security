@@ -188,6 +188,7 @@
           <state>LWM2M_CLIENT_MODE</state>
           <state>LWM2M_BOOTSTRAP</state>
           <state>WITH_MBEDTLS</state>
+          <state>CONFIG_NET_LWIP</state>
           <state>MBEDTLS_CONFIG_FILE="mbedtls_config.h"</state>
         </option>
         <option>
@@ -1029,13 +1030,13 @@
         <name>$PROJ_DIR$\..\..\app\mbedtls_alt\entropy_alt.c</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\app\mbedtls_alt\net_sockets.c</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\app\mbedtls_alt\timing_alt.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\app\mbedtls_alt\timing_alt.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\app\mbedtls_alt\net_sockets.c</name>
       </file>
     </group>
     <group>
@@ -1578,16 +1579,16 @@
     <group>
       <name>config</name>
       <file>
-        <name>$PROJ_DIR$\..\..\samples\stm32\wakaama\client\config\FreeRTOSConfig.h</name>
+        <name>$PROJ_DIR$\..\..\samples\stm32\lwm2m\client\config\FreeRTOSConfig.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\samples\stm32\wakaama\client\config\lwipopts.h</name>
+        <name>$PROJ_DIR$\..\..\samples\stm32\lwm2m\client\config\lwipopts.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\samples\stm32\wakaama\client\config\mbedtls_config.h</name>
+        <name>$PROJ_DIR$\..\..\samples\stm32\lwm2m\client\config\mbedtls_config.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\samples\stm32\wakaama\client\config\stm32f7xx_hal_conf.h</name>
+        <name>$PROJ_DIR$\..\..\samples\stm32\lwm2m\client\config\stm32f7xx_hal_conf.h</name>
       </file>
     </group>
     <file>
