@@ -145,7 +145,7 @@ connection_t *create_session(int sockfd, struct sockaddr_storage *caddr, socklen
 
 		// need to check
 		printf("%s:%s() line:%d caddrLen: %d\n", __FILE__, __func__, __LINE__, *caddrLen);
-		// *caddrLen = 16;
+		*caddrLen = 16;
 		
 		connP = connection_new_incoming(NULL, newsock, (struct sockaddr *)caddr, *caddrLen);
 #ifdef WITH_MBEDTLS
@@ -285,12 +285,10 @@ int connection_send(connection_t *connP,
 #if 1
 	if (AF_INET == connP->addr.sin_family) {
 		struct sockaddr_in *saddr = (struct sockaddr_in *)&connP->addr;
-		inet_ntop(saddr->sin_family, &saddr->sin_addr, s, INET6_ADDRSTRLEN);
+		inet_ntop(saddr->sin_family, &saddr->sin_addr, s, INET_ADDRSTRLEN);
 		port = saddr->sin_port;
 	} else if (AF_INET6 == connP->addr.sin_family) {
-		struct sockaddr_in6 *saddr = (struct sockaddr_in6 *)&connP->addr;
-		inet_ntop(saddr->sin6_family, &saddr->sin6_addr, s, INET6_ADDRSTRLEN);
-		port = saddr->sin6_port;
+		printf("unsupported ipv6.\n");
 	}
 #else
 	if (AF_INET == connP->addr.sin6_family) {
