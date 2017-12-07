@@ -144,8 +144,8 @@ connection_t *create_session(int sockfd, struct sockaddr_storage *caddr, socklen
 	} else {
 
 		// need to check
-		printf("%s:%s %d caddrLen: %d\n", __FILE__, __func__, __LINE__, *caddrLen);
-		*caddrLen = 16;
+		printf("%s:%s() line:%d caddrLen: %d\n", __FILE__, __func__, __LINE__, *caddrLen);
+		// *caddrLen = 16;
 		
 		connP = connection_new_incoming(NULL, newsock, (struct sockaddr *)caddr, *caddrLen);
 #ifdef WITH_MBEDTLS
@@ -281,7 +281,8 @@ int connection_send(connection_t *connP,
 
 	s[0] = 0;
 
-#ifdef __ICCARM__
+// need to check
+#if 1
 	if (AF_INET == connP->addr.sin_family) {
 		struct sockaddr_in *saddr = (struct sockaddr_in *)&connP->addr;
 		inet_ntop(saddr->sin_family, &saddr->sin_addr, s, INET6_ADDRSTRLEN);
@@ -302,6 +303,7 @@ int connection_send(connection_t *connP,
 		port = saddr->sin6_port;
 	}
 #endif
+
 	printf("Sending %ld bytes to [%s]:%hu\n", length, s, ntohs(port));
 	output_buffer(stderr, buffer, length, 0);
 

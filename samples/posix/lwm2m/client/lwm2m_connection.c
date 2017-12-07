@@ -277,7 +277,8 @@ int connection_send(connection_t *connP,
 
 	s[0] = 0;
 
-#ifdef __ICCARM__
+// need to check
+#if 1
 	if (AF_INET == connP->addr.sin_family) {
 		struct sockaddr_in *saddr = (struct sockaddr_in *)&connP->addr;
 		inet_ntop(saddr->sin_family, &saddr->sin_addr, s, INET6_ADDRSTRLEN);

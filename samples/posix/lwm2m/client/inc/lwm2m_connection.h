@@ -41,7 +41,8 @@
 typedef struct _connection_t {
 	struct _connection_t	*next;
 	int						sock;
-#ifdef __ICCARM__  
+// need to check
+#if 1  
     struct sockaddr_in		addr;
 #else
 	struct sockaddr_in6		addr;
