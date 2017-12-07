@@ -804,29 +804,27 @@ void print_usage(void)
 	fprintf(stdout, "Launch a LWM2M client.\r\n");
 	fprintf(stdout, "Options:\r\n");
 	fprintf(stdout, "  -h HOST\tSet the hostname of the LWM2M Server to connect to. Default: localhost\r\n");
+	fprintf(stdout, "  -p PORT\tSet the port of the LWM2M Server to connect to. Default: 6683\r\n");
 	fprintf(stdout, "  -t TIME\tSet the lifetime of the Client. Default: 300\r\n");
 #ifdef WITH_MBEDTLS
 	fprintf(stdout, "  -i STRING\t Set PSK identity.\r\n");
 	fprintf(stdout, "  -s HEXSTRING\t Set Pre-Shared-Key. The input length should be even, such as 11, 1111.\r\n");
 #endif
 	fprintf(stdout, "Examples:\r\n");
-	fprintf(stdout, "  ./lwm2m_client -h coap://127.0.0.1\r\n");
-	fprintf(stdout, "  ./lwm2m_client -h coaps://wsncoap.org -i PSK_identity -s 11111111\r\n");
-	fprintf(stdout, "  ./lwm2m_client -h coap+tcp://127.0.0.1\r\n");
-	fprintf(stdout, "  ./lwm2m_client -h coaps+tcp://127.0.0.1 -i PSK_identity -s 11111111\r\n");
+	fprintf(stdout, "  ./lwm2m_client -h coap://127.0.0.1 -p 6683\r\n");
+	fprintf(stdout, "  ./lwm2m_client -h coaps://wsncoap.org -p 6684 -i PSK_identity -s 11111111\r\n");
+	fprintf(stdout, "  ./lwm2m_client -h coap+tcp://127.0.0.1 -p 6683\r\n");
+	fprintf(stdout, "  ./lwm2m_client -h coaps+tcp://127.0.0.1 -p 6684 -i PSK_identity -s 11111111\r\n");
 	fprintf(stdout, "\r\n");
 }
 
-// int lwm2m_client_cb(void *args)
 int main( int argc, char *argv[] )
 {
-	// int argc;
-	// char **argv;
-
 	int i;
 	int result;
 	int opt;
-	char *name = "testlwm2mclient";
+	char *name = "embeded-security";
+	// char *name = "embeded-security";
 
 #ifdef WITH_MBEDTLS
 	unsigned char psk[MBEDTLS_PSK_MAX_LEN];
@@ -844,8 +842,6 @@ int main( int argc, char *argv[] )
 #endif
 
 	struct timeval tv = {60, 0};
-	// argc = ((struct pthread_arg *)args)->argc;
-	// argv = ((struct pthread_arg *)args)->argv;
 
 	lwm2mH = NULL;
 	g_quit = 0;
@@ -924,6 +920,15 @@ int main( int argc, char *argv[] )
 			}
 			server = argv[opt];
 			break;
+
+		case 'p':
+			opt++;
+			if (opt >= argc) {
+				print_usage();
+				return 0;
+			}
+			serverPort = argv[opt];
+			break;
 		default:
 			print_usage();
 			return 0;
@@ -940,7 +945,7 @@ int main( int argc, char *argv[] )
 
 	/* Move pointer to address field */
 	server += strlen(coap_uri_prefix[g_proto]);
-	serverPort = coap_get_port_from_proto(g_proto);
+	// serverPort = coap_get_port_from_proto(g_proto);
 
 	if (lwm2m_init_object() < 0) {
 	}
@@ -948,8 +953,8 @@ int main( int argc, char *argv[] )
 	/* This call an internal function that create an socket. */
 	printf("Trying to bind LWM2M Client to port %s\n", serverPort);
 
-	// data.sock = create_socket(g_proto, serverPort, data.addressFamily);
-	data.sock = create_socket(g_proto, "7683", data.addressFamily);
+	data.sock = create_socket(g_proto, serverPort, data.addressFamily);
+	// data.sock = create_socket(g_proto, "7683", data.addressFamily);
 
 	if (data.sock < 0) {
 		fprintf(stderr, "Failed to open socket: %d %s\r\n", errno, strerror(errno));
@@ -1048,6 +1053,7 @@ int main( int argc, char *argv[] )
 				numBytes = connection_read(g_proto, user_data->connP, data.sock, buffer, MAX_PACKET_SIZE, NULL, 0);
 
 				if (numBytes > 0) {
+					printf("received %d bytes\n", numBytes);
 					output_buffer(stderr, buffer, numBytes, 0);
 					lwm2m_handle_packet(lwm2mH, buffer, numBytes, user_data->connP);
 					conn_s_updateRxStatistic(objArray[7], numBytes, false);

@@ -586,6 +586,7 @@ void lwm2m_client_thread(void* args)
                 numBytes = connection_read(g_proto, user_data->connP, data.sock, buffer, MAX_PACKET_SIZE, NULL, 0);
 
                 if (numBytes > 0) {
+                    printf("received %d bytes\n", numBytes);
                     output_buffer(stderr, buffer, numBytes, 0);
                     lwm2m_handle_packet(lwm2mH, buffer, numBytes, user_data->connP);
                     conn_s_updateRxStatistic(objArray[7], numBytes, false);

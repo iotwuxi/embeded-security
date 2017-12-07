@@ -41,10 +41,10 @@
 typedef struct _connection_t {
 	struct _connection_t	*next;
 	int						sock;
-#if 1 
-	struct sockaddr_in6		addr; // xianrenqiu
-#else	
+#ifdef __ICCARM__  
     struct sockaddr_in		addr;
+#else
+	struct sockaddr_in6		addr;
 #endif
     size_t					addrLen;
 #ifdef WITH_MBEDTLS

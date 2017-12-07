@@ -239,21 +239,7 @@ connection_t *connection_create(coap_protocol_t protocol,
 	connP = connection_new_incoming(connList, sock, sa, sl);
 
 	if (NULL != servinfo) {
-#ifdef CONFIG_NET_LWIP
 		freeaddrinfo(servinfo);
-#else
-
-// xianrenqiu
-#if 0
-		if (servinfo->ai_addr) {
-			free(servinfo->ai_addr);
-		}
-		if (servinfo->ai_canonname) {
-			free(servinfo->ai_canonname);
-		}
-		free(servinfo);
-#endif
-#endif
 	}
 
 	return connP;
@@ -291,8 +277,7 @@ int connection_send(connection_t *connP,
 
 	s[0] = 0;
 
-// xianrenqiu
-#if 0
+#ifdef __ICCARM__
 	if (AF_INET == connP->addr.sin_family) {
 		struct sockaddr_in *saddr = (struct sockaddr_in *)&connP->addr;
 		inet_ntop(saddr->sin_family, &saddr->sin_addr, s, INET6_ADDRSTRLEN);
