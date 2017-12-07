@@ -143,6 +143,10 @@ connection_t *create_session(int sockfd, struct sockaddr_storage *caddr, socklen
 		printf("create_session : Failed to accept, errno \n");
 	} else {
 
+		// need to check
+		printf("%s:%s %d caddrLen: \n", __FILE__, __func__, __LINE__, caddrLen);
+		*caddrLen = 16;
+		
 		connP = connection_new_incoming(NULL, newsock, (struct sockaddr *)caddr, *caddrLen);
 #ifdef WITH_MBEDTLS
 		connP->session = session;
