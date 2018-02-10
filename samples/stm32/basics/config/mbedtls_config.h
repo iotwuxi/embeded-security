@@ -1,8 +1,8 @@
 #ifndef STM32F7_MBEDTLS_CONFIG_H
 #define STM32F7_MBEDTLS_CONFIG_H
 
-#define MBEDTLS_NO_PLATFORM_ENTROPY             /** 无平台熵源支持 (linux: /dev/urandom 或 Windows CryptoAPI) */
-#define MBEDTLS_ENTROPY_HARDWARE_ALT
+#define MBEDTLS_NO_PLATFORM_ENTROPY             /** 无平台熵源支持 ，例如linux: /dev/urandom 或 Windows CryptoAPI */
+#define MBEDTLS_ENTROPY_HARDWARE_ALT			/** 2018-02-08 需确认：此定义和上一个定义存在冲突，示例中加入了两次 stm32 entropy */
 // #define MBEDTLS_NO_DEFAULT_ENTROPY_SOURCES
 #define MBEDTLS_TIMING_C 
 #define MBEDTLS_TIMING_ALT

@@ -22,8 +22,7 @@ int main(void)
     mbedtls_md_init(&sha_ctx);
 
     int ret = mbedtls_md_setup(&sha_ctx, mbedtls_md_info_from_type(MBEDTLS_MD_SHA256), 1);
-    if (ret != 0)
-    {
+    if (ret != 0) {
         printf("  ! mbedtls_md_setup() returned -0x%04x\n", -ret);
         goto exit;
     }
@@ -33,8 +32,7 @@ int main(void)
     mbedtls_md_hmac_finish(&sha_ctx, mac );
 
     printf("\nHMAC(%s) = ", msg);
-    for (int i = 0; i < sizeof(mac); i++)
-    {
+    for (int i = 0; i < sizeof(mac); i++) {
         printf("%02X%s", mac[i], i == sizeof(mac) - 1 ? "\n\n" : "");
     }
 
