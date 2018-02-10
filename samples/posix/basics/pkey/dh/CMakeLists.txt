@@ -3,11 +3,18 @@ project("pkey")
 
 set(libs
     mbedcrypto 
+    mbedtls
 )
 
 set(targets
-    ecdh
+    dh_client
+    dh_server
+    dh_genprime
 )
 
-add_executable(ecdh ecdh.c)
-target_link_libraries(ecdh ${libs})
+add_executable(dh_client dh_client.c)
+target_link_libraries(dh_client ${libs})
+add_executable(dh_server dh_server.c)
+target_link_libraries(dh_server ${libs})
+add_executable(dh_genprime dh_genprime.c)
+target_link_libraries(dh_genprime ${libs})

@@ -1252,7 +1252,7 @@ recon:
 					char s[INET6_ADDRSTRLEN];
 					struct sockaddr_in *saddr = (struct sockaddr_in *)&addr;
 					inet_ntop(saddr->sin_family, &saddr->sin_addr, s, INET6_ADDRSTRLEN);
-					printf("from : %s  fromLen : %d\n", s, addrLen);
+					printf("from : %s  fromLen : %d\n", s, numBytes);
 
 					if (connP->addrLen != addrLen || memcmp(&(connP->addr), &addr, addrLen) != 0) {
 						numBytes = -1;
