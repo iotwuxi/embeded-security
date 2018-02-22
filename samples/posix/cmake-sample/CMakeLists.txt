@@ -14,8 +14,11 @@ include_directories(./ $ENV{MBEDTLS_BASE}/include)
 add_definitions(-DMBEDTLS_CONFIG_FILE=<mbedtls_config.h>)
 
 # 增加mbedtls源文件
-aux_source_directory($ENV{MBEDTLS_BASE}/library mbedtls_src)
+aux_source_directory($ENV{MBEDTLS_BASE}/library MBEDTLS_SOURCES)
 
+set(SOURCES 
+	${CMAKE_CURRENT_LIST_DIR}/ciphersuite-list.c 
+	${MBEDTLS_SOURCES})
 # 可执行文件
-add_executable(ciphersuite-list  ciphersuite-list.c ${mbedtls_src}) 
+add_executable(${PROJECT_NAME}  ${SOURCES}) 
 
