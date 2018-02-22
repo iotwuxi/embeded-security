@@ -19,11 +19,10 @@ static void print_hexdump(unsigned char *output, unsigned int olen)
 {
     if (olen == 0) return;
     
-    for(int i = 0; i < olen; i++)
-    {
+    for (int i = 0; i < olen; i++) {
         mbedtls_printf("%02X ", *output++);
     }
-     mbedtls_printf("\n");
+    mbedtls_printf("\n");
 }
 
 int sample_aes(void)
@@ -42,37 +41,32 @@ int sample_aes(void)
     const int *list;
     mbedtls_printf( "Available ciphers:\n" );
     list = mbedtls_cipher_list();
-    while( *list )
-    {
-        cipher_info = mbedtls_cipher_info_from_type( (mbedtls_cipher_type_t)*list );
-        mbedtls_printf( "  %s\n", cipher_info->name );
+    while (*list ) {
+        cipher_info = mbedtls_cipher_info_from_type((mbedtls_cipher_type_t)*list);
+        mbedtls_printf("  %s\n", cipher_info->name);
         list++;
     }
 
     mbedtls_cipher_init(&cipher_ctx);
     cipher_info = mbedtls_cipher_info_from_string("AES-128-CBC");
 
-    if( ( ret = mbedtls_cipher_setup( &cipher_ctx, cipher_info) ) != 0 )
-    {
+    if ((ret = mbedtls_cipher_setup(&cipher_ctx, cipher_info)) != 0) {
         mbedtls_printf("mbedtls_cipher_setup failed\n" );
         goto exit;
     }
 
-    if( mbedtls_cipher_setkey(&cipher_ctx, key, cipher_info->key_bitlen,
-                    MBEDTLS_ENCRYPT ) != 0 )
-    {
+    if (mbedtls_cipher_setkey(&cipher_ctx, key, cipher_info->key_bitlen,
+                    MBEDTLS_ENCRYPT) != 0 ) {
         mbedtls_printf("mbedtls_cipher_setkey() returned error\n");
         goto exit;
     }
 
-    if( mbedtls_cipher_set_iv( &cipher_ctx, iv, 16 ) != 0 )
-    {
+    if (mbedtls_cipher_set_iv(&cipher_ctx, iv, 16) != 0 ) {
         mbedtls_printf("mbedtls_cipher_set_iv() returned error\n" );
         goto exit;
     }
 
-    if( mbedtls_cipher_reset( &cipher_ctx ) != 0 )
-    {
+    if (mbedtls_cipher_reset( &cipher_ctx ) != 0) {
         mbedtls_printf("mbedtls_cipher_reset() returned error\n" );
         goto exit;
     }
@@ -81,15 +75,14 @@ int sample_aes(void)
     msg_size = strlen(msg);
     mbedtls_printf("Message Size: %d\n", msg_size);
 
-    for( offset = 0; offset < msg_size; offset += mbedtls_cipher_get_block_size( &cipher_ctx ) )
-    {
-        ilen = ( (unsigned int) msg_size - offset > mbedtls_cipher_get_block_size( &cipher_ctx ) ) ?
-            mbedtls_cipher_get_block_size( &cipher_ctx ) : (unsigned int) ( msg_size - offset );
+    for (offset = 0; offset < msg_size; 
+        offset += mbedtls_cipher_get_block_size( &cipher_ctx)) {
+        ilen = ((unsigned int) msg_size - offset > mbedtls_cipher_get_block_size( &cipher_ctx)) ?
+            mbedtls_cipher_get_block_size( &cipher_ctx ) : (unsigned int) (msg_size - offset);
 
         memcpy(buffer, msg + offset, ilen);
 
-        if( mbedtls_cipher_update( &cipher_ctx, buffer, ilen, output, &olen ) != 0 )
-        {
+        if (mbedtls_cipher_update(&cipher_ctx, buffer, ilen, output, &olen) != 0) {
             mbedtls_printf("mbedtls_cipher_update() returned error\n");
             goto exit;
         }
@@ -98,8 +91,7 @@ int sample_aes(void)
         print_hexdump(output, olen);
     }
 
-    if( mbedtls_cipher_finish( &cipher_ctx, output, &olen ) != 0 )
-    {
+    if (mbedtls_cipher_finish( &cipher_ctx, output, &olen ) != 0) {
         mbedtls_printf( "mbedtls_cipher_finish() returned error\n" );
         goto exit;
     }
