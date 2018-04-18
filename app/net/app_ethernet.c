@@ -132,12 +132,13 @@ void User_notification(struct netif *netif)
 }
 
 #ifdef USE_DHCP
-static thread_init_ thread_init;
+static user_thread_init_t user_init_callback;
 
-void app_net_register_thread(thread_init_ func)
+void app_net_register_thread(user_thread_init_t callback)
 {   
-    if(func != NULL)
-        thread_init = func;
+    if (callback != NULL) {
+        user_init_callback = callback;
+    }
 }
 
 /**
@@ -174,8 +175,8 @@ void DHCP_thread(void const * argument)
                     DHCP_state = DHCP_ADDRESS_ASSIGNED;	
                     printf("\n[DHCP]IP Address: %s\n", inet_ntoa(netif->ip_addr.addr));
 
-                    if(thread_init != NULL)
-                        thread_init();
+                    if (user_init_callback != NULL)
+                        user_init_callback();
                     else
                         printf("thread_init is empty.\n");
 

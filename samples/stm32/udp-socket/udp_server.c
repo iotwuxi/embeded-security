@@ -1,8 +1,8 @@
 #include "udp_server.h"
 
 /**
-* @brief UDP服务器任务
-*/
+ * @brief UDP服务器任务
+ */
 void udp_server_thread(void* args)
 {
     printf("%s start.\n", __func__);
@@ -10,8 +10,8 @@ void udp_server_thread(void* args)
     int sock;
     int len;
     char *recv_data;
-    uint32_t addr_len;
     struct sockaddr_in server_addr, client_addr;
+    int addr_len = sizeof(struct sockaddr);
 
     struct timeval tv;
     int maxfd = 0;
@@ -36,16 +36,13 @@ void udp_server_thread(void* args)
     memset(&(server_addr.sin_zero),0, sizeof(server_addr.sin_zero));
     
     if (bind(sock,(struct sockaddr *)&server_addr,
-             sizeof(struct sockaddr)) == -1)
-    {
+             sizeof(struct sockaddr)) == -1) {
         printf("bind error\n");
         free(recv_data);
         return;
     }
     
-    addr_len = sizeof(struct sockaddr);
     printf("udp server waiting for client on port %d...\n", PORT);
-    // listen(sock, 10);
     
     while (1)
     {
@@ -57,8 +54,7 @@ void udp_server_thread(void* args)
 
         ret = select(maxfd + 1, &read_fds, NULL, NULL, &tv);
         
-        if (ret == 0) 
-        {
+        if (ret == 0)  {
             continue;
         }
 
@@ -70,12 +66,10 @@ void udp_server_thread(void* args)
                   (struct sockaddr *)&client_addr, &addr_len);
         
                 recv_data[len] = '\0';
-        
                 printf("\n(%s , %d) said : ", inet_ntoa(client_addr.sin_addr),
                     ntohs(client_addr.sin_port));
                 printf("%s", recv_data);
 
-                // echo
                 sendto(sock, recv_data, strlen(recv_data), 0,
                     (struct sockaddr *)&client_addr, sizeof(struct sockaddr));
             }

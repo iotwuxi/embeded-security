@@ -90,8 +90,8 @@
 /* Exported functions ------------------------------------------------------- */
 void User_notification(struct netif *netif);
 #ifdef USE_DHCP
-typedef void(*thread_init_)(void);
-void app_net_register_thread(thread_init_ func);
+typedef void (*user_thread_init_t)(void);
+void app_net_register_thread(user_thread_init_t func);
 void DHCP_thread(void const * argument);
 #endif
 
